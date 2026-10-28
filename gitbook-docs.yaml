@@ -1,0 +1,11 @@
+$schema: https://api.gitbook.com/gitbook-docs.yaml
+site:
+  title: SYZ 的笔记
+  structure:
+    - type: space
+      key: syz-notes
+      title: 笔记与课程
+      path: notes
+      default: true
+      content:
+        directory: ./notes
