@@ -60,6 +60,7 @@
     * [P046 · 9.7 （定时器）从模式控制器](ke-cheng-ji-lu/stm32/chapter-09/p046.md)
     * [P047 · 9.8 （定时器）PWM参数测量原理](ke-cheng-ji-lu/stm32/chapter-09/p047.md)
     * [P048 · 9.9 （定时器）PWM参数测量实验](ke-cheng-ji-lu/stm32/chapter-09/p048.md)
+    * [相对路径图片测试](ke-cheng-ji-lu/stm32/chapter-09/relpath-test.md)
   * [ADC](ke-cheng-ji-lu/stm32/chapter-10/README.md)
     * [P049 · 10.1 （ADC） 逐次逼近型ADC](ke-cheng-ji-lu/stm32/chapter-10/p049.md)
     * [P050 · 10.2 （ADC） ADC模块的结构框图](ke-cheng-ji-lu/stm32/chapter-10/p050.md)
