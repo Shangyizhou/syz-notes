@@ -6,7 +6,7 @@
 
 扫描模式的作用，是使能 ADC 同时对多路模拟信号进行转换。举个例子：常规序列就像一张计划表，总共有第 1 到第 16 行，最多能填 16 项计划。如果把序列长度 L 设为 3，就只用前三行；假设依次填入通道 3、通道 1 和通道 4，我们希望 ADC 按顺序转换这三个通道。不开扫描模式时，即使 L 已经设为 3，前三行也填了内容，ADC 仍认为我们只想转换第一项，也就是通道 3。只有使能扫描模式，它才会按要求依次转换通道 3、通道 1、通道 4。这就是扫描模式的用途。
 
-![The regular-sequence diagram shows the 16 available ranks and the example using the first three for channel 3, channel 1, and channel 4.](<../../../.gitbook/assets/f001 (48).jpg>)
+![The regular-sequence diagram shows the 16 available ranks and the example using the first three for channel 3, channel 1, and channel 4.](images/f001.jpg)
 
 _The regular-sequence diagram shows the 16 available ranks and the example using the first three for channel 3, channel 1, and channel 4. ·_ [_原片 01:02_](https://www.bilibili.com/video/BV11X4y1j7si/?p=54\&t=62)
 
@@ -26,7 +26,7 @@ _The regular-sequence diagram shows the 16 available ranks and the example using
 
 要测引脚 2 的模拟信号，就要把它接入单片机 ADC。接入前还要计算这个信号的内阻，因为只有算出内阻，才能设置对应通道的采样时间。接下来把电路等效成电压源串联一个电阻的形式。
 
-![The potentiometer divider is shown with R1 set to about 3.3 kΩ and R2 to 6.6 kΩ, producing about 1.1 V at the wiper.](<../../../.gitbook/assets/f002 (48).jpg>)
+![The potentiometer divider is shown with R1 set to about 3.3 kΩ and R2 to 6.6 kΩ, producing about 1.1 V at the wiper.](images/f002.jpg)
 
 _The potentiometer divider is shown with R1 set to about 3.3 kΩ and R2 to 6.6 kΩ, producing about 1.1 V at the wiper. ·_ [_原片 05:06_](https://www.bilibili.com/video/BV11X4y1j7si/?p=54\&t=306)
 
@@ -44,7 +44,7 @@ _The potentiometer divider is shown with R1 set to about 3.3 kΩ and R2 to 6.6 k
 
 演示时，左边电位器接 PA0，也就是通道 0；右边电位器接 PA1，也就是通道 1。单片机 ADC 把模拟信号采进来并转换成数字信号，再由 USART1 串口发送给电脑，所以接上 USB 转 TTL 模块，并插到电脑。电脑上继续用上一期的 VOFA 软件显示实验现象。界面左侧放一张曲线图，可以看到红、绿两条曲线；红线代表左侧电位器，也就是通道 0。转动左边电位器，红线随之变化，显示它当前的值。绿色曲线代表右边电位器的通道 1。
 
-![VOFA displays two changing traces for the two potentiometer inputs, with one meter for each channel.](<../../../.gitbook/assets/f004 (48).jpg>)
+![VOFA displays two changing traces for the two potentiometer inputs, with one meter for each channel.](images/f003.jpg)
 
 _VOFA displays two changing traces for the two potentiometer inputs, with one meter for each channel. ·_ [_原片 10:00_](https://www.bilibili.com/video/BV11X4y1j7si/?p=54\&t=600)
 
@@ -52,7 +52,7 @@ _VOFA displays two changing traces for the two potentiometer inputs, with one me
 
 开始写代码之前先把实验电路连接好。需要两个电位器：每个的 1 脚接地，3 脚接高电压 3.3 V；2 脚是模拟信号输出。左边电位器的中间引脚接 PA0，也就是 ADC 通道 0；右边电位器的中间引脚接 PA1，也就是通道 1。接线图里可以看到两只电位器的地线、3.3 V 供电和两路独立输出。
 
-![The wiring diagram connects the two potentiometer wipers to PA0 and PA1, with the outer pins tied to ground and 3.3 V.](<../../../.gitbook/assets/f003 (47).jpg>)
+![The wiring diagram connects the two potentiometer wipers to PA0 and PA1, with the outer pins tied to ground and 3.3 V.](images/f004.jpg)
 
 _The wiring diagram connects the two potentiometer wipers to PA0 and PA1, with the outer pins tied to ground and 3.3 V. ·_ [_原片 11:30_](https://www.bilibili.com/video/BV11X4y1j7si/?p=54\&t=690)
 
@@ -82,7 +82,7 @@ PA9 配好后，下一步初始化 UART 模块。要先开启 UART1 的时钟，
 
 再设置自动重装寄存器 ARR 为 999。计数周期是 1000 次，每次计数为 1 微秒，因此总共 1000 微秒，也就是 1 毫秒。RCR 重复计数器设为 0。按这些参数配置后，Update 事件就每 1 ms 发生一次。
 
-![The timer timing diagram marks PSC=71 and ARR=999, yielding a 1 ms update interval from a 72 MHz timer clock.](<../../../.gitbook/assets/f005 (47).jpg>)
+![The timer timing diagram marks PSC=71 and ARR=999, yielding a 1 ms update interval from a 72 MHz timer clock.](images/f005.jpg)
 
 _The timer timing diagram marks PSC=71 and ARR=999, yielding a 1 ms update interval from a 72 MHz timer clock. ·_ [_原片 23:24_](https://www.bilibili.com/video/BV11X4y1j7si/?p=54\&t=1404)
 
@@ -112,7 +112,7 @@ ADC 基本参数初始化完成后，闭合 ADC 总开关。刚才已经设置�
 
 前面估算采样时间约 10.24 个周期，但芯片没有 10.24 周期这一档，只能选最接近的 13.5 个周期。回到接口汇总，在注入序列部分找到 ADC\_InjectedChannelConfig，它用来配置注入序列中的通道。要调用两次：先设置通道 0，第二个参数为通道编号 0，Rank 表示写入第几行，所以通道 0 的 Rank 填 1，采样时间选 13.5 个周期；复制这行代码，再把通道 1 填到 Rank 2，采样时间也选 13.5 个周期。两行设置好后，再配置左侧的外部触发来源。
 
-![The editor shows the injected-channel setup code, with channel 0 assigned to rank 1 and channel 1 to rank 2 using the 13.5-cycle sample time.](<../../../.gitbook/assets/f006 (43).jpg>)
+![The editor shows the injected-channel setup code, with channel 0 assigned to rank 1 and channel 1 to rank 2 using the 13.5-cycle sample time.](images/f006.jpg)
 
 _The editor shows the injected-channel setup code, with channel 0 assigned to rank 1 and channel 1 to rank 2 using the 13.5-cycle sample time. ·_ [_原片 35:47_](https://www.bilibili.com/video/BV11X4y1j7si/?p=54\&t=2147)
 
@@ -132,7 +132,7 @@ _The editor shows the injected-channel setup code, with channel 0 assigned to ra
 
 检查后发现这里本来应该闭合注入序列的开关，却误用了闭合常规序列开关的接口；之前也犯过这个错误。把接口改成 injected 对应的版本，再编译、下载，按复位按钮。再次打开 VOFA 后已经能看到数据。接下来点击左边控件，拖出一张图表并把它拉宽；右键选择“上下填充”，再把 I0、I1 两条曲线都选到 Y 轴上，就能看到两条曲线。然后再拖出两个仪表盘，分别绑定 I0 与 I1。
 
-![After changing the enable call to the injected-sequence version, VOFA begins receiving the two channel values.](<../../../.gitbook/assets/f007 (34).jpg>)
+![After changing the enable call to the injected-sequence version, VOFA begins receiving the two channel values.](images/f007.jpg)
 
 _After changing the enable call to the injected-sequence version, VOFA begins receiving the two channel values. ·_ [_原片 43:46_](https://www.bilibili.com/video/BV11X4y1j7si/?p=54\&t=2626)
 
@@ -142,6 +142,6 @@ _After changing the enable call to the injected-sequence version, VOFA begins re
 
 不过仪表盘看起来只有右半边刻度，没有左半边。原因是还没设置仪表量程。把量程设为 0 到 3.3 V，最大值设为 3.3；下面的仪表也一样设置成 0 到 3.3。设置好后再拧电位器，仪表显示恢复正常；右边电位器对应的仪表也正常。这个就是本次实验要达到的效果。好的，以上就是本节课的全部内容，感谢大家收看，我是铁头山羊，让我们下期视频再见。
 
-![The final VOFA view shows both live traces and the two voltage meters operating over the configured 0–3.3 V range.](<../../../.gitbook/assets/f008 (28).jpg>)
+![The final VOFA view shows both live traces and the two voltage meters operating over the configured 0–3.3 V range.](images/f008.jpg)
 
 _The final VOFA view shows both live traces and the two voltage meters operating over the configured 0–3.3 V range. ·_ [_原片 45:44_](https://www.bilibili.com/video/BV11X4y1j7si/?p=54\&t=2744)
