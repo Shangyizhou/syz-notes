@@ -2,7 +2,8 @@
 
 * [SYZ 的笔记](README.md)
 
-## 课程记录
+
+## 嵌入式与机器人
 
 * [铁头山羊 STM32 入门教程](ke-cheng-ji-lu/stm32/README.md)
   * [准备与开发环境](ke-cheng-ji-lu/stm32/chapter-01/README.md)
@@ -68,12 +69,18 @@
     * [P053 · 10.5 （ADC）定时器触发](ke-cheng-ji-lu/stm32/chapter-10/p053/README.md)
     * [P054 · 10.6 （ADC）扫描模式](ke-cheng-ji-lu/stm32/chapter-10/p054/README.md)
 
-* [2025 大模型 RAG 入门](ke-cheng-ji-lu/rag-intro/README.md)
-  * [01：为什么需要 RAG](ke-cheng-ji-lu/rag-intro/l01/README.md)
-  * [02：RAG的基本流程：为什么说上手RAG只要一星期](ke-cheng-ji-lu/rag-intro/l02/README.md)
-  * [03：RAG的10个优化技巧：为什么RAG不是算法问题，是工程问题](ke-cheng-ji-lu/rag-intro/l03/README.md)
-  * [04：RAG的评估方法：没有评估，就没法优化](ke-cheng-ji-lu/rag-intro/l04/README.md)
-  * [05：项目经理视角的RAG：需求评估要细，技术迭代要快](ke-cheng-ji-lu/rag-intro/l05/README.md)
+* [FreeRTOS 源码详解](ke-cheng-ji-lu/freertos-source/README.md)
+  * [FreeRTOS 源码详解 P01：列表–概述](ke-cheng-ji-lu/freertos-source/p01/README.md)
+  * [P02 列表–初始化](ke-cheng-ji-lu/freertos-source/p02/README.md)
+  * [P03 任务切换](ke-cheng-ji-lu/freertos-source/p03/README.md)
+  * [P04 阻塞延时](ke-cheng-ji-lu/freertos-source/p04/README.md)
+  * [FreeRTOS P05｜队列-概述](ke-cheng-ji-lu/freertos-source/p05/README.md)
+  * [P06 队列-创建](ke-cheng-ji-lu/freertos-source/p06/README.md)
+  * [P07 队列—发送](ke-cheng-ji-lu/freertos-source/p07/README.md)
+  * [FreeRTOS 源码详解 P08：队列接收](ke-cheng-ji-lu/freertos-source/p08/README.md)
+  * [互斥量｜FreeRTOS 源码详解 P09](ke-cheng-ji-lu/freertos-source/p09/README.md)
+  * [FreeRTOS P10｜队列集](ke-cheng-ji-lu/freertos-source/p10/README.md)
+
 * [嵌入式 AI 教程 · RK3588](ke-cheng-ji-lu/embedded-ai-rk3588/README.md)
   * [P01｜00_导学：嵌入式 AI 教程（基于 RK3588）](ke-cheng-ji-lu/embedded-ai-rk3588/p01/README.md)
   * [P02｜01_快速了解 RK3588](ke-cheng-ji-lu/embedded-ai-rk3588/p02/README.md)
@@ -110,21 +117,7 @@
   * [P33｜30_yolov26模型部署(从0到1版)_导出onnx与rknn模型并板端推理](ke-cheng-ji-lu/embedded-ai-rk3588/p33/README.md)
   * [P34｜31_yolov8模型部署（优化加速版）](ke-cheng-ji-lu/embedded-ai-rk3588/p34/README.md)
   * [P35 · 32_Deepseek_Qwen大模型部署](ke-cheng-ji-lu/embedded-ai-rk3588/p35/README.md)
-* [【完整版】微调：从原理到实操，该说的我都说了……](ke-cheng-ji-lu/finetuning-practice/README.md)
-* [FreeRTOS 源码详解](ke-cheng-ji-lu/freertos-source/README.md)
-  * [FreeRTOS 源码详解 P01：列表–概述](ke-cheng-ji-lu/freertos-source/p01/README.md)
-  * [P02 列表–初始化](ke-cheng-ji-lu/freertos-source/p02/README.md)
-  * [P03 任务切换](ke-cheng-ji-lu/freertos-source/p03/README.md)
-  * [P04 阻塞延时](ke-cheng-ji-lu/freertos-source/p04/README.md)
-  * [FreeRTOS P05｜队列-概述](ke-cheng-ji-lu/freertos-source/p05/README.md)
-  * [P06 队列-创建](ke-cheng-ji-lu/freertos-source/p06/README.md)
-  * [P07 队列—发送](ke-cheng-ji-lu/freertos-source/p07/README.md)
-  * [FreeRTOS 源码详解 P08：队列接收](ke-cheng-ji-lu/freertos-source/p08/README.md)
-  * [互斥量｜FreeRTOS 源码详解 P09](ke-cheng-ji-lu/freertos-source/p09/README.md)
-  * [FreeRTOS P10｜队列集](ke-cheng-ji-lu/freertos-source/p10/README.md)
-* [Linux 性能分析入门与实战](ke-cheng-ji-lu/linux-perf/README.md)
-* [LoRA 算法论文解读 & 开发人员如何微调大模型并暴露可调用接口](ke-cheng-ji-lu/lora-paper/README.md)
-* [MLflow 最佳实践｜2020 年分享忠实整理稿](ke-cheng-ji-lu/mlflow/README.md)
+
 * [RK3588 精品公开课](ke-cheng-ji-lu/rk3588-course/README.md)
   * [RK3588 NVR及后端产品](ke-cheng-ji-lu/rk3588-course/l01/README.md)
   * [RKNN模型精度优化指南](ke-cheng-ji-lu/rk3588-course/l02/README.md)
@@ -133,4 +126,26 @@
   * [RK3588 Linux SDK 开发及产品应用介绍](ke-cheng-ji-lu/rk3588-course/l05/README.md)
   * [RK3588 Android开发答疑](ke-cheng-ji-lu/rk3588-course/l06/README.md)
   * [99%利用率的RKNN模型](ke-cheng-ji-lu/rk3588-course/l07/README.md)
-* [官方文档-ROS命令行入门](ke-cheng-ji-lu/ros2-intro/README.md)
+
+* [ROS2 入门](ke-cheng-ji-lu/ros2-intro/README.md)
+
+
+## 大模型与 AI 应用
+
+* [2025 大模型 RAG 入门](ke-cheng-ji-lu/rag-intro/README.md)
+  * [01：为什么需要 RAG](ke-cheng-ji-lu/rag-intro/l01/README.md)
+  * [02：RAG的基本流程：为什么说上手RAG只要一星期](ke-cheng-ji-lu/rag-intro/l02/README.md)
+  * [03：RAG的10个优化技巧：为什么RAG不是算法问题，是工程问题](ke-cheng-ji-lu/rag-intro/l03/README.md)
+  * [04：RAG的评估方法：没有评估，就没法优化](ke-cheng-ji-lu/rag-intro/l04/README.md)
+  * [05：项目经理视角的RAG：需求评估要细，技术迭代要快](ke-cheng-ji-lu/rag-intro/l05/README.md)
+
+* [微调：从原理到实操](ke-cheng-ji-lu/finetuning-practice/README.md)
+
+* [LoRA 论文解读与微调部署](ke-cheng-ji-lu/lora-paper/README.md)
+
+
+## 工程与运维实践
+
+* [Linux 性能分析入门与实战](ke-cheng-ji-lu/linux-perf/README.md)
+
+* [MLflow 最佳实践](ke-cheng-ji-lu/mlflow/README.md)
