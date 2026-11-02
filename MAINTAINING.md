@@ -2,6 +2,29 @@
 
 这个仓库是 GitBook 站点 `syz-notes` 的唯一内容来源。**所有改动都在这里完成，永远不要在 GitBook 网页上编辑**——Git Sync 是双向的，两边同时改会产生冲突和重复文件。
 
+## 本地预览（MkDocs Material）
+
+GitBook 的 `SUMMARY.md` 仍是页面导航的唯一来源。MkDocs Material 在本地和 GitHub Pages 上读取同一批 Markdown 与图片；`scripts/mkdocs.py` 会先从 `SUMMARY.md` 生成临时导航配置，再启动 MkDocs。
+
+首次使用时，在仓库根目录执行：
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements-mkdocs.txt
+```
+
+之后预览或构建：
+
+```bash
+python scripts/mkdocs.py serve
+python scripts/mkdocs.py build --strict
+```
+
+预览地址是 `http://127.0.0.1:8000/syz-notes/`；如果 8000 端口已被占用，可运行 `python scripts/mkdocs.py serve --dev-addr 127.0.0.1:8001`，然后打开 `http://127.0.0.1:8001/syz-notes/`。新增、删除或移动页面后，照常维护 `notes/SUMMARY.md`；导航配置由脚本重新生成，不要手工编辑 `.mkdocs.generated.yml`。
+
+推送到 `main` 或迁移预览分支 `migration/syz-notes-full` 会触发 `.github/workflows/mkdocs-full.yml`，构建成功后更新 GitHub Pages 使用的 `gh-pages` 分支。
+
 ## 两个必须同步更新的文件
 
 | 文件 | 作用 | 漏了会怎样 |

@@ -1,6 +1,6 @@
 # 用 CC-Switch 将 Claude Code 接入 DeepSeek V4.1-Flash-1017
 
-> 工作稿：主要章节已完成并完成两轮审查。环境为 CC-Switch v4.0.24、Claude Code v2.1.316（2026-11-02）。已加入四张配置截图；密钥和余额未展示。
+> 本文操作环境为 CC-Switch v4.0.24、Claude Code v2.1.316（2026-11-02）。截图中的 API Key 已遮蔽，账户余额区域已裁掉。
 
 ## CC-Switch 是什么，为什么这次用它
 
@@ -38,7 +38,7 @@ https://api.deepseek.com/anthropic
 
 在 Claude Code 的模型映射栏里，显示名称方便人在 `/model` 菜单中识别，实际请求模型填写 `deepseek-flash`。如果要使用 1M 上下文，在 CC-Switch 的对应选项中勾选“1M”。这个选项是告诉 Claude Code 模型支持的上下文长度；它不会改变 API 的模型名。([DeepSeek Claude Code 配置指南](https://api-docs.deepseek.com/quick_start/agent_integrations/claude_code/)、[Claude Code 上下文说明](https://code.claude.com/docs/en/model-config#correct-the-window-for-a-gateway-or-custom-model-id))
 
-DeepSeek 的指南还区分了模型角色：主模型、Opus 和 Sonnet 使用 1M 设置；Haiku 和子代理使用普通的 `deepseek-flash`。指南另外建议设置 `CLAUDE_CODE_EFFORT_LEVEL=max`，并用 `CLAUDE_CODE_AUTO_COMPACT_WINDOW=786432` 指定自动压缩对话历史的窗口。Fable 在该指南中没有对应配置，本节先不把它列为必填项。
+DeepSeek 的指南还区分了模型角色：主模型、Opus 和 Sonnet 使用 1M 设置；Haiku 和子代理使用普通的 `deepseek-flash`。指南另外建议设置 `CLAUDE_CODE_EFFORT_LEVEL=max`，并用 `CLAUDE_CODE_AUTO_COMPACT_WINDOW=786432` 指定自动压缩对话历史的窗口。DeepSeek 指南没有为 Fable 指定单独设置，因此这里不需要额外配置。
 
 如果预设没有带上这两项，可以在该供应商的“配置 JSON”里，把缺少的键合并到现有 `env` 对象中；已有的键保留原值，不要用下面这段覆盖整份配置：
 
@@ -86,7 +86,7 @@ flowchart TD
 
 配置保存后，可以先在 CC-Switch 里检查 DeepSeek 地址是否可达。不过，v4.0.24 中的“检测连通”只检查网络是否能连到请求地址，不会验证 API Key 或模型名；即使检测显示可达，真实请求仍可能因认证、模型 ID 或接口格式不匹配而失败。([CC-Switch 连通检测说明](https://github.com/farion1231/cc-switch/blob/main/docs/user-manual/zh/4-proxy/4.5-model-test.md))
 
-这次操作中，CC-Switch 最初是 v3.14.1，界面里的旧版“模型检查”会发起真实模型请求。升级到 v4.0.24 后，检测功能已经是网络连通性检查。写教程时需要把两个版本里的检测结果分开说明，不能把旧版模型检查的结果当成新版连通检测验证了模型。
+这次操作中，CC-Switch 最初是 v3.14.1，界面里的旧版“模型检查”会发起真实模型请求。升级到 v4.0.24 后，检测功能已经是网络连通性检查。两个版本的检测能力不同：旧版模型检查会真实发起模型请求；v4.0.24 的连通检测只验证请求地址是否可达。因此，不能把旧版的模型检查结果当作新版已经验证了模型。
 
 为确保这次请求读取的是 CC-Switch 写入的设置，而不是测试进程继承来的旧变量，我先在该进程中取消相关环境变量，再发起最小请求：
 
@@ -112,6 +112,6 @@ env -u ANTHROPIC_BASE_URL \
 DEEPSEEK_V41_FLASH_1M_OK
 ```
 
-这只是一次冒烟验证，不代表 1M 长上下文、工具调用、图像输入或模型性能已经测试通过。文章里应明确这一范围，也不应把单次响应延迟当作性能结论。
+这次冒烟验证只确认基础请求链路成功；它不能证明 1M 长上下文、工具调用、图像输入或模型性能表现，单次请求耗时也不足以形成性能结论。
 
 如果 CC-Switch 显示可达，但 Claude Code 请求失败，先分别检查 API Key、实际模型名 `deepseek-flash`、Anthropic Messages 格式和当前选中的供应商；如果请求落到旧模型，再检查 Shell 环境变量是否覆盖了 CC-Switch 配置。

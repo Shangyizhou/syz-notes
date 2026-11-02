@@ -1,0 +1,39 @@
+site_name: SYZ 的笔记
+site_description: 记录课程内容、技术实践与个人学习总结
+site_url: https://shangyizhou.github.io/syz-notes/
+docs_dir: notes
+site_dir: site
+exclude_docs: |
+  /SUMMARY.md
+extra_css:
+  - mkdocs/stylesheets/center-images.css
+
+plugins:
+  - search
+
+theme:
+  name: material
+  language: zh
+  features:
+    - navigation.sections
+    - navigation.indexes
+    - navigation.top
+    - content.code.copy
+    - toc.follow
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+# This marker is replaced from notes/SUMMARY.md by scripts/mkdocs.py.
+# NAV_FROM_SUMMARY

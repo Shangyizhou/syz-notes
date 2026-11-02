@@ -1,0 +1,4 @@
+.venv/
+site/
+.mkdocs.generated.yml
+__pycache__/
