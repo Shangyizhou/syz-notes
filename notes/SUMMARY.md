@@ -151,3 +151,4 @@
 * [MLflow 最佳实践](ke-cheng-ji-lu/mlflow/README.md)
 
 * [CC-Switch：Claude Code 接入 DeepSeek V4.1-Flash-1017](ke-cheng-ji-lu/cc-switch-deepseek/README.md)
+* [用 MkDocs Material 和 GitHub Pages 发布 Markdown 笔记](ke-cheng-ji-lu/github-pages-mkdocs-notes/README.md)
