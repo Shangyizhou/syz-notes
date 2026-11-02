@@ -1,0 +1,32 @@
+name: Build and publish CC-Switch preview
+
+on:
+  push:
+    branches:
+      - mvp/mkdocs-cc-switch-preview
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Install MkDocs Material
+        run: python -m pip install -r requirements-mkdocs.txt
+
+      - name: Configure Git identity
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+
+      - name: Build and publish the preview
+        run: mkdocs gh-deploy --strict --force
