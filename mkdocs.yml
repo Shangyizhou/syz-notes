@@ -7,7 +7,7 @@ extra_css:
   - stylesheets/preview.css
 
 nav:
-  - CC-Switch 接入 DeepSeek: cc-switch-deepseek/index.md
+  - CC-Switch 接入 DeepSeek: index.md
 
 theme:
   name: material

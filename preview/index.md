@@ -16,7 +16,7 @@ flowchart LR
     Claude -->|直连发送对话请求| DS["DeepSeek"]
 ```
 
-![CC-Switch 的 Claude Code 页面，显示直连模式和 DeepSeek 供应商卡片](images/cc-switch-overview.png)
+![CC-Switch 的 Claude Code 页面，显示直连模式和 DeepSeek 供应商卡片](cc-switch-deepseek/images/cc-switch-overview.png)
 
 *图 1：CC-Switch 的 Claude Code 页面。截图裁掉了账户余额区域。*
 
@@ -30,7 +30,7 @@ flowchart LR
 https://api.deepseek.com/anthropic
 ```
 
-![DeepSeek 供应商表单，API Key 遮蔽，显示请求地址和 Anthropic Messages 格式](images/cc-switch-provider-form.png)
+![DeepSeek 供应商表单，API Key 遮蔽，显示请求地址和 Anthropic Messages 格式](cc-switch-deepseek/images/cc-switch-provider-form.png)
 
 *图 2：DeepSeek 供应商表单。API Key 保持遮蔽。*
 
@@ -51,7 +51,7 @@ DeepSeek 的指南还区分了模型角色：主模型、Opus 和 Sonnet 使用 
 }
 ```
 
-![模型映射表填写示例，Sonnet 和 Opus 声明支持 1M，Haiku 与 Subagent 不声明 1M](images/cc-switch-model-mapping.png)
+![模型映射表填写示例，Sonnet 和 Opus 声明支持 1M，Haiku 与 Subagent 不声明 1M](cc-switch-deepseek/images/cc-switch-model-mapping.png)
 
 *图 3：模型映射表填写示例。按 DeepSeek 指南，主模型、Sonnet 和 Opus 使用 1M；Haiku 和 Subagent 不勾选。*
 
@@ -59,7 +59,7 @@ DeepSeek 的指南还区分了模型角色：主模型、Opus 和 Sonnet 使用 
 
 主模型对应表单下方的“默认兜底模型”。这里同样填写 `deepseek-flash` 并勾选 1M：
 
-![默认兜底模型配置为 deepseek-flash，并勾选 1M](images/cc-switch-main-context.png)
+![默认兜底模型配置为 deepseek-flash，并勾选 1M](cc-switch-deepseek/images/cc-switch-main-context.png)
 
 *图 4：默认兜底模型对应 Claude Code 启动时使用的主模型。*
 
