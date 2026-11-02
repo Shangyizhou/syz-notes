@@ -149,3 +149,5 @@
 * [Linux 性能分析入门与实战](ke-cheng-ji-lu/linux-perf/README.md)
 
 * [MLflow 最佳实践](ke-cheng-ji-lu/mlflow/README.md)
+
+* [CC-Switch：Claude Code 接入 DeepSeek V4.1-Flash-1017](ke-cheng-ji-lu/cc-switch-deepseek/README.md)
