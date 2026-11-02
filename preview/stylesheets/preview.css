@@ -1,0 +1,7 @@
+/* Center article screenshots without changing the Markdown source. */
+.md-typeset img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1rem auto;
+}

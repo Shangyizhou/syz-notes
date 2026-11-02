@@ -1,0 +1,32 @@
+site_name: CC-Switch 接入 DeepSeek 预览
+site_description: CC-Switch 接入 DeepSeek V4.1-Flash-1017 文章的主题预览
+# 只读取这次预览目录，避免把 notes/ 下的其他 GitBook 笔记带入构建。
+docs_dir: preview
+site_dir: site
+extra_css:
+  - stylesheets/preview.css
+
+nav:
+  - CC-Switch 接入 DeepSeek: cc-switch-deepseek/index.md
+
+theme:
+  name: material
+  language: zh
+  features:
+    - navigation.top
+    - content.code.copy
+    - toc.follow
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
