@@ -1,0 +1,5575 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="记录课程内容、技术实践与个人学习总结">
+      
+      
+      
+        <link rel="canonical" href="https://shangyizhou.github.io/syz-notes/ke-cheng-ji-lu/freertos-source/p09/">
+      
+      
+        <link rel="prev" href="../p08/">
+      
+      
+        <link rel="next" href="../p10/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>互斥量｜FreeRTOS 源码详解 P09 - SYZ 的笔记</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../mkdocs/stylesheets/center-images.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#freertos-p09" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="SYZ 的笔记" class="md-header__button md-logo" aria-label="SYZ 的笔记" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SYZ 的笔记
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              互斥量｜FreeRTOS 源码详解 P09
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="SYZ 的笔记" class="md-nav__button md-logo" aria-label="SYZ 的笔记" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    SYZ 的笔记
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SYZ 的笔记
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+          
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../ros2-intro/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    嵌入式与机器人
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    嵌入式与机器人
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    铁头山羊 STM32 入门教程
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    铁头山羊 STM32 入门教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/chapter-01/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    准备与开发环境
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_2" id="__nav_2_1_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    准备与开发环境
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-01/p002/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P002 · 安装开发环境
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-01/p003/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P003 · 1.1 （准备） STM32的基本信息
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/chapter-02/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GPIO
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_3" id="__nav_2_1_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    GPIO
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-02/p005/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P005 · 2.1 （GPIO）4种输出模式
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-02/p006/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P006 · 2.2 （GPIO）IO的最大输出速度
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-02/p007/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P007 · 2.3 （GPIO）LED闪灯实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-02/p008/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P008 · 2.4 （GPIO）4种输入模式
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-02/p009/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P009 · 2.5 （GPIO）按钮实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/chapter-03/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    串口
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_4" id="__nav_2_1_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    串口
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-03/p010/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P010 · 3.1 （串口）通信协议
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-03/p011/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P011 · 3.2 （串口）UART模块的使用方法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-03/p012/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P012 · 3.3 （串口）为串口初始化IO引脚
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-03/p013/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P013 · 3.4 （串口）发送数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-03/p014/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P014 · 3.5 （串口）格式化打印字符串
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-03/p015/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P015 · 3.6 （串口）接收数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-03/p016/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P016 · 3.7 （串口）封装常用功能
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/chapter-04/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    I²C
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_5" id="__nav_2_1_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    I²C
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-04/p017/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P017 · 4.1 （I2C）基本电路结构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-04/p018/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P018 · 4.2 （I2C）通信协议
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-04/p019/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P019 · 4.3 （I2C）I2C模块的使用方法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-04/p020/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P020 · 4.4 （I2C）写数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-04/p021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P021 · 4.5 （I2C）读数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-04/p022/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P022 · 4.6 （I2C）软I2C
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-04/p023/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P023 · 4.7 （I2C）封装常用功能
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-04/p024/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P024 · 4.8 （I2C）OLED显示器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/chapter-05/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SPI 与按钮驱动
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_6" id="__nav_2_1_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    SPI 与按钮驱动
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-05/p025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P025 · 5.1 （SPI）电路结构和通信协议
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-05/p026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P026 · 5.2 （番外） 按钮驱动程序编写
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-05/p027/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P027 · 5.3 （番外） 按钮代码的封装
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-05/p028/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P028 · 5.4 （SPI） IO引脚初始化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-05/p029/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P029 · 5.5 （SPI）SPI模块的初始化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-05/p030/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P030 · 5.6 （SPI）数据收发
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-05/p031/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P031 · 5.7 （SPI）W25Q64实验(上)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-05/p032/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P032 · 5.8 （SPI）W25Q64实验(下)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/chapter-06/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    中断
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_7" id="__nav_2_1_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    中断
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-06/p033/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P033 · 6.1 （中断）中断的概念
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-06/p034/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P034 · 6.2 （中断）中断优先级
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-06/p035/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P035 · 6.3 （中断）串口中断编程实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_8" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/chapter-07/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EXTI
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_8" id="__nav_2_1_8_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    EXTI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-07/p036/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P036 · 7.1 （EXTI）工作原理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-07/p037/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P037 · 7.2 （EXTI）按钮实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_9" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/chapter-08/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    时钟
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_9" id="__nav_2_1_9_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    时钟
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-08/p038/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P038 · 8.1 （时钟）时钟树
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-08/p039/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P039 · 8.2 （时钟）时钟树编程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_10" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/chapter-09/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    定时器
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_10" id="__nav_2_1_10_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    定时器
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-09/p040/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P040 · 9.1 （定时器）时基单元
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-09/p041/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P041 · 9.2 （定时器）自制延迟函数
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-09/p042/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P042 · 9.3 （定时器）输出比较
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-09/p043/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P043 · 9.4 （定时器）呼吸灯实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-09/p044/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P044 · 9.5 （定时器）输入捕获
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-09/p045/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P045 · 9.6 （定时器）超声波测距实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-09/p046/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P046 · 9.7 （定时器）从模式控制器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-09/p047/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P047 · 9.8 （定时器）PWM参数测量原理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-09/p048/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P048 · 9.9 （定时器）PWM参数测量实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_11" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/chapter-10/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADC
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_11" id="__nav_2_1_11_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ADC
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-10/p049/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P049 · 10.1 （ADC） 逐次逼近型ADC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-10/p050/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P050 · 10.2 （ADC） ADC模块的结构框图
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-10/p051/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P051 · 10.3 （ADC）采样时间和转换时间
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-10/p052/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P052 · 10.4 （ADC）常规单通道转换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-10/p053/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P053 · 10.5 （ADC）定时器触发
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-10/p054/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P054 · 10.6 （ADC）扫描模式
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeRTOS 源码详解
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    FreeRTOS 源码详解
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeRTOS 源码详解 P01：列表–概述
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P02 列表–初始化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P03 任务切换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P04 阻塞延时
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeRTOS P05｜队列-概述
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P06 队列-创建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P07 队列—发送
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeRTOS 源码详解 P08：队列接收
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    互斥量｜FreeRTOS 源码详解 P09
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    互斥量｜FreeRTOS 源码详解 P09
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        从信号量看队列的特殊情况
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#i2c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        共用 I²C 时的互斥
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        为什么还需要互斥量：优先级反转
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        优先级继承与归还后的恢复
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tcb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TCB 与队列头增加、复用的字段
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        从创建函数印证初始化
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        任务创建时的两个初值
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task B 成功取得互斥量
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task A 获取失败后进入继承路径
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        事件列表项的优先级与事件组例外
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        就绪状态与非就绪状态的两条分支
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#head" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        归还路径为什么还要检查 Head
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mutexes-held-0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        为什么必须等 Mutexes Held 减到 0
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeRTOS P10｜队列集
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../embedded-ai-rk3588/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    嵌入式 AI 教程 · RK3588
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    嵌入式 AI 教程 · RK3588
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P01｜00_导学：嵌入式 AI 教程（基于 RK3588）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P02｜01_快速了解 RK3588
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P03｜02_NPU原理及对比
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P04｜03_RKNPU 推理软件架构与模型部署流程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P05｜04_瑞芯微 GitHub 仓库介绍
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P06｜05_搭建 rknn_toolkit2 开发环境
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P07｜06_设备端 NPU 环境搭建与 NPU 驱动更新
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P08｜07_查看和调整 CPU、NPU 和 DDR 频率
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P09｜08_快速体验 rknn_demo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P10｜09_rknn模型转换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10_均值和标准差
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P12｜11_模型转换工具 rknn_convert
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P13｜12_Netron 的基本使用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P14｜13_rknn-toolkit2模型推理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    14. 模型量化精度分析
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P16｜15_模型性能评估
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P17｜16_模型内存评估
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P18｜17_模型剪枝
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    18_模型加密
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P20｜19_多 Batch 处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P21｜20_多输入模型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P22｜21_动态 shape 输入
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P23｜22_ONNX模型编辑
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P24｜23_自动生成部署 C 代码
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P25｜24_RKNN-ToolkitLite2 基本使用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P26｜25_RKNPU2—通用 C API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P27｜26_RKNPU2—零拷贝 C API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p28/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P28｜27_mobilenet模型部署
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P29｜28_mobilenet模型代码封装
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p30/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    29｜YOLOv5模型部署实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p31/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P31 · YOLOv26 模型部署：Windows 环境搭建与模型预测分析
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    30_yolov26模型部署(从0到1版)_数据集构建与模型训练
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p33/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P33｜30_yolov26模型部署(从0到1版)_导出onnx与rknn模型并板端推理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p34/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P34｜31_yolov8模型部署（优化加速版）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p35/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P35 · 32_Deepseek_Qwen大模型部署
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../rk3588-course/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RK3588 精品公开课
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    RK3588 精品公开课
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rk3588-course/l01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RK3588 NVR及后端产品
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rk3588-course/l02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RKNN模型精度优化指南
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rk3588-course/l03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RKNN Runtime部署指南
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rk3588-course/l04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RK3588 多目摄像头拼接产品及技术答疑
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rk3588-course/l05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RK3588 Linux SDK 开发及产品应用介绍
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rk3588-course/l06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RK3588 Android开发答疑
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rk3588-course/l07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    99%利用率的RKNN模型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../finetuning-practice/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    大模型与 AI 应用
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    大模型与 AI 应用
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../rag-intro/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2025 大模型 RAG 入门
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    2025 大模型 RAG 入门
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag-intro/l01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01：为什么需要 RAG
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag-intro/l02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02：RAG的基本流程：为什么说上手RAG只要一星期
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag-intro/l03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03：RAG的10个优化技巧：为什么RAG不是算法问题，是工程问题
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag-intro/l04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    04：RAG的评估方法：没有评估，就没法优化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag-intro/l05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    05：项目经理视角的RAG：需求评估要细，技术迭代要快
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lora-paper/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LoRA 论文解读与微调部署
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../linux-perf/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    工程与运维实践
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    工程与运维实践
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mlflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MLflow 最佳实践
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cc-switch-deepseek/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CC-Switch：Claude Code 接入 DeepSeek V4.1-Flash-1017
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cc-switch-codex-opencode-go/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CC-Switch：Codex 接入 OpenCode Go
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../github-pages-mkdocs-notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    用 MkDocs Material 和 GitHub Pages 发布 Markdown 笔记
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        从信号量看队列的特殊情况
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#i2c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        共用 I²C 时的互斥
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        为什么还需要互斥量：优先级反转
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        优先级继承与归还后的恢复
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tcb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TCB 与队列头增加、复用的字段
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        从创建函数印证初始化
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        任务创建时的两个初值
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task B 成功取得互斥量
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#task-a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Task A 获取失败后进入继承路径
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        事件列表项的优先级与事件组例外
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        就绪状态与非就绪状态的两条分支
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#head" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        归还路径为什么还要检查 Head
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mutexes-held-0" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        为什么必须等 Mutexes Held 减到 0
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="freertos-p09">互斥量｜FreeRTOS 源码详解 P09<a class="headerlink" href="#freertos-p09" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>清理式忠实讲稿，保留讲述顺序与讲者主张。原片范围 00:00–31:00.870，<a href="https://www.bilibili.com/video/BV1fmL6ziEhA/?p=9">来源 P09</a>。
+原视频640×360，代码小字局部不清；正文仅清理可由上下文及画面确认的识别错误，不据模糊截图补造代码。设备名、讲者特殊表述在相邻位置标注。浏览器file协议受限，桌面与窄屏布局及图片缩放、时间链接交互未实测。</p>
+</blockquote>
+<h2 id="_1">从信号量看队列的特殊情况<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><a href="https://www.bilibili.com/video/BV1fmL6ziEhA/?p=9&amp;t=0">原片 00:00</a></p>
+</blockquote>
+<p>我们来介绍一下互斥量的内部机制。互斥量实际上是一种高级的信号量，而信号量又是特殊的队列，所以我们先简单地介绍一下信号量。</p>
+<p>信号量前面也说了，它是特殊的队列。它特殊在哪呢？特殊在它的 size——每个有多大——这个 size 是 0。也就是说，它没有数据段。它就是这样一个情况：没有数据段，其他的都和队列是一样的。</p>
+<p>这边我们也来看一下，这是创建二值信号量的一个宏函数。我们创建二值信号量就用这个函数，也可以看到它的底层，就是在调用这个通用的队列创建函数。二值信号量的 length，也就是传进去的第一个参数，是 1；然后它的 size 是 0，第二个参数是 0。这也就印证了我们刚才说的：它的 size 是 0。</p>
+<p><img alt="二值信号量创建宏及底层队列创建调用（原视频640×360，小字局部不清，截图用于定位原画面）" src="images/f001.jpg" /></p>
+<p><em>二值信号量创建宏及底层队列创建调用（原视频640×360，小字局部不清，截图用于定位原画面） · <a href="https://www.bilibili.com/video/BV1fmL6ziEhA/?p=9&amp;t=60">原片 01:00</a></em></p>
+<p>包括信号量的放入与取出，其实底层都是用队列的函数。这边要往信号量里放，底层也是调用队列通用的 Send 函数。你看它第一个参数，本质上就是个队列的头节点；第二个参数是一个指针。当我们把它用作队列的时候，它指向的是我们要传到队列里面的数据。但是因为信号量没有数据段，我们传 NULL 就行了，内核帮我们传好了。然后包括它的一个 Take，从这个信号量里面取东西，底层也是在调用队列的函数，这个我们之前都讲到了。同样的，用来接收队列里面数据的指针也是 NULL。当它用作信号量时，我们这些传的都是 0。</p>
+<p>它内部的细节就不讲了，因为这个 Generic Receive 函数上节课也都说得很清楚了。大家感兴趣的话，可以把信号量这个特殊情况自己看一下。</p>
+<h2 id="i2c">共用 I²C 时的互斥<a class="headerlink" href="#i2c" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><a href="https://www.bilibili.com/video/BV1fmL6ziEhA/?p=9&amp;t=153">原片 02:33</a></p>
+</blockquote>
+<p>二值信号量的作用，我们主要是用来同步。假设说 Task A 和 Task B，它们都会使用同一个 I²C。Task A 可能是用来驱动屏幕的，Task B 可能是用来给这个设备写数据的〔此处设备名识别不清，原转写为“一方”，不据此补定型号〕。因为 I²C 的时序要求很高，它在写的时候，肯定是不能给别的任务打断的。</p>
+<p>当多个线程共用同一个有限资源的时候，就要用到互斥，对吧？互斥，就是某个比较紧张的资源有一个人在使用的时候，其他几个进程不能使用。这就是互斥的“斥”，互相排斥。</p>
+<p>假设 Task A 首先抢到了 I²C，它就会在这边把二值信号量拿过来。前面也说了，二值信号量的 length 最多只能放 1。初始的话，后面也会说，它在创建的时候会变成一个 1。这边 Take 拿过来之后，就会从 1 变成 0。</p>
+<p>取到了之后，因为取成功了，就可以正常进行，在这边使用 I²C，可以驱动屏幕。那 Task B 呢？假如说它走到这里来，</p>
+<p><img alt="Task A、Task B 中 Take、I2C 操作与 Give 的示例（原视频640×360，小字局部不清，截图用于定位原画面）" src="images/f002.jpg" /></p>
+<p><em>Task A、Task B 中 Take、I2C 操作与 Give 的示例（原视频640×360，小字局部不清，截图用于定位原画面） · <a href="https://www.bilibili.com/video/BV1fmL6ziEhA/?p=9&amp;t=240">原片 04:00</a></em></p>
+<p>此时 Task A 还在用 I²C。因为这个二值信号量，或者说这个队列，它的 Messages Waiting 已经从 1 变成 0 了，那它这里就写失败了。写失败了，它就阻塞了，进入这个 Waiting to Send 的列表下，乖乖等着。〔讲者此处的“写失败／Waiting to Send”按原讲述保留。〕</p>
+<p>一直要等到 Task A 把 I²C 使用完毕之后，再调用这个信号量 Give，把 I²C 的使用权限、这个信号量还过去之后，它才能够唤醒，然后再继续使用 I²C，发送它想要发送的数据。所以，这就是二值信号量的一个作用：互斥。</p>
+<h2 id="_2">为什么还需要互斥量：优先级反转<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><a href="https://www.bilibili.com/video/BV1fmL6ziEhA/?p=9&amp;t=286">原片 04:46</a></p>
+</blockquote>
+<p>那么，我们还有互斥量。既然二值信号量已经可以实现互斥的功能了，那我们为什么还要互斥量呢？大家应该也都听过，其中涉及到一个优先级反转的问题。简单来复习一下什么是优先级反转。</p>
+<p>我们假设一种情况：Task B 优先抢到了 I²C，现在资源在 Task B 这里。紧接着它来到这里，开始使用 I²C。使用到一半，这时候有一个 Task C 插进来了，它开始执行了。Task C 可能执行的时间比较长，同时它的优先级又比 Task B 要高。</p>
+<p>这就导致 Task B 会卡在这里。因为 Task C 的优先级比它高，Task B 一直没有执行的机会，这边的 I²C 它就用不完。它用不完，那 Task A 就一直卡在这，没法被唤醒了。</p>
+<p><img alt="A、C、B 三个任务的就绪优先级示意（原视频640×360，小字局部不清，截图用于定位原画面）" src="images/f003.jpg" /></p>
+<p><em>A、C、B 三个任务的就绪优先级示意（原视频640×360，小字局部不清，截图用于定位原画面） · <a href="https://www.bilibili.com/video/BV1fmL6ziEhA/?p=9&amp;t=360">原片 06:00</a></em></p>
+<p>那么这时候就遇到一个问题了：Task A 的执行，竟然要看 Task C 的心情。</p>
+<p>也就是说，优先级低的 Task C，它的存在竟然把优先级更高的 Task A 给阻塞了。这个就是“下克上”的一种行为。这就是使用二值信号量来做互斥机制的这样一个缺陷。</p>
+<p>所以这时候就引入了一个互斥量，一个更高级的二值信号量，来解决这个问题。互斥量解决这个问题的方法，是采用一个优先级继承的机制。</p>
+<h2 id="_3">优先级继承与归还后的恢复<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><a href="https://www.bilibili.com/video/BV1fmL6ziEhA/?p=9&amp;t=384">原片 06:24</a></p>
+</blockquote>
+<p>什么是优先级继承呢？就是现在 Task B 占有这个互斥资源，或者用刚才的例子来举例，就是占有那个 I²C。然后 Task A 想要用这个 Queue Receive 函数，去获取互斥量资源。</p>
+<p>由于这个互斥量现在被 Task B 所持有，所以 Task A 对互斥量的获取操作肯定是失败的。一旦失败，内核这里就会比对 Task A 和 Task B 两个任务的优先级。</p>
+<p>一旦内核检测到当前持有这个互斥量的任务，也就是 Task B，它的优先级比想要获取这个互斥量而不成功的任务的优先级要低，那么它就会临时对 Task B——就是当前持有这个互斥量的任务——进行一个提拔，把它的优先级提上来，提到跟想获取互斥量而不成功的这个任务的优先级一样。</p>
+<p>也就是这样一个情况：内核发现 Task A 拿互斥量拿不到，B 的优先级又比 A 要低。为了防止出现刚才那个“下克上”，也就是优先级反转的缺陷，它就把 Task B 提拔到和 Task A 一样的位置了。那就保证 Task B 可以执行，对不对？可以快速地、赶快执行完，把 I²C 释放完，然后让 Task A 来用。</p>
+<p><img alt="Task B 被临时放到 Task A 所在优先级的示意（原视频640×360，小字局部不清，截图用于定位原画面）" src="images/f004.jpg" /></p>
+<p><em>Task B 被临时放到 Task A 所在优先级的示意（原视频640×360，小字局部不清，截图用于定位原画面） · <a href="https://www.bilibili.com/video/BV1fmL6ziEhA/?p=9&amp;t=504">原片 08:24</a></em></p>
+<p>同理，你既然把它临时提拔上来了，那等这个互斥量用完了之后，这一切肯定要回归正常。Task B 肯定要回到它该回去的位置。因此，在 Task B 归还互斥量，也就是调用 Queue Send 函数成功的时候，就会把它当前的优先级和这个任务被创建时，也就是一出生的初始优先级，进行一个对比。一旦不一样，就让它当前的优先级和初始优先级一致，也就是又回到了这个状态。大致就是这样一个逻辑。</p>
+<p>我们刚才也说了，优先级继承就是两句话：当获取互斥量不成功时，优先级反转，对吧？让优先级更低、同时又占有资源的那个人升官，临时升官，让他能快速用完这个资源再还给我。第二个，当发送互斥量成功时，就是有任务把互斥量归还回去，它要优先级恢复。它检测一下自己现在是不是被临时升官了，如果是临时升官了，就要回到过去的位置。</p>
+<p>那么在技术细节上，它是怎么实现的呢？一旦我们把 Mutex，就是互斥量的那个宏定义打开，有两个结构体会因此发生一些变化。</p>
+<h2 id="tcb">TCB 与队列头增加、复用的字段<a class="headerlink" href="#tcb" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><a href="https://www.bilibili.com/video/BV1fmL6ziEhA/?p=9&amp;t=607">原片 10:07</a></p>
+</blockquote>
+<p>首先是 TCB 这个结构体，它会多出两个成员。一个叫 Base Priority（<code>uxBasePriority</code>），直译过来就是基本优先级，也就是这个任务被创建时的优先级。第二个是 uxMutexesHeld，代表这个 TCB 所代表的任务，持有了几个互斥量。</p>
+<p>然后队列头这个结构体，它的变化是：首先它的 size 是 0，对吧？互斥量本质上还是信号量，只是高级一点，它肯定是没有数据段的。再一个，它的 length 是 1。1 代表这个资源能用，0 代表这个资源不能用，它是一个二值状态，所以 length 是 1。</p>
+<p>再一个，初始化的时候，你调用 Mutex Create 函数，就是来创建一个互斥量的时候，这个 Messages Waiting（<code>uxMessagesWaiting</code>）——就是已经放了几个的这个变量——它是 1。初始的时候，这个资源是谁都能用的，代表有资源。</p>
+<p>然后我们前面讲到 pcHead 和 pcTail，代表数据段头和数据段尾。互斥量都没有数据段，所以这两个就另有他用。pcTail 不再表示数据尾了，它会指向一个 TCB。它所指向的 TCB，就是当前占有这个互斥量的任务；这个 TCB 所代表的，就是当前占有这个互斥量的任务。我们通过查询这根指针，就能找到当前这个互斥量是被谁、被哪个任务所占有。</p>
+<p><img alt="队列头、TCB 与持有者关系的结构图（原视频640×360，小字局部不清，截图用于定位原画面）" src="images/f005.jpg" /></p>
+<p><em>队列头、TCB 与持有者关系的结构图（原视频640×360，小字局部不清，截图用于定位原画面） · <a href="https://www.bilibili.com/video/BV1fmL6ziEhA/?p=9&amp;t=660">原片 11:00</a></em></p>
+<p>如果它谁都没指，是一个 NULL，就代表谁都不占有它。然后 pcHead 也不指向任何地方；pcTail 指向 NULL，pcHead 指向 NULL，就代表是互斥量。源码里面都是通过把 pcHead 和 NULL 进行对比，来判断它是不是互斥量的。</p>
+<p>所以刚才就说了，互斥量高级的地方在于它有一个优先级继承。优先级继承进一步说，就是这两个特质。实现这两个特质，内部有一些技术细节，主要就是 TCB 和 Queue 这两个数据结构上的区别。同时等会儿我们看源码，源码里面也会有一些不同。总体来说，技术细节都列出来了，接下来就去源码里把这些都印证一下、都找出来。</p>
+<h2 id="_4">从创建函数印证初始化<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><a href="https://www.bilibili.com/video/BV1fmL6ziEhA/?p=9&amp;t=802">原片 13:22</a></p>
+</blockquote>
+<p>然后我们来看互斥量的创建函数。它还是在调用队列的创建来完成的。首先 length 是 1，代表要么有、要么无：0 是无，1 是有。然后 size 是 0，对吧？它是一个没有数据段的队列，不需要数据段。这就是第一点。把这两个 1 和 0 传进去，这两个特性就实现了。</p>
+<p>然后这边是互斥量的初始化函数，看它干了啥。就是这里，Mutex Holder（<code>pxMutexHolder</code>）。这个 Holder 是谁？我们来看一下。Holder 是个宏，它就是 Tail，数据段尾。我们刚才说了，这个尾如果指向某个地方，它所指向的地方就会是一个 TCB，然后这个 TCB 就是当前持有互斥量的任务。</p>
+<p>初始化的时候，这个互斥量谁都不属于，肯定是空，对吧？然后这个 Queue Type（<code>uxQueueType</code>），它是谁？它也是个宏，它是 Head，对吧？这边也说了，Head 要赋值为 NULL，那我就给这个宏，它也是 NULL。后面的代码就会查这个 pcHead，来确定它是不是互斥量。</p>
+<p>然后这里，当我们这个互斥量作为一个递归型互斥量的时候，这个变量会用到。其实我们互斥量懂了，递归型互斥量就很简单。</p>
+<p>然后就是对这一点：往互斥量里面发了一个数据，就是印证第三点。它往里面发了一个东西，那么此时 Messages Waiting，就是当前有几个的这个变量，就不是零了。发了一个就是一，代表一开始这个资源是有的，是一个有的状态，谁都可以持有。初始化这一块，就大致带大家看了一下。</p>
+<p><img alt="互斥量初始化函数中的持有者、类型与初始发送（原视频640×360，小字局部不清，截图用于定位原画面）" src="images/f006.jpg" /></p>
+<p><em>互斥量初始化函数中的持有者、类型与初始发送（原视频640×360，小字局部不清，截图用于定位原画面） · <a href="https://www.bilibili.com/video/BV1fmL6ziEhA/?p=9&amp;t=888">原片 14:48</a></em></p>
+<h2 id="_5">任务创建时的两个初值<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><a href="https://www.bilibili.com/video/BV1fmL6ziEhA/?p=9&amp;t=925">原片 15:25</a></p>
+</blockquote>
+<p>然后就是这几个点，TCB 里面相关的一些特性。是从 Task Create 开始，这个函数还没给大家讲，我打算放最后讲。等一切讲完了，我们来看看第一个任务是怎么跑起来的。</p>
+<p>就给大家找一下吧，在这，在初始化这里。好，在这，你看，这个是个宏。一旦把这个宏开关打开，就是有互斥量了，需要用到互斥量了。那这边是 Base Priority，对吧？它代表任务被创建时的优先级，所以创建的时候就把它进行赋值。然后这个变量代表持有了几个互斥量，你刚创建的时候肯定啥都没有，那肯定是零。这个特性也讲完了。</p>
+<h2 id="task-b">Task B 成功取得互斥量<a class="headerlink" href="#task-b" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><a href="https://www.bilibili.com/video/BV1fmL6ziEhA/?p=9&amp;t=990">原片 16:30</a></p>
+</blockquote>
+<p>然后我们就模拟一下刚才说的 A、B、C 这三个任务的情况，对着源码，把技术细节捋一下。首先肯定是 Task B 调用这个 Queue Receive 函数成功了。调用成功，就来到这。</p>
+<p>基本上的区别，首先这里有一个：因为我们的 size 是 0，所以就不存在什么 memcpy 传输数据的事情，直接就跳出来。其他这边都一模一样。</p>
+<p>然后你是用作互斥量的时候，这个 Peeking（<code>xJustPeeking</code>）肯定是 False。你不能只看一下，必须拿走，所以肯定是走这个分支。唯一的区别就在这，多一些操作。</p>
+<p>你看这个 Mutex 宏打开之后，它首先就会判断 Head 是不是 NULL。就是这里，截个图，就这里判断一下 Head 是不是 NULL。pcHead 赋值为 NULL，代表是互斥量。现在判断确实是互斥量，就会来到这里。</p>
+<p>这里是在做一个什么事呢？首先，让这个 Tail 指针——因为 Tail 指针会指向此时此刻占有互斥量任务的 TCB——就把 pcTail 指针的指向改一下。同时还会干啥呢？同时还会让这个 Mutexes Held 变量，就是代表任务持有了几个互斥量的变量，让相应 TCB 里面这个变量再加加。因为你成功持有了，所持有的互斥量肯定要自增。</p>
+<p><img alt="获取成功后的互斥量专用分支（原视频640×360，小字局部不清，截图用于定位原画面）" src="images/f007.jpg" /></p>
+<p><em>获取成功后的互斥量专用分支（原视频640×360，小字局部不清，截图用于定位原画面） · <a href="https://www.bilibili.com/video/BV1fmL6ziEhA/?p=9&amp;t=1080">原片 18:00</a></em></p>
+<p>现在某个任务调用这个 Queue Receive 函数成功了，而且来到这里，那它肯定是 Current TCB，对吧？不然也不会来到这里，肯定是现在正在执行的任务。所以这里，就是 Current 任务的一个 TCB，这边的变量做一个加加，代表我现在又多持有了一个互斥量。</p>
+<p>也就是这个：假如以刚才的情况为例，这是 Task B 的 TCB，那它就是 1，就加加了。然后这返回去的是一个指针，就是 Task B 的地址。那么我们就让互斥量的 Tail 指向 Task B，这已经指向了。既然它要指向它，我们后续通过这个指针，就能知道当前是 Task B 在拿着这个互斥量了。</p>
+<p><img alt="pcTail 指向持有者 Task B 的图解（原视频640×360，小字局部不清，截图用于定位原画面）" src="images/f008.jpg" /></p>
+<p><em>pcTail 指向持有者 Task B 的图解（原视频640×360，小字局部不清，截图用于定位原画面） · <a href="https://www.bilibili.com/video/BV1fmL6ziEhA/?p=9&amp;t=1140">原片 19:00</a></em></p>
+<h2 id="task-a">Task A 获取失败后进入继承路径<a class="headerlink" href="#task-a" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><a href="https://www.bilibili.com/video/BV1fmL6ziEhA/?p=9&amp;t=1160">原片 19:20</a></p>
+</blockquote>
+<p>Task B 现在拿成功了，此时此刻它在用 I²C，还没用完、没释放。就是说 Task A 过来了。Task A 调用 Queue Receive 函数，发现失败了，它要做一个优先级的继承。我们看它是怎么做的。</p>
+<p>失败了，那我们直接往下走。这边都讲过了，很熟悉了，这个分支跳过去，来到这。当这个宏被打开的时候，这里会做一个区分。首先也是判断一下 Head 指针：如果是 NULL，就确认是互斥量，然后进行一个优先级继承。</p>
+<p>这个是判断一下人家传进来的是啥。Holder，就是 Tail，是吧？传进来的是 Tail。前面也说了，Tail 指向的肯定是当前占有互斥量的任务的 TCB，好不好？首先再判断一下它是不是 NULL，如果不是 NULL，就说明它指向某个 TCB。</p>
+<h2 id="_6">事件列表项的优先级与事件组例外<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><a href="https://www.bilibili.com/video/BV1fmL6ziEhA/?p=9&amp;t=1214">原片 20:14</a></p>
+</blockquote>
+<p>然后接着来做。这个 pxTCB 所指向的，就是 Mutex Holder，就是传进来的，也就是当前持有这个互斥量的任务的 TCB。把它的优先级拿出来，和我们当前想拿互斥量而不成功的任务的优先级进行对比。如果发现它小于它，也就是这种情况：当前拿到的是 B，B 的优先级小于 A，就进行下一步判断。</p>
+<p>它首先是想这样，肯定是要调用这一步的：Set Item Value，把 Event List 里面列表项的一个成员替换成 A，把它替换成 Task A 的一个优先级。这里就在干这个事情。</p>
+<p>不过它在干之前，多了一层判断。它判断这个值的某一个位，是不是 1。这个是为啥呢？后面讲事件组的时候会给大家介绍：如果这个判定过不去，说明当前这个 TCB 的 Event List 是在事件组排队的。如果在事件组排队，就不能把 Event List 里面所代表的优先级变掉，否则会有问题。</p>
+<p>如果不用事件组，那就能放下来，就把 Event List 的优先级变一下。Event List 这边再复习一下，前面也说了，各种各样的任务在各种队列里面排队的时候，是让 Event List 的列表项替它去排队的。然后 Event List 这个列表项里面的值，它就代表优先级。</p>
+<p><img alt="继承函数对事件列表项值及标志位的判断（原视频640×360，小字局部不清，截图用于定位原画面）" src="images/f009.jpg" /></p>
+<p><em>继承函数对事件列表项值及标志位的判断（原视频640×360，小字局部不清，截图用于定位原画面） · <a href="https://www.bilibili.com/video/BV1fmL6ziEhA/?p=9&amp;t=1296">原片 21:36</a></em></p>
+<p>所以你如果想实现优先级继承，如果不把这个任务用于事件组的时候，那肯定 Event List 也要改。帮它排队的那个所代表的优先级，也要相应升高。不然你只把 TCB 里面的优先级改了，但它排队始终排不过去，也一直在死等，对吧？把优先级更高的也给阻塞了。</p>
+<h2 id="_7">就绪状态与非就绪状态的两条分支<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><a href="https://www.bilibili.com/video/BV1fmL6ziEhA/?p=9&amp;t=1358">原片 22:38</a></p>
+</blockquote>
+<p>然后这一层判定，就是两个分支。判定 State List，就是当前持有这个互斥量的任务，它是否处于 Ready 状态，是否处于 Ready List 下。这个宏函数就在判断这件事，就这一行：它的 container 是否是这个 Ready List。</p>
+<p>如果处于 Ready 列表下，就先拿出来，再赋值，再干这个事情。如果在 Ready 列表下，把它从 Ready 列表里面拿出来，然后再改优先级，这边就进行一个赋值。如果不在 Ready 列表下，就直接赋值。</p>
+<p>这样就完成了一个优先级继承，对吧？Task B 的 TCB 里面的优先级，以及替它去各个队列里排队的这个 Event List 的优先级，都变得跟 A 一样了。那就能执行了。Task B 得到了提拔，能执行了。</p>
+<p><img alt="优先级继承中就绪列表成员判断与分支（原视频640×360，小字局部不清，截图用于定位原画面）" src="images/f010.jpg" /></p>
+<p><em>优先级继承中就绪列表成员判断与分支（原视频640×360，小字局部不清，截图用于定位原画面） · <a href="https://www.bilibili.com/video/BV1fmL6ziEhA/?p=9&amp;t=1416">原片 23:36</a></em></p>
+<p>它执行了一段时间，把 I²C 用完了，就往里还了，也就是调用 Queue Send 函数，发送互斥量。发送成功之后，就会优先级恢复。看一下它是咋恢复的。</p>
+<h2 id="head">归还路径为什么还要检查 Head<a class="headerlink" href="#head" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><a href="https://www.bilibili.com/video/BV1fmL6ziEhA/?p=9&amp;t=1463">原片 24:23</a></p>
+</blockquote>
+<p>在这，这是 Queue Send 函数。你发送成功了，就会来到这边，有区别的就在这。这里照例检查一下 pcHead 是否是 NULL。</p>
+<p>简单说一下，为啥要看这个？因为这个 Item Size 是 0 的时候，有两种情况：第一种是互斥量，还有信号量的时候，也是 0。那信号量的时候，这个指针就不是 NULL。它不需要优先级恢复，也不用优先级继承这些机制，所以这边做一个判断。</p>
+<p><img alt="发送路径中 size 与互斥量类型判断（原视频640×360，小字局部不清，截图用于定位原画面）" src="images/f011.jpg" /></p>
+<p><em>发送路径中 size 与互斥量类型判断（原视频640×360，小字局部不清，截图用于定位原画面） · <a href="https://www.bilibili.com/video/BV1fmL6ziEhA/?p=9&amp;t=1500">原片 25:00</a></em></p>
+<p>然后我们看优先级恢复是怎么实现的。pxTCB 就是指向当前持有互斥量的任务，那其实就是 Task B，其实就是 Current TCB，对不对？只是现在它把我还回去了。还我的人肯定也是持有我的人，这个还，是 Current TCB 才能还；那持有我的，肯定也是 Current TCB。</p>
+<p>你看这边，还有一个断言判断：持有这个互斥量的，肯定要是 Current TCB 才行。然后也就是 Task B 开始还了。</p>
+<p>首先这个变量要减减吧？代表持有了几个互斥量的变量，要减减，它就减成零了，是吧？还了一个，要减一个，这个很自然。然后这边会做一个判断，确认是啥呢？就是我当前的优先级，不等于我一出生时的优先级，那说明我是被临时提拔的。我现在就要进行一个优先级恢复，就是回到我该去的地方。好，这个判断先不看，我们最后再来看。</p>
+<p>首先，我此时此刻既然能还这个互斥量，那肯定是在一个 Ready 列表下。那我不仅要还互斥量，还要回到初始位置。我现在在这，要回到这，肯定要先从当前所在的 Ready 列表里面离开，对不对？就是在这，List Remove，让自己离开。</p>
+<p>然后就是让自己当前的优先级，等于初始时的优先级，这就返回去了。前面也说了，Event List 就是替它去队列里面排队的列表项。在继承的时候，这个优先级也变了。现在优先级还回去了，替它排队的那个人也不能在这狐假虎威了，是吧？也要把这个优先级给它恢复回去，就是在这。</p>
+<p><img alt="恢复基本优先级和事件列表项值的源码（原视频640×360，小字局部不清，截图用于定位原画面）" src="images/f012.jpg" /></p>
+<p><em>恢复基本优先级和事件列表项值的源码（原视频640×360，小字局部不清，截图用于定位原画面） · <a href="https://www.bilibili.com/video/BV1fmL6ziEhA/?p=9&amp;t=1620">原片 27:00</a></em></p>
+<p>好，这就说完了。你看这样一下，优先级继承其实都结束了——不好意思，优先级恢复也都 OK 了。其实整个逻辑也就说完了。</p>
+<h2 id="mutexes-held-0">为什么必须等 Mutexes Held 减到 0<a class="headerlink" href="#mutexes-held-0" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><a href="https://www.bilibili.com/video/BV1fmL6ziEhA/?p=9&amp;t=1664">原片 27:44</a></p>
+</blockquote>
+<p>然后最后再补讲一下：为什么要判定这个 Mutexes Held 等于 0 呢？这个其实也很简单，想象有一种这样的情况。假设有一个 Task，Task B、C……假设有个 Task E 吧。Task E 优先级不高，但是拿到的资源很多。比如说它把 I²C、串口、SPI，或者什么 Flash，还有各种应用层的一些东西都拿到手了。这个时候，我假设说这个 7 想用它，想用 I²C 了，就是这个 Task D 想用 I²C 了。但现在 I²C 在 Task E 手上，那就会把 Task E 临时提拔到它这。</p>
+<p>过了一会儿，Task C 想用串口了，串口也在 Task E 这，那就会临时把它提拔到这。结果 A 到 C 这些所有的任务，所想用的互斥资源，全都在 Task E 手上。刚才的步骤就重复了很多次，直到最后 Task E 就有可能跑到最高优先级上。</p>
+<p><img alt="多个等待任务与 Task E 持有多个资源的示意（原视频640×360，小字局部不清，截图用于定位原画面）" src="images/f013.jpg" /></p>
+<p><em>多个等待任务与 Task E 持有多个资源的示意（原视频640×360，小字局部不清，截图用于定位原画面） · <a href="https://www.bilibili.com/video/BV1fmL6ziEhA/?p=9&amp;t=1776">原片 29:36</a></em></p>
+<p>也就是说，它会持有很多任务——它会持有很多互斥量。它这个 Held，因为每次拿到一个互斥量，就会加加；同时持有了很多，那这个值也很大，比如说是 80。</p>
+<p>为什么要有刚才那个判断呢？刚才我们是在还 I²C。你不能说还了一个，就立马回去。你立马回去，那中间这些咋办？中间这些还想用串口，还想用 SPI，你这直接回去了，还是会出现优先级反转这样一个问题。</p>
+<p>所以就要判断一下。因为每还一个会减减，那就是你如果是 10，肯定要还 10 次，减减 10 次。要确保你所有的都还出去了，再回到你一开始的优先级。所以这里减减之后，这边再判断一下。好，那其实整个互斥量，这些细节也讲完了。有了队列的基础，其实这些都是队列的变体，讲起来、理解起来也是非常轻松的，因为有前置知识了。</p>
+<p>好，本节课把这个互斥量，从信号量开始，引入了优先级反转这样一个问题；然后又引入了我们的互斥量，介绍了一下互斥量解决优先级反转问题的方式，就是这两个方式。同时在源码上面，把这些技术细节都解释清楚了。</p>
+<p>好，那这个互斥量的讲解就说完了。</p>
+<p><img alt="课程结尾回到互斥量结构与继承、恢复关系图（原视频640×360，小字局部不清，截图用于定位原画面）" src="images/f014.jpg" /></p>
+<p><em>课程结尾回到互斥量结构与继承、恢复关系图（原视频640×360，小字局部不清，截图用于定位原画面） · <a href="https://www.bilibili.com/video/BV1fmL6ziEhA/?p=9&amp;t=1848">原片 30:48</a></em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.indexes", "navigation.top", "content.code.copy", "toc.follow"], "search": "../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+    
+  </body>
+</html>

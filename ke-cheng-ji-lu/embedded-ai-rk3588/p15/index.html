@@ -1,0 +1,5392 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="记录课程内容、技术实践与个人学习总结">
+      
+      
+      
+        <link rel="canonical" href="https://shangyizhou.github.io/syz-notes/ke-cheng-ji-lu/embedded-ai-rk3588/p15/">
+      
+      
+        <link rel="prev" href="../p14/">
+      
+      
+        <link rel="next" href="../p16/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>14. 模型量化精度分析 - SYZ 的笔记</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../mkdocs/stylesheets/center-images.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#14" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="SYZ 的笔记" class="md-header__button md-logo" aria-label="SYZ 的笔记" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SYZ 的笔记
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              14. 模型量化精度分析
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="SYZ 的笔记" class="md-nav__button md-logo" aria-label="SYZ 的笔记" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    SYZ 的笔记
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SYZ 的笔记
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+          
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../ros2-intro/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    嵌入式与机器人
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    嵌入式与机器人
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    铁头山羊 STM32 入门教程
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    铁头山羊 STM32 入门教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/chapter-01/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    准备与开发环境
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_2" id="__nav_2_1_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    准备与开发环境
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-01/p002/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P002 · 安装开发环境
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-01/p003/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P003 · 1.1 （准备） STM32的基本信息
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/chapter-02/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GPIO
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_3" id="__nav_2_1_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    GPIO
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-02/p005/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P005 · 2.1 （GPIO）4种输出模式
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-02/p006/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P006 · 2.2 （GPIO）IO的最大输出速度
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-02/p007/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P007 · 2.3 （GPIO）LED闪灯实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-02/p008/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P008 · 2.4 （GPIO）4种输入模式
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-02/p009/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P009 · 2.5 （GPIO）按钮实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/chapter-03/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    串口
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_4" id="__nav_2_1_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    串口
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-03/p010/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P010 · 3.1 （串口）通信协议
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-03/p011/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P011 · 3.2 （串口）UART模块的使用方法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-03/p012/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P012 · 3.3 （串口）为串口初始化IO引脚
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-03/p013/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P013 · 3.4 （串口）发送数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-03/p014/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P014 · 3.5 （串口）格式化打印字符串
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-03/p015/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P015 · 3.6 （串口）接收数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-03/p016/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P016 · 3.7 （串口）封装常用功能
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/chapter-04/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    I²C
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_5" id="__nav_2_1_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    I²C
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-04/p017/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P017 · 4.1 （I2C）基本电路结构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-04/p018/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P018 · 4.2 （I2C）通信协议
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-04/p019/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P019 · 4.3 （I2C）I2C模块的使用方法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-04/p020/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P020 · 4.4 （I2C）写数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-04/p021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P021 · 4.5 （I2C）读数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-04/p022/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P022 · 4.6 （I2C）软I2C
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-04/p023/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P023 · 4.7 （I2C）封装常用功能
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-04/p024/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P024 · 4.8 （I2C）OLED显示器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/chapter-05/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SPI 与按钮驱动
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_6" id="__nav_2_1_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    SPI 与按钮驱动
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-05/p025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P025 · 5.1 （SPI）电路结构和通信协议
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-05/p026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P026 · 5.2 （番外） 按钮驱动程序编写
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-05/p027/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P027 · 5.3 （番外） 按钮代码的封装
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-05/p028/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P028 · 5.4 （SPI） IO引脚初始化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-05/p029/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P029 · 5.5 （SPI）SPI模块的初始化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-05/p030/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P030 · 5.6 （SPI）数据收发
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-05/p031/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P031 · 5.7 （SPI）W25Q64实验(上)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-05/p032/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P032 · 5.8 （SPI）W25Q64实验(下)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/chapter-06/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    中断
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_7" id="__nav_2_1_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    中断
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-06/p033/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P033 · 6.1 （中断）中断的概念
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-06/p034/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P034 · 6.2 （中断）中断优先级
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-06/p035/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P035 · 6.3 （中断）串口中断编程实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_8" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/chapter-07/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EXTI
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_8" id="__nav_2_1_8_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    EXTI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-07/p036/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P036 · 7.1 （EXTI）工作原理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-07/p037/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P037 · 7.2 （EXTI）按钮实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_9" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/chapter-08/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    时钟
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_9" id="__nav_2_1_9_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    时钟
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-08/p038/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P038 · 8.1 （时钟）时钟树
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-08/p039/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P039 · 8.2 （时钟）时钟树编程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_10" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/chapter-09/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    定时器
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_10" id="__nav_2_1_10_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    定时器
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-09/p040/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P040 · 9.1 （定时器）时基单元
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-09/p041/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P041 · 9.2 （定时器）自制延迟函数
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-09/p042/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P042 · 9.3 （定时器）输出比较
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-09/p043/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P043 · 9.4 （定时器）呼吸灯实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-09/p044/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P044 · 9.5 （定时器）输入捕获
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-09/p045/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P045 · 9.6 （定时器）超声波测距实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-09/p046/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P046 · 9.7 （定时器）从模式控制器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-09/p047/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P047 · 9.8 （定时器）PWM参数测量原理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-09/p048/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P048 · 9.9 （定时器）PWM参数测量实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_11" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/chapter-10/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADC
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_11" id="__nav_2_1_11_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ADC
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-10/p049/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P049 · 10.1 （ADC） 逐次逼近型ADC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-10/p050/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P050 · 10.2 （ADC） ADC模块的结构框图
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-10/p051/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P051 · 10.3 （ADC）采样时间和转换时间
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-10/p052/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P052 · 10.4 （ADC）常规单通道转换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-10/p053/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P053 · 10.5 （ADC）定时器触发
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-10/p054/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P054 · 10.6 （ADC）扫描模式
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../freertos-source/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeRTOS 源码详解
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    FreeRTOS 源码详解
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../freertos-source/p01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeRTOS 源码详解 P01：列表–概述
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../freertos-source/p02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P02 列表–初始化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../freertos-source/p03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P03 任务切换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../freertos-source/p04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P04 阻塞延时
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../freertos-source/p05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeRTOS P05｜队列-概述
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../freertos-source/p06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P06 队列-创建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../freertos-source/p07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P07 队列—发送
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../freertos-source/p08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeRTOS 源码详解 P08：队列接收
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../freertos-source/p09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    互斥量｜FreeRTOS 源码详解 P09
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../freertos-source/p10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeRTOS P10｜队列集
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    嵌入式 AI 教程 · RK3588
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    嵌入式 AI 教程 · RK3588
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P01｜00_导学：嵌入式 AI 教程（基于 RK3588）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P02｜01_快速了解 RK3588
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P03｜02_NPU原理及对比
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P04｜03_RKNPU 推理软件架构与模型部署流程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P05｜04_瑞芯微 GitHub 仓库介绍
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P06｜05_搭建 rknn_toolkit2 开发环境
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P07｜06_设备端 NPU 环境搭建与 NPU 驱动更新
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P08｜07_查看和调整 CPU、NPU 和 DDR 频率
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P09｜08_快速体验 rknn_demo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P10｜09_rknn模型转换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10_均值和标准差
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P12｜11_模型转换工具 rknn_convert
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P13｜12_Netron 的基本使用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P14｜13_rknn-toolkit2模型推理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    14. 模型量化精度分析
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    14. 模型量化精度分析
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        量化的基本介绍
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        常规量化
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        量化结果分析：映射文件与误差报告
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        混合量化
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P16｜15_模型性能评估
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P17｜16_模型内存评估
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P18｜17_模型剪枝
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    18_模型加密
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P20｜19_多 Batch 处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P21｜20_多输入模型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P22｜21_动态 shape 输入
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P23｜22_ONNX模型编辑
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P24｜23_自动生成部署 C 代码
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P25｜24_RKNN-ToolkitLite2 基本使用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P26｜25_RKNPU2—通用 C API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P27｜26_RKNPU2—零拷贝 C API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p28/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P28｜27_mobilenet模型部署
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P29｜28_mobilenet模型代码封装
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p30/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    29｜YOLOv5模型部署实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p31/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P31 · YOLOv26 模型部署：Windows 环境搭建与模型预测分析
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    30_yolov26模型部署(从0到1版)_数据集构建与模型训练
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p33/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P33｜30_yolov26模型部署(从0到1版)_导出onnx与rknn模型并板端推理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p34/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P34｜31_yolov8模型部署（优化加速版）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p35/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P35 · 32_Deepseek_Qwen大模型部署
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../rk3588-course/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RK3588 精品公开课
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    RK3588 精品公开课
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rk3588-course/l01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RK3588 NVR及后端产品
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rk3588-course/l02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RKNN模型精度优化指南
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rk3588-course/l03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RKNN Runtime部署指南
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rk3588-course/l04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RK3588 多目摄像头拼接产品及技术答疑
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rk3588-course/l05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RK3588 Linux SDK 开发及产品应用介绍
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rk3588-course/l06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RK3588 Android开发答疑
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rk3588-course/l07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    99%利用率的RKNN模型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../finetuning-practice/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    大模型与 AI 应用
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    大模型与 AI 应用
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../rag-intro/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2025 大模型 RAG 入门
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    2025 大模型 RAG 入门
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag-intro/l01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01：为什么需要 RAG
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag-intro/l02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02：RAG的基本流程：为什么说上手RAG只要一星期
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag-intro/l03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03：RAG的10个优化技巧：为什么RAG不是算法问题，是工程问题
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag-intro/l04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    04：RAG的评估方法：没有评估，就没法优化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag-intro/l05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    05：项目经理视角的RAG：需求评估要细，技术迭代要快
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lora-paper/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LoRA 论文解读与微调部署
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../linux-perf/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    工程与运维实践
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    工程与运维实践
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mlflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MLflow 最佳实践
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cc-switch-deepseek/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CC-Switch：Claude Code 接入 DeepSeek V4.1-Flash-1017
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cc-switch-codex-opencode-go/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CC-Switch：Codex 接入 OpenCode Go
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../github-pages-mkdocs-notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    用 MkDocs Material 和 GitHub Pages 发布 Markdown 笔记
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        量化的基本介绍
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        常规量化
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        量化结果分析：映射文件与误差报告
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        混合量化
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="14">14. 模型量化精度分析<a class="headerlink" href="#14" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>来源：<a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15">B站课程P15</a> · 全片42分54秒。</p>
+<p>整理方式：忠实讲稿，不做摘要压缩。保留原讲述顺序、第一人称、解释、操作、例子和限定；仅清理无意义停顿、偶发结巴并补充标点与轻量小标题。</p>
+<p>图片说明：16张原视频截图，源画面640×360，小字受原始画质限制；图注是编辑说明。原始转写与复核记录随附于 sources。33:31附近原转写异常已根据局部重新识别修订；末段部分小数无法可靠确认，均在相应位置注明。</p>
+</blockquote>
+<p><a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=0">00:00</a></p>
+<p>这节课我们来看第14讲，模型量化精度分析。这节课内容会稍微有点多，这里一共有四个部分：第一个是量化的基本介绍，第二个是常规量化，第三个是混合量化，第四个是量化结果分析。其中第四个量化结果分析，是包含于第二个和第三个部分中的。接下来我们就一个一个逐个来看。</p>
+<h2 id="_1">量化的基本介绍<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>第一个我们要看的是量化的基本介绍。首先这里有一个定义：模型量化，是指深度学习模型中的浮点参数和操作转换为定点表示。什么意思呢？举个例子，我们可以把 float32 转换为 int8。float32 转换为 int8，很明显这个数据是变小的。变小之后，它就能降低内存的占用，实现模型的压缩或者推理的加速。但是因为它变小了，所以它的精度也会造成一定程度上的损失。这就是量化的定义。</p>
+<p>接下来我们来看量化的计算原理。这里一共有五个公式，这个也是我从官网上面截下来的。在这里我就不再带着大家去看这个公式了，大家感兴趣的话，可以看看我的这个文档，或者直接去官网上面看，也都是一样的。其实这个原理是非常简单的，这个量化、反量化，我还是建议大家去看一看。虽然我们写代码其实不用考虑这些，但还是建议大家去看一看。</p>
+<p><img alt="量化计算原理：讲师展示官方文档中的五个公式。" src="images/f001.jpg" /></p>
+<p><em>量化计算原理：讲师展示官方文档中的五个公式。 · <a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=96">原片 01:36</a></em></p>
+<p>接下来我们来看，瑞芯微 RKNN-Toolkit2 提供了两种量化方式，还有三种量化算法，是通过 <code>config</code> 这个接口去进行配置的。我们可以在这里打开前面的……</p>
+<p><a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=123">02:03</a></p>
+<p>第9节，有一个构建——点错了，是这个转换，<code>config</code>。它里面我们找一找，在这里，当时我也都进行标红了。这个就是量化算法，这个就是方式，叫 method；这个 algorithm，是算法。</p>
+<p>我们重新回到这篇文档，就不在刚才那里去看了，我们在这里来看。三种量化算法分别是 Normal、MSE，还有 KLD。</p>
+<p>Normal 算法的原理，是通过计算模型中特征的浮点数最大值和最小值，来确定量化范围的最大值和最小值。算法的特点是速度比较快，但是遇到特征分布不均衡的时候，效果就会比较差。推荐的量化数据一般是20到100张左右。</p>
+<p>第二个 MSE 算法，是通过最小化浮点数据量化、反量化后浮点数的均方误差损失，确定量化范围的。它在一定程度上能缓解大异常值带来的量化精度损失问题。它的核心就是这个，叫什么，均方误差。这个在我们机器学习当中，包括深度学习、PyTorch 当中，也都会经常提 MSE。在这里我就不给大家讲这个，大家知道有这三种算法就可以了。</p>
+<p>第三个是 KLD 算法。刚才这里还有一点漏讲：MSE 采用的是暴力迭代的方式，所以它的速度会很慢，但它的精度是这三种算法里面最高的。它推荐的量化数据量是20到50张左右，用户也可以根据时间长短，去进行适当的增加或者减少。</p>
+<p><a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=251">04:11</a></p>
+<p>那都是废话。第三个是 KLD，它是将模型特征中的浮点数和定点数抽象成两个分布，然后通过调整阈值来调整这个分布，通过这个分布确定量化范围的最大值和最小值。它用的时间，还有它的精度，都是介于 Normal 和 MSE 之间的。它推荐的数据量也是20到100张，和我们的 Normal 是一样的。这是三种量化算法。</p>
+<p>两种量化方式，一个叫 Layer，一个叫 Channel。Layer 量化方式这里有很多文字，我们就不看了，直接看这幅图。Layer 可以看到这个红、绿、蓝，它们都共用 s 和 z 这个参数，也就是共享相同的量化参数。Channel 这个通道的方式，每一层都会有自己独立的量化参数。所以从这个图，我们也能想得到，Channel 这种方式计算量会更大，复杂度会更高，相应的精度也会更好。这就是两种量化方式。</p>
+<p><img alt="Per-Layer 共用 s、z；Per-Channel 图中分别标出各通道的量化参数。" src="images/f002.jpg" /></p>
+<p><em>Per-Layer 共用 s、z；Per-Channel 图中分别标出各通道的量化参数。 · <a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=312">原片 05:12</a></em></p>
+<p>看完这个之后，我们再来看下面这里。有这么多算法、方式等等，这些算法到底是怎么样把浮点数变成整数的？也就是前面我们这里的计算原理，只不过前面是数学公式，可能看上去有点不好理解，有点烦。在这里，我用文字来给大家做一个简单的解释。</p>
+<p>所有量化方法的核心，都是在建立浮点值和整数值之间的一种映射关系。这个很明显，比如说把18.888映射成一个——1点……映射成一个2，映射成一个3或者4等等。其实它们之间就是在找一种映射关系。</p>
+<p><a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=376">06:16</a></p>
+<p>最常用的方式叫做线性量化，它的基本思想是用一个缩放系数和一个零点，把一段浮点范围线性地压缩到整数范围内。具体来说，它的过程可以简单理解为：先减去一个零点，再除一个缩放因子，最后再四舍五入，变成一个整数。反过来，把整数还原成浮点数，就叫做反量化。这就是它最简单的思想。</p>
+<p>在这里，我们也可以根据零点是不是固定为0，把线性量化又分成两种方式，一个叫对称量化，一个叫非对称量化。对称量化就强制零点是0，可以看到这幅图里0就在中间。非对称量化，0就可以不在中间，可以动态地进行计算、动态地进行分布。你看，左边有5个，1、2、3、4、5，5个空点；右边也有1、2、3、4、5，5个空点，就是采用这种方法进行计算的。在我们瑞芯微这里面，采用的就是非对称量化方式。</p>
+<p><img alt="对称量化与非对称量化的映射示意图。" src="images/f003.jpg" /></p>
+<p><em>对称量化与非对称量化的映射示意图。 · <a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=436">原片 07:16</a></em></p>
+<p>这里也写了一下量化的优势：可以有效地压缩模型文件，节省磁盘存储空间，节省成本，能够更快地进行推理，限制功耗，节省内存。缺点是精度损失，这个显而易见，都能想得明白。理论上，模型推理的准确度，就是我们的这个数据，越小它越不精准，数据越大越精准。</p>
+<p>上面讲的这些内容，就是量化的基本介绍。讲完这些之后，上面这些都是理论，接下来我们来看一下，我们在写代码的过程中，到底应该怎么样来写。写代码的时候……</p>
+<h2 id="_2">常规量化<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p><a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=496">08:16</a></p>
+<p>我们也有两种方式，一个叫常规量化，一个叫混合量化。我们先来看常规量化，第一个是常规量化的流程。我把它直接点进来，看上去会大一些。</p>
+<p>首先和之前一样，创建 RKNN 对象，配置 RKNN 模型，加载对应的浮点模型，构建 RKNN 对象，导出对象。然后在这里进行量化精度分析，调用的是这个 API。它可以逐层对比浮点模型和量化模型的输出结果，输出余弦距离和欧氏距离，可以分析精度下降的原因。最后一步就是释放 RKNN 对象。</p>
+<p><img alt="常规量化流程中，在导出模型之后进行量化精度分析。" src="images/f004.jpg" /></p>
+<p><em>常规量化流程中，在导出模型之后进行量化精度分析。 · <a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=532">原片 08:52</a></em></p>
+<p>在这里，知道流程之后，可能大家还没看到具体代码，还不太理解。我们先知道这个流程，一会儿在代码中具体来看。</p>
+<p>看完流程之后，在看代码之前，我们先来看一下它的 API。它调用的 API 叫做 <code>accuracy_analysis</code>。这个口语比较差，所以我就不再给大家读这个单词了，总之就是这个 API。</p>
+<p>它里面有1、2、3、4，有4个参数。第一个参数是输入的图像，第二个是输出的目录，默认值叫这么个名字，它里面还会生成好多目录。我看看，这个还有这个……这个我们不在这里看，一会儿直接看代码就行了。第三个参数是 <code>target</code>，是具体的平台。最后一个是设备的 ID。</p>
+<p>同样，在这里也写了一下注意事项：精度分析的时候，可能因为模型太大了，开发板容量不够……</p>
+<p><a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=616">10:16</a></p>
+<p>就会失败。我们就使用这个命令去查一下，查完之后确保它有足够大的空间，然后再来进行量化分析。</p>
+<blockquote>
+<p>画面中的检查命令为 <code>df -h</code>。</p>
+</blockquote>
+<p>第二个，我们加载 RKNN 模型的时候，这个 RKNN 模型如果缺失原始模型的信息，可能就没有办法进行精度分析了。第三个，在 ARM64 版本中，可以不加 <code>device_id</code>。我们之前写了那么多代码，都没加过这个东西。</p>
+<p>再下面就是一个举例，还有代码测试，有 PC 端模拟器里面的，有连板推理的。这些我们在代码中来看，一会儿直接看代码里面。</p>
+<p>首先打开04这个目录。因为这节课前面忘了，漏掉了，忘了录这节课了，所以下面都已经到14了，我又回过头来录制这节课。</p>
+<p>我们来看一下，首先是这个带下划线、跟 pt 的文件（<code>accuracy_analysis_pt.py</code>），这个文件是在模拟器里面执行，所以我们来看具体代码。第一个是创建对象，第二个是进行配置。这些我们在代码中来看，我们一会儿直接看代码里面。首先打开04这个目录，就是进行配置。第三个是加载 PyTorch 的模型，第四个是进行 build 构建，然后导出。然后在这里面，就是进行量化精度分析。</p>
+<p>第四个参数，设备 ID，直接就没写。第一个是输入的图片，第二个是输出的目录，就是我们一会儿进行量化分析，会生成一大堆文件，这些文件就保存在这个目录下面。第三个是平台，因为我们现在想要看的是模拟器上面的，所以直接把它设置为 <code>None</code>。</p>
+<p><img alt="模拟器精度分析代码：输入图片、snapshot 输出目录与 target=None。" src="images/f005.jpg" /></p>
+<p><em>模拟器精度分析代码：输入图片、snapshot 输出目录与 target=None。 · <a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=716">原片 11:56</a></em></p>
+<p>接下来打开 Ubuntu。在这里，我们先跳到04这个文件，我先清一下屏，然后在这里来执行一下，它就是这个。</p>
+<blockquote>
+<p>画面所在目录为 <code>04_accuracy_analysis</code>，执行的脚本是 <code>accuracy_analysis_pt.py</code>。</p>
+</blockquote>
+<p><a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=737">12:17</a></p>
+<p>好，我们稍微等待一会儿。等待完之后可以看到，现在说就保存在这个里面，一个什么映射文件，还有一个什么 error 这个文件。我们不管它，直接打开代码，打开 VS Code。可以看到，在这里我们确确实实就生成了这些文件。</p>
+<p>这些文件到底是什么意思、什么功能呢？在文档中，我也给大家写得很详细。其实在这里我也截图了，我在这里也再贴一下。</p>
+<p>首先第一个目录叫做 <code>golden</code>。Golden 这个名字叫很珍贵，就是黄金。这什么意思呢？就是说我们把这个目录叫做真实目录，我们认为这个目录下面的值就是标准值。所以它里面保存的是未量化的原始浮点模型，没有量化之前的数据，就是最开始、最真实的数据。</p>
+<p>第二个是我们模拟器。模拟器量化之后的值就保存在这里（<code>simulator</code>）。你想一下，我们从 float 模型转变成一个 int 模型，一定会有精度的损失。上面这里就相当于保存的是原本的值，下面这里保存的是模拟器上面精度损失之后、量化过之后的值。就是这两个文件。</p>
+<p><img alt="分析输出目录与 golden、simulator、映射文件和 error_analysis.txt 的说明。" src="images/f006.jpg" /></p>
+<p><em>分析输出目录与 golden、simulator、映射文件和 error_analysis.txt 的说明。 · <a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=820">原片 13:40</a></em></p>
+<p>实际上，这两个文件我们也可以点开看一下，它里面内容特别特别多。我们一般情况下，其实也不看这些文件，包括还有很多 npy，就是文件特别多。这个文件和它其实是对应的，也是这些内容。我们一般会看的，主要还是下面这个文件。</p>
+<h2 id="_3">量化结果分析：映射文件与误差报告<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p><a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=860">14:20</a></p>
+<p>就是 error 这个文件。在 error 文件之前，我们先说一下，还有一个文件叫做 <code>map_name_to_file.txt</code>。从这个名字也能听到，就是映射，这个东西到这个 file 里面。我们打开这个文件，瞅一眼，把它贴个图放到这里，来看一下它的解释。</p>
+<p>你看，左侧叫做 layer_name，就是每一层这些层的名字；file_name 就是这些层对应的具体文件。这个 <code>input.11</code>，它对应的文件叫 <code>input_11.txt</code>。在这里，我们可以看特别具体、详细的信息，也就是建立了一个映射关系，为了方便我们去看。但一般情况下，我们也不看这个。</p>
+<p><img alt="map_name_to_file.txt 中 layer_name 与 file_name 两列的对应关系。" src="images/f007.jpg" /></p>
+<p><em>map_name_to_file.txt 中 layer_name 与 file_name 两列的对应关系。 · <a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=896">原片 14:56</a></em></p>
+<p>我们一般会看它，<code>error_analysis.txt</code>，我点击查看，叫做精度误差分析报告。这里我截的一张图是这样的，我们打开它，可以看到，就是这个图和我这里截的其实是一样的。</p>
+<p>我们来看一下，我想一下，还是把它……这样吧，我还是贴一张图，贴一张图好说一点。可以看到，这个图里面分成这么几个部分。我鼠标这里叫做 layer_name，就是层的名称。这里叫 simulator_error，就是模拟器上面的一个分析。它的下面又分成两个，一个叫 entire，一个叫 single。英语好一点，这两个单词也能知道含义。single 就是单层误差，entire 是累积误差。单层误差就代表……</p>
+<p><a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=980">16:20</a></p>
+<p>我们这一层有多少误差，这一层有多少。entire 就是累积有多少误差，就这个意思。我们重点关注的其实是 single，就是单层。因为我们去优化的时候，这层我们发现它不太好，我们就优化这一层，是这样去做的。</p>
+<p>它下面还有两个东西，一个叫 cos，一个叫 euc。cos 叫做余弦相似度，euc 叫做欧氏距离。这两个东西，一些特别细节的概念，我们也不需要深入研究。我们要记住的是，cos 越接近1，就代表效果越好。euc 的话，它其实很难接近0，可能从几，2到20之间都会有。</p>
+<p>其实我们重点关注的也不是 euc，需要重点关注的是 cos。就是看它，我们可以近似地把 cos 当成准确率吧，可以这样理解吧，也不能这么理解。我们可以近似地把 cos 当成准确率吧，可以这样理解吧，近似地这样看。1就代表百分之百好，0.999 就代表损失了一点点，0.999……就又损失得多了一点点，我们就近似地这样去理解。</p>
+<blockquote>
+<p>此处第二个小数的转写同样为0.999，画面未给出讲师口中第二个示例的独立标注，暂保留原转写，不推定其小数位数。</p>
+</blockquote>
+<p><img alt="误差报告包含 entire、single 两组，每组下有 cos、euc 两列。" src="images/f008.jpg" /></p>
+<p><em>误差报告包含 entire、single 两组，每组下有 cos、euc 两列。 · <a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=1052">原片 17:32</a></em></p>
+<p>当然，它的一些定义、作用，在这里我也都写了下来，这些文字大家可以自己看一下，我就不再读这些文字了。大家记住我刚才说的，我们要尽可能让 cos 这个值接近1。你像这种，我们这里都是999开头的，我们的效果可以说是非常哇塞，所以其实就没什么太多好优化的地方。这个文件分析完之后……</p>
+<p><a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=1100">18:20</a></p>
+<p>我们第一个代码就全部看完了。接下来，我们来看第二个代码，把它折叠起来，就是这个不带 pt 的（<code>accuracy_analysis.py</code>）。可以看到，其实这些地方都一样：创建 RKNN 对象，进行配置，然后加载、构建、导出。在这里，唯一不一样的是，我把 <code>target</code> 改成了 <code>rk3588</code>，用开发板做精度分析。这个目录，我也是为了区分，叫了一个2，随便起了一个名字，多叫了一个名字。</p>
+<p>好，在这里我们就再执行一下这个文件，来看一下。我们每次用开发板、连板推理这种方式，有这个“小手机”这种（该口述词转写未确认），速度就会慢一些，因为它要建立一个连接，和去使用这个板子推理。在这里也能看到，就是之前说过很多次的 API 版本，有 server 版本、tool 版本，都是2.3.2。</p>
+<p><img alt="连板分析建立连接后，终端显示 API、rknn_server 与工具版本信息。" src="images/f009.jpg" /></p>
+<p><em>连板分析建立连接后，终端显示 API、rknn_server 与工具版本信息。 · <a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=1160">原片 19:20</a></em></p>
+<p>等待一会儿之后，现在就执行好了。执行好之后，我们看它又保存到这里了。然后打开它，点哪去了？这个，有这个。可以看到，就在这里，我们多生成了一个 runtime 目录。之前只有这两个，现在多了一个 runtime，下面别的文件其实都是一样的。</p>
+<p>这个 runtime 文件是什么意思呢？在这个4.2这里，我也有记录。这个意思，就是我们设置了 RK3588 这个平台之后……</p>
+<p><a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=1220">20:20</a></p>
+<p>在这里我们设置了它之后，就会生成它。simulator 是模拟器端量化后的数据，runtime 就是我们开发板端的数据。所以说，这就是和 simulator 不一样的地方。这个是模拟器端，下面这个 simulator 是模拟器端，runtime 是开发板端。具体在这里也写了一些文字，文字就不看了。</p>
+<p>我们来看它，这个文件和前面一样，没什么区别，你看，都是这样左右的。然后这个文件，它就有一点区别了，我们来看一下。</p>
+<p>之前我们是没有这边这些信息的，只有左边的。我也再说一点，这是层，这是什么余弦距离、欧氏距离，这是累积误差，这是单层误差，是这样的。在右边这里，这个东西就是我们 NPU 上面的量化误差。同样，这也是累积的，这也是单层的；这是余弦距离，这是欧氏距离，余弦距离、欧氏距离，就是这么个意思。</p>
+<p><img alt="报告左侧为 simulator_error，右侧为 runtime_error，两边均有累积与单层指标。" src="images/f010.jpg" /></p>
+<p><em>报告左侧为 simulator_error，右侧为 runtime_error，两边均有累积与单层指标。 · <a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=1304">原片 21:44</a></em></p>
+<p>我们看一下最终的结果，到最后这里。可以看到，其实确实，我们看这个累积的，就是左侧的，我们可以看到，最终这里好像右边的值，确实总是比左边的值会大一点，比左边的值好一点。也就是什么意思呢？</p>
+<p><a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=1341">22:21</a></p>
+<p>就是说，我们开发板端可能推理的时候效果会更好。但是也不一定，应该也有右边比左边小的，这里就小了。另外的含义和刚才一样，也就不再多讲。</p>
+<p>什么时候我们需要特别关注呢？这个值突然发现，这里还是0.999，下面一层降得特别厉害，那可能这一层会有一些问题，我们就需要重点关注。</p>
+<p>如果一些眼尖的同学会发现，这边上面怎么空空的？这里有数据，这里怎么没有？这里有数据，这里怎么没有？好像右边的数据比左边少。产生这个的原因是什么？就是说，左边这个我们叫模拟器，模拟器端精度损失的效果。在模拟器处理的时候，它会把这些层，每一层都进行严格的处理。而我们这边叫 NPU 端，开发板端处理。开发板在处理的时候，可能我们也可以叫它更聪明一点，它觉得这两个操作、这个算子可以融合，它就融合到一起了。融合到一起之后，它的步骤就变少了，所以这也是它这里步骤、数据会少一点的原因。</p>
+<p>如果大家真的去看，也会发现 runtime 里面的文件，比 simulator 里面的文件数量要少。simulator 文件数量和 golden，也就是未进行量化之前，它们的数据是一样的。对，它俩数量一样多，runtime 数量会少。这个大家自己可以去查一查，使用一条命令查一查文件数量，我在这里就不再给大家查了。</p>
+<p>我想一下，说到这里，第一个步骤……</p>
+<p><a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=1461">24:21</a></p>
+<p>也就是我们04这个代码就看完了。这个代码看完之后，我们常规量化也就讲完了。讲完常规量化之后，接下来来讲混合量化。</p>
+<h2 id="_4">混合量化<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>为什么会有混合量化这个东西的存在呢？在前面我们进行常规量化，就是把所有的层，这个网络中每一层，采用的都是相同的方式去进行量化。第一层、第二层、第三层，我们每一层采用的方式都是相同的。</p>
+<p>但是可能会有这种情况：某一层，我们想要把它使用 int8 类型去进行量化；还有一些层，我们并不想 int8，我们觉得精度下降得太厉害了，就要用浮点型来进行表示。这个时候，采用刚才常规量化就做不到了，就需要使用混合量化来做。混合量化的功能，也就是这个作用。上面这段字也就是解释我刚才说的东西。</p>
+<p>我们来看它的用法。第一个，将指定的量化层可以改成非量化层，比如用 float16 进行计算。但是因为我们这个 NPU，它的非量化算力比较低，所以推理速度就会比较慢。第二个，每一层的量化参数都可以进行修改，一般也不建议修改。</p>
+<p>在这里，我们就看一下它的流程。量化一共分为两个部分，我们先来看量化第一步。第一步同样，先创建对象、配置对象，然后加载模型……</p>
+<p><a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=1581">26:21</a></p>
+<p>加载模型，然后生成量化配置文件。调用这个 API 之后，会生成三个文件：第一个叫临时模型文件，就是 <code>.model</code>；第二个是权重数据文件，<code>.data</code>；第三个是量化配置文件，<code>.cfg</code>。在这里我们可以进行一些配置，最后释放对象，这是量化的第一步。</p>
+<p>量化第二步在这里，同样前面都是一样的。不一样的地方就在第三步，构建混合量化 RKNN 模型，就是调用混合量化 step2 这个接口，把第一步生成的这些文件传进来，然后生成我们要的模型，再把模型导出就可以了。这是混合量化第二步。</p>
+<p><img alt="混合量化第二步流程：将第一步的模型、权重和量化配置传给 step2，再导出模型。" src="images/f011.jpg" /></p>
+<p><em>混合量化第二步流程：将第一步的模型、权重和量化配置传给 step2，再导出模型。 · <a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=1617">原片 26:57</a></em></p>
+<p>我们看一下 API。第一个 API 叫 <code>hybrid_quantization_step1</code>，传入这么几个参数：<code>dataset</code>，然后有个 <code>rknn_batch_size</code>，这个 <code>proposal</code>，这个就是产生混合量化配置的建议值。瑞芯微很贴心，它帮我们加了这么个参数。把这个参数开启之后，它就会建议我们哪些层可以做量化，哪些层可以不用做量化，通过这个参数进行控制。</p>
+<p>下面这个 <code>proposal_dataset_size</code>，就是它使用的 dataset 的张数，默认值是1。因为这个功能比较耗时，所以默认就用一张，也就是 dataset 里面的第一张。最后一个是自定义的（<code>custom_hybrid</code>），如果有多组输入和输出名，就使用这种方式，我们一般也不太用得到。这是第一步的 API。</p>
+<p>接下来看第二步的 API，<code>hybrid_quantization_step2</code>。它的参数就是三个，上面生成了三个文件，在这里我们就传入三个文件，之后再生成 RKNN 模型，导出 RKNN 模型就可以了。</p>
+<p><a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=1701">28:21</a></p>
+<p>这是它的 API。接下来就是具体代码，我们直接在这里来看。打开05，我把之前这些文件，刚才测试的文件都删掉。好，我们就打开它，<code>step1.py</code>，第一步。</p>
+<p>我们构建 RKNN 对象，进行 <code>config</code> 配置，然后加载模型。很关键的，就是调用这个 API。第一个是传入 <code>dataset</code>，然后这个是批次（<code>rknn_batch_size</code>），我们3588的话，要不就不设置，要不就设置为3。这个是否开启混合量化建议的参数值，我们先把它设置为 <code>False</code>，默认值也是 <code>False</code>。最后一个就是用几张图片，一般我们就采用一张图片，默认值也是1。我们可以点过来看一下，就是这个，这是它的默认值。好，看一下，默认值也是1。</p>
+<p><img alt="step1.py 中的 dataset、rknn_batch_size、proposal 与 proposal_dataset_size 参数。" src="images/f012.jpg" /></p>
+<p><em>step1.py 中的 dataset、rknn_batch_size、proposal 与 proposal_dataset_size 参数。 · <a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=1752">原片 29:12</a></em></p>
+<p>把它关掉，关掉之后，到 Ubuntu 里面。我们到05目录下，清一下屏，然后 <code>ls</code> 一下，再执行一下。好，执行完了。执行完之后可以看到，我们就生成了三个文件，比如说数据文件，比如说 <code>.model</code> 临时模型文件，第三个就是这个 config。</p>
+<p>config 的核心就是两部分。你看，第一个部分叫做 custom，自定义的量化层；第二个就是具体的量化参数。自定义的量化层是什么意思？</p>
+<p><a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=1821">30:21</a></p>
+<p>比如说，我们觉得 <code>input.11</code> 这一层不好。我想一下怎么讲，我们先说下面吧，先来看量化参数。<code>x.3</code> 这个是输入的，下面就是具体的层。</p>
+<p>我们来看 <code>qtype</code>，就是采用的类型。这个 <code>asym</code>，就是非对称量化。这个方式叫 Layer，你看，就和我们前面讲这里的时候一样，这一项有 Layer、有 Channel，这里是 Layer。量化的类型叫 int8。然后 min 和 max 就是量化之后，它把这个值映射到“0、0.000……”（此处数值转写未确认），最小值是这个，最大值是这个。这个是原始值，原始值最小是它、最大是它。这个叫做缩放因子，这个是零点。</p>
+<p>就在前面我们做这一课的时候也讲了，你看，先把浮点数减去一个零点，除一个缩放因子，四舍五入变成整数。你看，这是原始值，这是缩放因子，这是零点值，最终它就能计算出这两个值。这就是我们的量化参数。下面虽然很多，但都是这个格式。</p>
+<p><img alt="量化配置包含 qtype、qmethod、dtype、min/max、scale、zero_point 和原始范围。" src="images/f013.jpg" /></p>
+<p><em>量化配置包含 qtype、qmethod、dtype、min/max、scale、zero_point 和原始范围。 · <a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=1893">原片 31:33</a></em></p>
+<p>做完这个之后，我们再讲上面这个。上面自定义的，比如说我们觉得这一层，使用 int8 不好，会影响我们的精度，我们就在上面可以这样，用一个 float16。这样一写，就代表这一层采用 float16，我们就不用 int8 了，就是这个意思。我们觉得这一层不好，就把这一层加上去；这层不好，都加上去。</p>
+<p><a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=1941">32:21</a></p>
+<p>我先删掉。这就是这个参数的作用，我们可以手动进行配置。配置完之后，就进入第二步。第二步，你看，我们调这个 API，把前面生成的这三个东西传进来。传进来之后，我们就可以重新进行分析，再把它导出就可以了。</p>
+<p>同样，我们把它也执行一下，在这里直接来做 step2。稍微等待一会儿，因为每次用这种方式去执行，其实就是稍微有一点点慢。</p>
+<p>然后其实这里特别地慢，刚才看这个文档，记得在哪里好像也看到了，是这个混合量化，应该是 API 吧。然后就是这里……我忘了。反正就是刚才在哪里已经看到了，就是速度会比较慢。</p>
+<blockquote>
+<p><a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=2000">33:20–34:10 局部转写修订</a>：原始转写在33:31–33:59出现乱码和重复“通过”。此处依据协调器提供的2000–2050秒音频局部重新识别及原片时间映射恢复语句，并结合已查看画面核对场景；不是人工听音确认。原始与补充识别均保留在 sources。</p>
+</blockquote>
+<p>当然，这会儿也已经好了，好了就行。那好了之后我们看一下，它同样地也生成了这些值，和刚才也都是一样的，这里也是量化。我想一下，那就这样，我把它保存下来。</p>
+<p><a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=2061">34:21</a></p>
+<p>总之，这就是我们完成的混合量化过程。有一个地方，就是刚才在这里把它设置成 <code>False</code>，它没有给我们建议值，所以需要我们自己手动在这里进行修改。</p>
+<p>现在我们把它设置为 <code>True</code>。设置为 <code>True</code>，再看一眼，现在我们再执行一下。这次设置为 <code>True</code> 之后，我们再打开，还是这个文件，可以看到比刚才多了很多信息。多了哪些信息呢？就是 custom 这里，它告诉我们，可以把这些层，我截下来，就是叫 <code>input.11</code>，然后82、572、572……它在这些层使用 float 类型会更好，我们的精度会更高。它给出了这些建议，这就是刚才那个参数的作用。</p>
+<p><img alt="proposal=True 后，custom_quantize_layers 出现 float16 建议层和旁侧数值注释。" src="images/f014.jpg" /></p>
+<p><em>proposal=True 后，custom_quantize_layers 出现 float16 建议层和旁侧数值注释。 · <a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=2133">原片 35:33</a></em></p>
+<p>其实我们一般来讲，怎么看呢？来看一下，就是它为什么会给我们这些建议。首先来看，就是 <code>input.11</code> 这里，你看，从这里都是999，然后到下面 <code>input.11</code>，到这里输出的时候，它变成了0.9991。它觉得这里精度下降得比较多，所以建议你把这一层用这个 float 的……你看，它后面也写了0.9991。我把它写得全一点，然后接下来是这个82。</p>
+<p><a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=2184">36:24</a></p>
+<p>82在这里。这里你看，0.9991。我再看一眼，它这个是怎么对的。它这里没写，那不管它，就是它觉得从这里，从这个0.9991这里，然后到下面这里……反正它觉得这里不好，然后它就给了一些，就这里，它觉得这里不好，就给了一些建议值。包括还有这些，像572，这些572在最下面。</p>
+<p>好，反正总之就是它觉得这里不好，就给了建议值。但其实我们效果已经足够好了。总之它是这样的，它给了这些，然后我们把这个代码也改，把它改成……我们也去执行一下。执行完之后，可以稍微进行一个对比。</p>
+<p>在这里执行的时候会比较慢，还是稍微等一会儿吧。好，现在还没生成完，还是一些中间的，我们再等一会儿吧。好，现在已经生成完了，生成完了。</p>
+<p><a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=2304">38:24</a></p>
+<p>生成完之后，我们再打开，这样。现在已经生成完了，生成完之后再打开，这样，上面这里这样。我们来看一下，它刚才建议的这个，折叠起来，这是它建议的这些。</p>
+<p>我们再来看一下，不看那么多了，就看572这里。572在最下面，你看它原本的……算了，还是这样看吧，好像有点小。上面，现在打开的是上面这个，就是第一次没有使用建议值的。我们看一下572这里，就是这里，“99937，99937”，然后“913、913、913”，是这么一串。单层的话，是什么“919393”。然后我们再看刚才使用了这个之后的，可以看到刚才那个……</p>
+<blockquote>
+<p><a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=2394">39:54–40:14 数字待确认</a>：原转写将连续小数识别为上述数字串；源画面只有640×360，不能把这些字串可靠还原为完整小数。保留讲师比较的顺序与原串，具体报告请结合截图查看。</p>
+</blockquote>
+<p><a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=2424">40:24</a></p>
+<p>那个“13”，我们在这里其实都明显有提升。这样对比吧，你看，原本没有使用建议值去优化之前，这里都是“913、913”。现在这里，这个变成了一个效果，这里整体的效果也是有变好的。然后单层的效果，看，也是从原本的，你看是999，然后现在变成了“1.6”（此处原转写如此，画面对应的 cos 显示为1.00000）。当然这里是一样。左边，你看，累积的也是有变好。</p>
+<p>总之是什么意思呢？采用了那个参数值进行优化之后，不管是左边累积的，还是右边单层的，我们效果确实变好了。</p>
+<p><img alt="572附近结果对照：讲师将未采用建议的报告截图贴到新报告下方比较。" src="images/f015.jpg" /></p>
+<p><em>572附近结果对照：讲师将未采用建议的报告截图贴到新报告下方比较。 · <a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=2448">原片 40:48</a></em></p>
+<p>我们再看一个别的层吧，还有，我们再看一下这个，看上面一个。先看没有优化之前，<code>input.11</code>、82这个，你看它总体是这样，单层也是这样，这是之前的。然后我们看之后的，之后的在这里，你看这些全都是一点，1.0。所以说，它确实精度变得更高了，但是速度也会变得更慢。因为确实把 int 类型又改回去，改回 float 类型了。</p>
+<p><img alt="采用 float16 建议后的前部层报告，若干 cos 单层指标显示1.00000。" src="images/f016.jpg" /></p>
+<p><em>采用 float16 建议后的前部层报告，若干 cos 单层指标显示1.00000。 · <a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=2512">原片 41:52</a></em></p>
+<p>总之，大家知道这个就可以了。我们在做的时候，如果明显像这种，其实都已经很好了，不需要进行优化。实际过程中，发现有哪些确实不好的时候，我们就进行这些优化……</p>
+<p><a href="https://www.bilibili.com/video/BV11DjT6uEhc/?p=15&amp;t=2544">42:24</a></p>
+<p>那就可以了。讲完这个，其实我们第三个混合量化也已经讲完了，代码也分析了。第四点，前两个我们已经看过了，这里其实就是解释了一下这个，这个我们其实也已经说过了。</p>
+<p>说完这些，本节课就都已经讲完了。这节课我看一下，也都42分钟了，我们这个视频就到这里。最后也是感谢大家的观看，谢谢大家，谢谢大家。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.indexes", "navigation.top", "content.code.copy", "toc.follow"], "search": "../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+    
+  </body>
+</html>

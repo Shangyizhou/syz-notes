@@ -1,0 +1,7 @@
+/* Center Markdown screenshots in the Material site without changing GitBook pages. */
+.md-typeset img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1rem auto;
+}
