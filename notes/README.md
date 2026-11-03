@@ -21,6 +21,7 @@
 * [Linux 性能分析入门与实战](ke-cheng-ji-lu/linux-perf/)：Linux 性能观测与分析方法整理。
 * [MLflow 最佳实践](ke-cheng-ji-lu/mlflow/)：MLflow 实验跟踪与模型管理实践。
 * [CC-Switch：Claude Code 接入 DeepSeek V4.1-Flash-1017](ke-cheng-ji-lu/cc-switch-deepseek/)：用 CC-Switch 配置 DeepSeek，并验证 Claude Code 的调用链路。
+* [CC-Switch：Codex 接入 OpenCode Go](ke-cheng-ji-lu/cc-switch-codex-opencode-go/README.md)：配置 OpenCode Go 的 Chat Completions 上游，并排查 Codex 协议转换、区域策略和本地代理问题。
 * [用 MkDocs Material 和 GitHub Pages 发布 Markdown 笔记](ke-cheng-ji-lu/github-pages-mkdocs-notes/)：记录从本地 Markdown 预览到 GitHub Pages 发布的工作流。
 
 ## 关于这些记录
