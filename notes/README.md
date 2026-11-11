@@ -15,6 +15,7 @@
 * [2025 大模型 RAG 入门](ke-cheng-ji-lu/rag-intro/)：5 集，从基本流程到优化技巧与评估方法。
 * [微调：从原理到实操](ke-cheng-ji-lu/finetuning-practice/)：SFT、RLHF 概念与 Linux 上微调部署的完整流程。
 * [LoRA 论文解读与微调部署](ke-cheng-ji-lu/lora-paper/)：LoRA 算法原理与对外接口暴露实践。
+* [AI 动画制作全流程](ke-cheng-ji-lu/ai-animation-production/README.md)：从参考片拆解到生成、剪辑与发布的单集完整记录。
 
 ## 工程与运维实践
 

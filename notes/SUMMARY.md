@@ -143,6 +143,9 @@
 
 * [LoRA 论文解读与微调部署](ke-cheng-ji-lu/lora-paper/README.md)
 
+* [AI 动画制作全流程](ke-cheng-ji-lu/ai-animation-production/README.md)
+  * [全网150万播放的AI动画，怎么做的？分享我的制作全流程](ke-cheng-ji-lu/ai-animation-production/full-workflow/README.md)
+
 
 ## 工程与运维实践
 
