@@ -1,0 +1,6898 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="记录课程内容、技术实践与个人学习总结">
+      
+      
+      
+        <link rel="canonical" href="https://shangyizhou.github.io/syz-notes/ke-cheng-ji-lu/ros2-intro/">
+      
+      
+        <link rel="prev" href="../rk3588-course/l07/">
+      
+      
+        <link rel="next" href="../rag-intro/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>ROS2 入门 - SYZ 的笔记</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../mkdocs/stylesheets/center-images.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#-ros" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="SYZ 的笔记" class="md-header__button md-logo" aria-label="SYZ 的笔记" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SYZ 的笔记
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              ROS2 入门
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="SYZ 的笔记" class="md-nav__button md-logo" aria-label="SYZ 的笔记" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    SYZ 的笔记
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SYZ 的笔记
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+          
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="./" class="md-nav__link md-nav__link--active">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    嵌入式与机器人
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link md-nav__link--active" for="__nav_2" id="__nav_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    嵌入式与机器人
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../stm32/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    铁头山羊 STM32 入门教程
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    铁头山羊 STM32 入门教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../stm32/chapter-01/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    准备与开发环境
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_2" id="__nav_2_1_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    准备与开发环境
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-01/p002/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P002 · 安装开发环境
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-01/p003/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P003 · 1.1 （准备） STM32的基本信息
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../stm32/chapter-02/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GPIO
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_3" id="__nav_2_1_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    GPIO
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-02/p005/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P005 · 2.1 （GPIO）4种输出模式
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-02/p006/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P006 · 2.2 （GPIO）IO的最大输出速度
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-02/p007/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P007 · 2.3 （GPIO）LED闪灯实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-02/p008/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P008 · 2.4 （GPIO）4种输入模式
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-02/p009/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P009 · 2.5 （GPIO）按钮实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../stm32/chapter-03/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    串口
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_4" id="__nav_2_1_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    串口
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-03/p010/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P010 · 3.1 （串口）通信协议
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-03/p011/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P011 · 3.2 （串口）UART模块的使用方法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-03/p012/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P012 · 3.3 （串口）为串口初始化IO引脚
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-03/p013/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P013 · 3.4 （串口）发送数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-03/p014/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P014 · 3.5 （串口）格式化打印字符串
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-03/p015/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P015 · 3.6 （串口）接收数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-03/p016/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P016 · 3.7 （串口）封装常用功能
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../stm32/chapter-04/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    I²C
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_5" id="__nav_2_1_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    I²C
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-04/p017/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P017 · 4.1 （I2C）基本电路结构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-04/p018/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P018 · 4.2 （I2C）通信协议
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-04/p019/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P019 · 4.3 （I2C）I2C模块的使用方法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-04/p020/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P020 · 4.4 （I2C）写数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-04/p021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P021 · 4.5 （I2C）读数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-04/p022/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P022 · 4.6 （I2C）软I2C
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-04/p023/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P023 · 4.7 （I2C）封装常用功能
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-04/p024/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P024 · 4.8 （I2C）OLED显示器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../stm32/chapter-05/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SPI 与按钮驱动
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_6" id="__nav_2_1_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    SPI 与按钮驱动
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-05/p025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P025 · 5.1 （SPI）电路结构和通信协议
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-05/p026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P026 · 5.2 （番外） 按钮驱动程序编写
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-05/p027/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P027 · 5.3 （番外） 按钮代码的封装
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-05/p028/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P028 · 5.4 （SPI） IO引脚初始化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-05/p029/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P029 · 5.5 （SPI）SPI模块的初始化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-05/p030/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P030 · 5.6 （SPI）数据收发
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-05/p031/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P031 · 5.7 （SPI）W25Q64实验(上)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-05/p032/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P032 · 5.8 （SPI）W25Q64实验(下)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../stm32/chapter-06/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    中断
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_7" id="__nav_2_1_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    中断
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-06/p033/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P033 · 6.1 （中断）中断的概念
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-06/p034/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P034 · 6.2 （中断）中断优先级
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-06/p035/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P035 · 6.3 （中断）串口中断编程实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_8" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../stm32/chapter-07/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EXTI
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_8" id="__nav_2_1_8_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    EXTI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-07/p036/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P036 · 7.1 （EXTI）工作原理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-07/p037/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P037 · 7.2 （EXTI）按钮实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_9" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../stm32/chapter-08/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    时钟
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_9" id="__nav_2_1_9_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    时钟
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-08/p038/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P038 · 8.1 （时钟）时钟树
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-08/p039/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P039 · 8.2 （时钟）时钟树编程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_10" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../stm32/chapter-09/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    定时器
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_10" id="__nav_2_1_10_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    定时器
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-09/p040/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P040 · 9.1 （定时器）时基单元
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-09/p041/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P041 · 9.2 （定时器）自制延迟函数
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-09/p042/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P042 · 9.3 （定时器）输出比较
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-09/p043/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P043 · 9.4 （定时器）呼吸灯实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-09/p044/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P044 · 9.5 （定时器）输入捕获
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-09/p045/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P045 · 9.6 （定时器）超声波测距实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-09/p046/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P046 · 9.7 （定时器）从模式控制器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-09/p047/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P047 · 9.8 （定时器）PWM参数测量原理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-09/p048/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P048 · 9.9 （定时器）PWM参数测量实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_11" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../stm32/chapter-10/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADC
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_11" id="__nav_2_1_11_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ADC
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-10/p049/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P049 · 10.1 （ADC） 逐次逼近型ADC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-10/p050/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P050 · 10.2 （ADC） ADC模块的结构框图
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-10/p051/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P051 · 10.3 （ADC）采样时间和转换时间
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-10/p052/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P052 · 10.4 （ADC）常规单通道转换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-10/p053/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P053 · 10.5 （ADC）定时器触发
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../stm32/chapter-10/p054/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P054 · 10.6 （ADC）扫描模式
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../freertos-source/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeRTOS 源码详解
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    FreeRTOS 源码详解
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freertos-source/p01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeRTOS 源码详解 P01：列表–概述
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freertos-source/p02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P02 列表–初始化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freertos-source/p03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P03 任务切换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freertos-source/p04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P04 阻塞延时
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freertos-source/p05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeRTOS P05｜队列-概述
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freertos-source/p06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P06 队列-创建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freertos-source/p07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P07 队列—发送
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freertos-source/p08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeRTOS 源码详解 P08：队列接收
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freertos-source/p09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    互斥量｜FreeRTOS 源码详解 P09
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../freertos-source/p10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeRTOS P10｜队列集
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../embedded-ai-rk3588/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    嵌入式 AI 教程 · RK3588
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    嵌入式 AI 教程 · RK3588
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P01｜00_导学：嵌入式 AI 教程（基于 RK3588）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P02｜01_快速了解 RK3588
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P03｜02_NPU原理及对比
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P04｜03_RKNPU 推理软件架构与模型部署流程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P05｜04_瑞芯微 GitHub 仓库介绍
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P06｜05_搭建 rknn_toolkit2 开发环境
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P07｜06_设备端 NPU 环境搭建与 NPU 驱动更新
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P08｜07_查看和调整 CPU、NPU 和 DDR 频率
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P09｜08_快速体验 rknn_demo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P10｜09_rknn模型转换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10_均值和标准差
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P12｜11_模型转换工具 rknn_convert
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P13｜12_Netron 的基本使用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P14｜13_rknn-toolkit2模型推理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    14. 模型量化精度分析
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P16｜15_模型性能评估
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P17｜16_模型内存评估
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P18｜17_模型剪枝
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    18_模型加密
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P20｜19_多 Batch 处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P21｜20_多输入模型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P22｜21_动态 shape 输入
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P23｜22_ONNX模型编辑
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P24｜23_自动生成部署 C 代码
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P25｜24_RKNN-ToolkitLite2 基本使用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P26｜25_RKNPU2—通用 C API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P27｜26_RKNPU2—零拷贝 C API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p28/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P28｜27_mobilenet模型部署
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P29｜28_mobilenet模型代码封装
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p30/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    29｜YOLOv5模型部署实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p31/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P31 · YOLOv26 模型部署：Windows 环境搭建与模型预测分析
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    30_yolov26模型部署(从0到1版)_数据集构建与模型训练
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p33/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P33｜30_yolov26模型部署(从0到1版)_导出onnx与rknn模型并板端推理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p34/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P34｜31_yolov8模型部署（优化加速版）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../embedded-ai-rk3588/p35/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P35 · 32_Deepseek_Qwen大模型部署
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../rk3588-course/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RK3588 精品公开课
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    RK3588 精品公开课
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rk3588-course/l01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RK3588 NVR及后端产品
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rk3588-course/l02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RKNN模型精度优化指南
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rk3588-course/l03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RKNN Runtime部署指南
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rk3588-course/l04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RK3588 多目摄像头拼接产品及技术答疑
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rk3588-course/l05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RK3588 Linux SDK 开发及产品应用介绍
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rk3588-course/l06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RK3588 Android开发答疑
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rk3588-course/l07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    99%利用率的RKNN模型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../finetuning-practice/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    大模型与 AI 应用
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    大模型与 AI 应用
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../rag-intro/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2025 大模型 RAG 入门
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    2025 大模型 RAG 入门
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rag-intro/l01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01：为什么需要 RAG
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rag-intro/l02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02：RAG的基本流程：为什么说上手RAG只要一星期
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rag-intro/l03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03：RAG的10个优化技巧：为什么RAG不是算法问题，是工程问题
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rag-intro/l04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    04：RAG的评估方法：没有评估，就没法优化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rag-intro/l05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    05：项目经理视角的RAG：需求评估要细，技术迭代要快
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../lora-paper/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LoRA 论文解读与微调部署
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../ai-animation-production/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI 动画制作全流程
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    AI 动画制作全流程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ai-animation-production/full-workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    全网150万播放的AI动画，怎么做的？分享我的制作全流程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../linux-perf/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    工程与运维实践
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    工程与运维实践
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mlflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MLflow 最佳实践
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cc-switch-deepseek/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CC-Switch：Claude Code 接入 DeepSeek V4.1-Flash-1017
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cc-switch-codex-opencode-go/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CC-Switch：Codex 接入 OpenCode Go
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../github-pages-mkdocs-notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    用 MkDocs Material 和 GitHub Pages 发布 Markdown 笔记
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        内容目标
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        整体脉络
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        核心解析
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="核心解析">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dockerros2-jazzy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Docker安装ROS2 Jazzy
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Docker安装ROS2 Jazzy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-ros2-jazzy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. 拉取 ROS2 Jazzy 镜像
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. 创建并后台启动容器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. 进入容器
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-ros2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. 在容器内加载 ROS2 环境
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ros" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ROS 环境配置
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#turtlesimros2rqt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        使用turtlesim，ros2和rqt
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="使用turtlesim，ros2和rqt">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#turtlesim" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        安装 TurtleSim
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        开始海龟模拟
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Docker 缺少了组件遇到的问题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        使用方向控制乌龟
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rqt" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        安装 rqt
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#topic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Topic
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Topic">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        任务
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#topic_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        理解 Topic
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="理解 Topic">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        背景信息
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rqt-graph" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        rqt graph
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ros2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ros2 主题列表
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        查看主题发布数据
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ros2-topic-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ros2 topic 信息-详细
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ros2_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ros2 接口显示
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ros2_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ros2 主题发布
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ros2-topic-hz" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ros2 topic hz
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ros2_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ros2 服务
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ros2 服务">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ros2_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ros2 服务列表
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ros2_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ros2服务类型
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ros2_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ros2 服务信息
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ros2_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ros2 服务调用
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ros2_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ros2 参数
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ros2 参数">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ros2_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ros2 参数获取
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ros2_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ros2 参数集
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ros2_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ros2 参数转储
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ros2_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ros2 参数加载
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        节点启动时加载参数文件
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ros2-action" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ros2 Action
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ros2 Action">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ros2_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ros2 操作类表
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ros2-action-type" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ros2 action type
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ros2-action-info" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ros2 action info
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ros2-action-interface" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ros2 action interface
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ros2-action-send_goal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ros2 action send_goal
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rqt_console" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        rqt_console 查看日志
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="rqt_console 查看日志">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ros2_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ros2 日志级别
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        设置日志默认级别
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ros2-launch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ros2 Launch
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ros2 Launch">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_11" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        运行启动文件
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_12" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        数据记录和回放
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="数据记录和回放">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#topic_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        管理 Topic 数据
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        记录主题
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#topic_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        记录多个 Topic
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#topic_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        检查 Topic 数据
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#topic_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        播放 Topic 数据
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_14" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        管理服务数据
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_15" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        内容小结
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="-ros">官方文档-ROS命令行入门<a class="headerlink" href="#-ros" title="Permanent link">&para;</a></h1>
+<h2 id="_1">内容目标<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>通过 ROS 2 Jazzy 官方命令行教程，理解如何在 Docker 容器中配置 ROS 环境，并使用 ros2、turtlesim、rqt、topic、service、launch 和 bag 检查及驱动系统。</p>
+<h2 id="_2">整体脉络<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>这篇记录从容器和 ROS 环境初始化开始，沿着 turtlesim 的节点、主题、服务、动作、日志、launch 与 rosbag 操作展开，命令既用于启动系统，也用于观察 ROS 图和验证消息。</p>
+<pre class="mermaid"><code>flowchart LR
+  A[Docker ROS2 Jazzy] --&gt; B[ROS 环境]
+  B --&gt; C[turtlesim 节点]
+  C --&gt; D[topic/service/action]
+  D --&gt; E[ros2 CLI 与 rosbag]</code></pre>
+<h2 id="_3">核心解析<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>官方文档-ROS命令行入门</p>
+<p>我们以 ROS Jazzy 版本作为学习案例</p>
+<p>参考官方链接：https://docs.ros.org/en/jazzy/Tutorials/Beginner-CLI-Tools.html</p>
+<p>我们以 ROS Jazzy 版本作为学习案例</p>
+<h3 id="dockerros2-jazzy">Docker安装ROS2 Jazzy<a class="headerlink" href="#dockerros2-jazzy" title="Permanent link">&para;</a></h3>
+<h4 id="1-ros2-jazzy">1. 拉取 ROS2 Jazzy 镜像<a class="headerlink" href="#1-ros2-jazzy" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code>docker pull ros:jazzy-ros-base
+</code></pre></div>
+<h4 id="2">2. 创建并后台启动容器<a class="headerlink" href="#2" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code>docker run -d \
+  --name ros2-jazzy \
+  -v "$(pwd)/work:/workspace" \
+  ros:jazzy-ros-base \
+  sleep infinity
+</code></pre></div>
+<p>说明：</p>
+<ul>
+<li><code>-d</code>：后台运行</li>
+<li><code>--name ros2-jazzy</code>：容器名称</li>
+<li><code>-v "$(pwd)/work:/workspace"</code>：挂载当前目录下的 <code>work</code></li>
+<li><code>sleep infinity</code>：让容器持续运行</li>
+</ul>
+<h4 id="3">3. 进入容器<a class="headerlink" href="#3" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code>docker exec -it ros2-jazzy bash
+</code></pre></div>
+<h4 id="4-ros2">4. 在容器内加载 ROS2 环境<a class="headerlink" href="#4-ros2" title="Permanent link">&para;</a></h4>
+<p>进入容器后执行：</p>
+<div class="highlight"><pre><span></span><code>source /opt/ros/jazzy/setup.bash
+</code></pre></div>
+<p>验证：</p>
+<div class="highlight"><pre><span></span><code>echo $ROS_DISTRO
+ros2 --help
+</code></pre></div>
+<p>应该看到：</p>
+<div class="highlight"><pre><span></span><code>jazzy
+</code></pre></div>
+<h4 id="ros">ROS 环境配置<a class="headerlink" href="#ros" title="Permanent link">&para;</a></h4>
+<p>如果您不想每次打开新 shell 时都执行 setup 文件（跳过任务 1），则可以将该命令添加到 shell 启动脚本中：</p>
+<div class="highlight"><pre><span></span><code><span class="nb">echo</span><span class="w"> </span><span class="s2">"source /opt/ros/jazzy/setup.bash"</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.bashrc
+</code></pre></div>
+<p>加载 ROS 2 安装文件会设置运行 ROS 2 所需的几个环境变量。如果您在查找或使用 ROS 2 软件包时遇到问题，请确保使用以下命令正确设置您的环境：</p>
+<p>检查环境变量</p>
+<div class="highlight"><pre><span></span><code><span class="nx">printenv</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="nx">grep</span><span class="w"> </span><span class="o">-</span><span class="nx">i</span><span class="w"> </span><span class="nx">ROS</span>
+</code></pre></div>
+<p>输出</p>
+<div class="highlight"><pre><span></span><code><span class="nx">ROS_VERSION</span><span class="o">=</span><span class="mf">2</span>
+<span class="nx">ROS_PYTHON_VERSION</span><span class="o">=</span><span class="mf">3</span>
+<span class="nx">AMENT_PREFIX_PATH</span><span class="o">=</span><span class="err">/opt/ros/jazzy</span>
+<span class="nx">ROS_AUTOMATIC_DISCOVERY_RANGE</span><span class="o">=</span><span class="nx">SUBNET</span>
+<span class="nx">PYTHONPATH</span><span class="o">=</span><span class="err">/opt/ros/jazzy/lib/python3.12/site-packages</span>
+<span class="nx">LD_LIBRARY_PATH</span><span class="o">=</span><span class="err">/opt/ros/jazzy/lib/aarch64-linux-gnu:/opt/ros/jazzy/lib</span>
+<span class="nx">PATH</span><span class="o">=</span><span class="err">/opt/ros/jazzy/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin</span>
+<span class="nx">ROS_DISTRO</span><span class="o">=</span><span class="nx">jazzy</span>
+</code></pre></div>
+<h3 id="turtlesimros2rqt">使用<code>turtlesim</code>，<code>ros2</code>和<code>rqt</code><a class="headerlink" href="#turtlesimros2rqt" title="Permanent link">&para;</a></h3>
+<p>Turtlesim 是一个轻量级的 ROS 2 学习模拟器。它以最基本的层面演示了 ROS 2 的功能，让您了解以后使用真实机器人或机器人模拟器时会遇到的问题。</p>
+<p>ros2 工具是用户管理、检查和交互 ROS 系统的方式。它支持多种命令，可以控制系统及其运行的不同方面。用户可以使用它来启动节点、设置参数、监听主题等等。ros2 工具是 ROS 2 核心安装的一部分。</p>
+<p>rqt 是 ROS 2 的图形用户界面 (GUI) 工具。rqt 中的所有操作都可以在命令行中完成，但 rqt 提供了一种更友好的方式来操作 ROS 2 元素。</p>
+<h4 id="turtlesim">安装 TurtleSim<a class="headerlink" href="#turtlesim" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>update
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>ros-jazzy-turtlesim
+</code></pre></div>
+<p>要检查软件包是否已安装，请运行以下命令，该命令应返回 turtlesim 可执行文件的列表：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>pkg<span class="w"> </span>executables<span class="w"> </span>turtlesim
+turtlesim<span class="w"> </span>draw_square
+turtlesim<span class="w"> </span>mimicturtlesim<span class="w"> </span>
+turtle_teleop_key
+turtlesim<span class="w"> </span>turtlesim_node
+</code></pre></div>
+<h4 id="_4">开始海龟模拟<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h4>
+<p>要启动 TurtleSim，请在终端中输入以下命令：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>run<span class="w"> </span>turtlesim<span class="w"> </span>turtlesim_node
+<span class="o">[</span>INFO<span class="o">]</span><span class="w"> </span><span class="o">[</span>turtlesim<span class="o">]</span>:<span class="w"> </span>Starting<span class="w"> </span>turtlesim<span class="w"> </span>with<span class="w"> </span>node<span class="w"> </span>name<span class="w"> </span>/turtlesim
+<span class="o">[</span>INFO<span class="o">]</span><span class="w"> </span><span class="o">[</span>turtlesim<span class="o">]</span>:<span class="w"> </span>Spawning<span class="w"> </span>turtle<span class="w"> </span><span class="o">[</span>turtle1<span class="o">]</span><span class="w"> </span>at<span class="w"> </span><span class="nv">x</span><span class="o">=[</span><span class="m">5</span>.544445<span class="o">]</span>,<span class="w"> </span><span class="nv">y</span><span class="o">=[</span><span class="m">5</span>.544445<span class="o">]</span>,<span class="w"> </span><span class="nv">theta</span><span class="o">=[</span><span class="m">0</span>.000000<span class="o">]</span>
+</code></pre></div>
+<h4 id="docker">Docker 缺少了组件遇到的问题<a class="headerlink" href="#docker" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code>root@97dadf09cb70:/#<span class="w"> </span>ros2<span class="w"> </span>run<span class="w"> </span>turtlesim<span class="w"> </span>turtlesim_node<span class="w"> </span>
+qt.qpa.xcb:<span class="w"> </span>could<span class="w"> </span>not<span class="w"> </span>connect<span class="w"> </span>to<span class="w"> </span>display<span class="w"> </span>
+qt.qpa.plugin:<span class="w"> </span>Could<span class="w"> </span>not<span class="w"> </span>load<span class="w"> </span>the<span class="w"> </span>Qt<span class="w"> </span>platform<span class="w"> </span>plugin<span class="w"> </span><span class="s2">"xcb"</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="s2">""</span><span class="w"> </span>even<span class="w"> </span>though<span class="w"> </span>it<span class="w"> </span>was<span class="w"> </span>found.
+This<span class="w"> </span>application<span class="w"> </span>failed<span class="w"> </span>to<span class="w"> </span>start<span class="w"> </span>because<span class="w"> </span>no<span class="w"> </span>Qt<span class="w"> </span>platform<span class="w"> </span>plugin<span class="w"> </span>could<span class="w"> </span>be<span class="w"> </span>initialized.<span class="w"> </span>Reinstalling<span class="w"> </span>the<span class="w"> </span>application<span class="w"> </span>may<span class="w"> </span>fix<span class="w"> </span>this<span class="w"> </span>problem.
+
+Available<span class="w"> </span>platform<span class="w"> </span>plugins<span class="w"> </span>are:<span class="w"> </span>eglfs,<span class="w"> </span>linuxfb,<span class="w"> </span>minimal,<span class="w"> </span>minimalegl,<span class="w"> </span>offscreen,<span class="w"> </span>vnc,<span class="w"> </span>wayland-egl,<span class="w"> </span>wayland,<span class="w"> </span>wayland-xcomposite-egl,<span class="w"> </span>wayland-xcomposite-glx,<span class="w"> </span>xcb.
+
+<span class="o">[</span>ros2run<span class="o">]</span>:<span class="w"> </span>Aborted
+</code></pre></div>
+<p>这不是少装了 turtlesim，而是容器里的 Qt 找不到宿主机的图形显示器。你现在的容器能找到 turtlesim_node，但还没有配置 X11 图形转发；我先确认 macOS + Docker Desktop 的当前配置方式，再给你可以直接复制的命令。</p>
+<p>你使用的是 macOS + Docker Desktop，需要安装并配置 XQuartz。</p>
+<p>一、在 macOS 宿主机执行</p>
+<p>注意：下面命令不要在 <code>root@容器</code> 里面执行，要在 Mac 的 Terminal 中执行。</p>
+<ol>
+<li>安装 XQuartz</li>
+</ol>
+<p>如果你安装了 Homebrew：</p>
+<div class="highlight"><pre><span></span><code>brew install --cask xquartz
+</code></pre></div>
+<p>也可以从 <a href="https://www.xquartz.org/">XQuartz 官网</a>下载安装。</p>
+<ol>
+<li>启动 XQuartz</li>
+</ol>
+<div class="highlight"><pre><span></span><code>open -a XQuartz
+</code></pre></div>
+<ol>
+<li>允许 XQuartz 接收容器连接</li>
+</ol>
+<div class="highlight"><pre><span></span><code>xhost +localhost
+</code></pre></div>
+<p>如果后面仍然提示权限问题，可以临时执行：</p>
+<div class="highlight"><pre><span></span><code>xhost +
+</code></pre></div>
+<p>这会放宽 X11 访问权限，只建议在本机学习时临时使用。完成后可以恢复：</p>
+<div class="highlight"><pre><span></span><code>xhost -
+</code></pre></div>
+<p>如果你刚安装了 XQuartz，建议退出并重新打开 XQuartz，必要时注销 macOS 后重新登录。</p>
+<ol>
+<li>在 ROS2 容器内执行</li>
+</ol>
+<p>回到你现在的容器终端：</p>
+<div class="highlight"><pre><span></span><code>export DISPLAY=host.docker.internal:0
+</code></pre></div>
+<p>检查：</p>
+<div class="highlight"><pre><span></span><code>echo $DISPLAY
+</code></pre></div>
+<p>应该输出：</p>
+<div class="highlight"><pre><span></span><code>host.docker.internal:0
+</code></pre></div>
+<p>加载 ROS2 环境：</p>
+<div class="highlight"><pre><span></span><code>source /opt/ros/jazzy/setup.bash
+</code></pre></div>
+<p>启动小乌龟：</p>
+<div class="highlight"><pre><span></span><code>ros2 run turtlesim turtlesim_node
+</code></pre></div>
+<p>正常情况下，macOS 桌面上会弹出 turtlesim 窗口。Docker Desktop 提供的 <code>host.docker.internal</code> 用于让容器访问宿主机服务。<a href="https://docs.docker.com/guides/ros2/">Docker ROS2 指南</a></p>
+<p><img alt="" src="assets/image-01.png" /></p>
+<h4 id="_5">使用方向控制乌龟<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h4>
+<p>使用方向键控制小乌龟：</p>
+<ul>
+<li>↑：前进</li>
+<li>↓：后退</li>
+<li>←：左转</li>
+<li>→：右转</li>
+</ul>
+<p><img alt="" src="assets/image-02.png" /></p>
+<div class="highlight"><pre><span></span><code>Reading<span class="w"> </span>from<span class="w"> </span>keyboard
+---------------------------
+Use<span class="w"> </span>arrow<span class="w"> </span>keys<span class="w"> </span>to<span class="w"> </span>move<span class="w"> </span>the<span class="w"> </span>turtle.
+Use<span class="w"> </span>g<span class="p">|</span>b<span class="p">|</span>v<span class="p">|</span>c<span class="p">|</span>d<span class="p">|</span>e<span class="p">|</span>r<span class="p">|</span>t<span class="w"> </span>keys<span class="w"> </span>to<span class="w"> </span>rotate<span class="w"> </span>to<span class="w"> </span>absolute<span class="w"> </span>orientations.<span class="w"> </span><span class="s1">'f'</span><span class="w"> </span>to<span class="w"> </span>cancel<span class="w"> </span>a<span class="w"> </span>rotation.
+<span class="s1">'q'</span><span class="w"> </span>to<span class="w"> </span>quit.
+</code></pre></div>
+<p>这些字母让小乌龟旋转到绝对方向：</p>
+<table>
+<thead>
+<tr>
+<th><strong>按键</strong></th>
+<th><strong>方向</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>g</td>
+<td>0°</td>
+</tr>
+<tr>
+<td>t</td>
+<td>45°</td>
+</tr>
+<tr>
+<td>r</td>
+<td>90°</td>
+</tr>
+<tr>
+<td>e</td>
+<td>135°</td>
+</tr>
+<tr>
+<td>d</td>
+<td>180°</td>
+</tr>
+<tr>
+<td>c</td>
+<td>-135°</td>
+</tr>
+<tr>
+<td>v</td>
+<td>-90°</td>
+</tr>
+<tr>
+<td>b</td>
+<td>-45°</td>
+</tr>
+</tbody>
+</table>
+<h4 id="rqt">安装 rqt<a class="headerlink" href="#rqt" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>update
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>ros-jazzy-rqt<span class="w"> </span>ros-jazzy-rqt-common-plugins
+</code></pre></div>
+<p>运行 rqt</p>
+<div class="highlight"><pre><span></span><code>rqt
+</code></pre></div>
+<p>rqt 启动遇到问题</p>
+<div class="highlight"><pre><span></span><code>root@97dadf09cb70:/#<span class="w"> </span>rqt
+could<span class="w"> </span>not<span class="w"> </span>connect<span class="w"> </span>to<span class="w"> </span>display<span class="w"> </span>
+This<span class="w"> </span>application<span class="w"> </span>failed<span class="w"> </span>to<span class="w"> </span>start<span class="w"> </span>because<span class="w"> </span>no<span class="w"> </span>Qt<span class="w"> </span>platform<span class="w"> </span>plugin<span class="w"> </span>could<span class="w"> </span>be<span class="w"> </span>initialized.<span class="w"> </span>Reinstalling<span class="w"> </span>the<span class="w"> </span>application<span class="w"> </span>may<span class="w"> </span>fix<span class="w"> </span>this<span class="w"> </span>problem.
+
+Available<span class="w"> </span>platform<span class="w"> </span>plugins<span class="w"> </span>are:<span class="w"> </span>eglfs,<span class="w"> </span>linuxfb,<span class="w"> </span>minimal,<span class="w"> </span>minimalegl,<span class="w"> </span>offscreen,<span class="w"> </span>vnc,<span class="w"> </span>wayland-egl,<span class="w"> </span>wayland,<span class="w"> </span>wayland-xcomposite-egl,<span class="w"> </span>wayland-xcomposite-glx,<span class="w"> </span>xcb.
+</code></pre></div>
+<p><img alt="" src="assets/image-03.png" /></p>
+<p>这里创建了另一个乌龟后，开启新终端 run 命令的，把 turtle1/cmd_vel 改成 turtle2/cmd_vel。</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>run<span class="w"> </span>turtlesim<span class="w"> </span>turtle_teleop_key<span class="w"> </span>--ros-args<span class="w"> </span>--remap<span class="w"> </span>turtle1/cmd_vel:<span class="o">=</span>turtle2/cmd_vel<span class="w"> </span>--remap<span class="w"> </span>turtle1/rotate_absolute:<span class="o">=</span>turtle2/rotate_absolute
+</code></pre></div>
+<p><img alt="" src="assets/image-04.png" /></p>
+<p>创建一个新的 turtle</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>service<span class="w"> </span>call<span class="w"> </span>/spawn<span class="w"> </span>turtlesim/srv/Spawn<span class="w"> </span><span class="se">\</span>
+<span class="s2">"{x: 2.0, y: 2.0, theta: 0.0, name: 'turtle2'}"</span>
+</code></pre></div>
+<h3 id="topic">Topic<a class="headerlink" href="#topic" title="Permanent link">&para;</a></h3>
+<p>ROS 图是一个由 ROS 2 元素组成的网络，这些元素同时处理数据。它包含了所有可执行文件以及它们之间的所有连接（如果您将它们全部绘制出来并可视化的话）。</p>
+<p>ROS 中的每个节点都应负责单一的模块化功能，例如控制车轮电机或发布来自激光测距仪的传感器数据。每个节点都可以通过主题、服务、动作或参数与其他节点发送和接收数据。</p>
+<p><img alt="" src="assets/image-05.png" /></p>
+<p>一个完整的机器人系统由许多协同工作的节点组成。在 ROS 2 中，一个可执行文件（C++ 程序、Python 程序等）可以包含一个或多个节点。</p>
+<h4 id="_6">任务<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h4>
+<ol>
+<li>ros2 运行</li>
+</ol>
+<p>该命令会启动软件包中的可执行文件。<code>ros2 run</code></p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>run<span class="w"> </span>&lt;package_name&gt;<span class="w"> </span>&lt;executable_name&gt;
+</code></pre></div>
+<p>要运行 turtlesim，请打开一个新的终端窗口，然后输入以下命令：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>run<span class="w"> </span>turtlesim<span class="w"> </span>turtlesim_node
+</code></pre></div>
+<p>软件包名称是<code>turtlesim</code>，可执行文件名是<code>turtlesim_node</code>。</p>
+<p>如果不知道节点名称。可以使用以下方法查找节点名称。<code>ros2 node list</code>。</p>
+<p><code>ros2 node list</code>将显示所有正在运行的节点的名称。当您想要与某个节点交互，或者您的系统运行着许多节点并需要跟踪它们时，此功能尤其有用。</p>
+<ol>
+<li>ros2 node list</li>
+</ol>
+<p>在 TurtleSim 仍在运行的情况下，打开一个新的终端，并输入以下命令。终端将返回节点名称：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>node<span class="w"> </span>list
+/turtlesim
+</code></pre></div>
+<ol>
+<li>ros2 node info</li>
+</ol>
+<p>现在您已经知道了节点的名称，可以通过以下方式访问有关它们的更多信息：</p>
+<div class="highlight"><pre><span></span><code>root@97dadf09cb70:/#<span class="w"> </span>ros2<span class="w"> </span>node<span class="w"> </span>info<span class="w"> </span>/turtlesim<span class="w"> </span>
+/turtlesim
+<span class="w">  </span>Subscribers:
+<span class="w">    </span>/parameter_events:<span class="w"> </span>rcl_interfaces/msg/ParameterEvent
+<span class="w">    </span>/turtle1/cmd_vel:<span class="w"> </span>geometry_msgs/msg/Twist
+<span class="w">    </span>/turtle2/cmd_vel:<span class="w"> </span>geometry_msgs/msg/Twist
+<span class="w">    </span>/turtle3/cmd_vel:<span class="w"> </span>geometry_msgs/msg/Twist
+<span class="w">  </span>Publishers:
+<span class="w">    </span>/parameter_events:<span class="w"> </span>rcl_interfaces/msg/ParameterEvent
+<span class="w">    </span>/rosout:<span class="w"> </span>rcl_interfaces/msg/Log
+<span class="w">    </span>/turtle1/color_sensor:<span class="w"> </span>turtlesim/msg/Color
+<span class="w">    </span>/turtle1/pose:<span class="w"> </span>turtlesim/msg/Pose
+<span class="w">    </span>/turtle2/color_sensor:<span class="w"> </span>turtlesim/msg/Color
+<span class="w">    </span>/turtle2/pose:<span class="w"> </span>turtlesim/msg/Pose
+<span class="w">    </span>/turtle3/color_sensor:<span class="w"> </span>turtlesim/msg/Color
+<span class="w">    </span>/turtle3/pose:<span class="w"> </span>turtlesim/msg/Pose
+<span class="w">  </span>Service<span class="w"> </span>Servers:
+<span class="w">    </span>/clear:<span class="w"> </span>std_srvs/srv/Empty
+<span class="w">    </span>/kill:<span class="w"> </span>turtlesim/srv/Kill
+<span class="w">    </span>/reset:<span class="w"> </span>std_srvs/srv/Empty
+<span class="w">    </span>/spawn:<span class="w"> </span>turtlesim/srv/Spawn
+<span class="w">    </span>/turtle1/set_pen:<span class="w"> </span>turtlesim/srv/SetPen
+<span class="w">    </span>/turtle1/teleport_absolute:<span class="w"> </span>turtlesim/srv/TeleportAbsolute
+<span class="w">    </span>/turtle1/teleport_relative:<span class="w"> </span>turtlesim/srv/TeleportRelative
+<span class="w">    </span>/turtle2/set_pen:<span class="w"> </span>turtlesim/srv/SetPen
+<span class="w">    </span>/turtle2/teleport_absolute:<span class="w"> </span>turtlesim/srv/TeleportAbsolute
+<span class="w">    </span>/turtle2/teleport_relative:<span class="w"> </span>turtlesim/srv/TeleportRelative
+<span class="w">    </span>/turtle3/set_pen:<span class="w"> </span>turtlesim/srv/SetPen
+<span class="w">    </span>/turtle3/teleport_absolute:<span class="w"> </span>turtlesim/srv/TeleportAbsolute
+<span class="w">    </span>/turtle3/teleport_relative:<span class="w"> </span>turtlesim/srv/TeleportRelative
+<span class="w">    </span>/turtlesim/describe_parameters:<span class="w"> </span>rcl_interfaces/srv/DescribeParameters
+<span class="w">    </span>/turtlesim/get_parameter_types:<span class="w"> </span>rcl_interfaces/srv/GetParameterTypes
+<span class="w">    </span>/turtlesim/get_parameters:<span class="w"> </span>rcl_interfaces/srv/GetParameters
+<span class="w">    </span>/turtlesim/get_type_description:<span class="w"> </span>type_description_interfaces/srv/GetTypeDescription
+<span class="w">    </span>/turtlesim/list_parameters:<span class="w"> </span>rcl_interfaces/srv/ListParameters
+<span class="w">    </span>/turtlesim/set_parameters:<span class="w"> </span>rcl_interfaces/srv/SetParameters
+<span class="w">    </span>/turtlesim/set_parameters_atomically:<span class="w"> </span>rcl_interfaces/srv/SetParametersAtomically
+<span class="w">  </span>Service<span class="w"> </span>Clients:
+
+<span class="w">  </span>Action<span class="w"> </span>Servers:
+<span class="w">    </span>/turtle1/rotate_absolute:<span class="w"> </span>turtlesim/action/RotateAbsolute
+<span class="w">    </span>/turtle2/rotate_absolute:<span class="w"> </span>turtlesim/action/RotateAbsolute
+<span class="w">    </span>/turtle3/rotate_absolute:<span class="w"> </span>turtlesim/action/RotateAbsolute
+<span class="w">  </span>Action<span class="w"> </span>Clients:
+</code></pre></div>
+<p><code>ros2 node info</code>返回订阅者、发布者、服务和操作的列表，即与该节点交互的 ROS 图连接。</p>
+<p>现在尝试在<code>/teleop_turtle</code>节点上运行相同的命令，看看它的连接与之前的有何不同<code>my_turtle</code>。</p>
+<h4 id="topic_1">理解 Topic<a class="headerlink" href="#topic_1" title="Permanent link">&para;</a></h4>
+<h5 id="_7">背景信息<a class="headerlink" href="#_7" title="Permanent link">&para;</a></h5>
+<p>ROS 2 将复杂系统分解成许多模块化节点。主题是 ROS 图的重要组成部分，它们充当节点间交换消息的总线。</p>
+<p><img alt="" src="assets/image-06.png" /></p>
+<p>一个节点可以向任意数量的主题发布数据，并同时订阅任意数量的主题。</p>
+<p><img alt="" src="assets/image-07.png" /></p>
+<h4 id="rqt-graph">rqt graph<a class="headerlink" href="#rqt-graph" title="Permanent link">&para;</a></h4>
+<p>先运行之前的乌龟 demo</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>run<span class="w"> </span>turtlesim<span class="w"> </span>turtlesim_node
+</code></pre></div>
+<p>另一个终端启动 node 发键盘事件</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>run<span class="w"> </span>turtlesim<span class="w"> </span>turtle_teleop_key
+</code></pre></div>
+<p>我们将使用<code>rqt_graph</code>可视化工具来展示不断变化的节点和主题，以及它们之间的连接。</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>run<span class="w"> </span>rqt_graph<span class="w"> </span>rqt_graph
+</code></pre></div>
+<p>Node Graph，它展示的是当前 ROS2 系统中的“计算图”。计算图的核心含义是：有哪些节点正在运行，以及这些节点之间通过哪些 topic、service 或 action 发生通信。</p>
+<p><img alt="" src="assets/image-08.png" /></p>
+<ul>
+<li>这表示 /teleop_turtle 正在发布 /turtle1/cmd_vel 这个 topic，而 /turtlesim 正在订阅这个 topic。这个 topic 的消息类型是：</li>
+</ul>
+<div class="highlight"><pre><span></span><code>geometry_msgs/msg/Twist
+</code></pre></div>
+<p>下面两条连接属于 <code>/turtle1/rotate_absolute</code> 这个 Action 的内部通信：</p>
+<div class="highlight"><pre><span></span><code>/turtle1/rotate_absolute/_action/feedback
+/turtle1/rotate_absolute/_action/status
+</code></pre></div>
+<p>这和普通 topic 有些不同。Action 用于执行一个可能持续一段时间的任务，例如“让 turtle1 旋转到指定的绝对方向”。</p>
+<ul>
+<li><code>/teleop_turtle</code> 是 Action Client，它负责发起旋转目标；</li>
+<li><code>/turtlesim</code> 是 Action Server，它负责真正执行旋转任务。执行过程中，<code>/turtlesim</code> 会把当前执行状态和反馈发送回 <code>/teleop_turtle</code>，所以截图中这两条箭头的方向是从右边的 <code>/turtlesim</code> 指向左边的 <code>/teleop_turtle</code>。</li>
+<li><code>/turtle1/rotate_absolute/_action/feedback</code> 表示执行过程中的反馈，例如旋转还剩多少距离、当前执行到了什么阶段；</li>
+<li><code>/turtle1/rotate_absolute/_action/status</code> 表示 Action 当前处于什么状态，例如目标已经接受、正在执行、已经完成或被取消。你在</li>
+</ul>
+<h4 id="ros2">ros2 主题列表<a class="headerlink" href="#ros2" title="Permanent link">&para;</a></h4>
+<p>在新终端中运行该命令将返回系统中当前所有活动主题的列表：ros2 topic list</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>topic<span class="w"> </span>list
+/parameter_events
+/rosout
+/turtle1
+/cmd_vel
+/turtle1
+/color_sensor
+/turtle1/pose
+</code></pre></div>
+<p>ros2 topic list -t将返回相同的主题列表，这次会在括号中附加主题类型：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>topic<span class="w"> </span>list<span class="w"> </span>-t
+/parameter_events<span class="w"> </span><span class="o">[</span>rcl_interfaces/msg/ParameterEvent<span class="o">]</span>/rosout<span class="w"> </span><span class="o">[</span>rcl_interfaces/msg/Log<span class="o">]</span>/turtle1/cmd_vel<span class="w"> </span><span class="o">[</span>geometry_msgs/msg/Twist<span class="o">]</span>/turtle1/color_sensor<span class="w"> </span><span class="o">[</span>turtlesim/msg/Color<span class="o">]</span>/turtle1/pose<span class="w"> </span><span class="o">[</span>turtlesim/msg/Pose<span class="o">]</span>
+</code></pre></div>
+<p>这些属性，特别是类型，使得节点能够知道它们在主题之间传递时讨论的是相同的信息。</p>
+<p>如果您想知道 rqt_graph 中所有这些主题的位置，您可以取消选中“隐藏”下的所有复选框**：**</p>
+<h4 id="_8">查看主题发布数据<a class="headerlink" href="#_8" title="Permanent link">&para;</a></h4>
+<p>要查看某个主题已发布的数据，请使用：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>topic<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>&lt;topic_name&gt;
+</code></pre></div>
+<p>既然我们知道它会发布关于该主题的<code>/teleop_turtle</code>数据，那么让我们用它来深入探讨该主题：<code>/turtlesim/turtle1/cmd_velecho</code></p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>topic<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>/turtle1/cmd_vel
+</code></pre></div>
+<p>一开始，这条命令不会返回任何数据。这是因为它正在等待<code>/teleop_turtle</code>发布某些内容。</p>
+<p>返回运行程序的终端<code>turtle_teleop_key</code>，使用方向键移动海龟。<code>echo</code>同时观察运行程序的终端，你会看到每次移动都会发布位置数据：</p>
+<div class="highlight"><pre><span></span><code><span class="l l-Scalar l-Scalar-Plain">root@97dadf09cb70:/# ros2 topic echo /turtle1/cmd_vel</span>
+<span class="l l-Scalar l-Scalar-Plain">linear</span><span class="p p-Indicator">:</span>
+<span class="w">  </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span>
+<span class="w">  </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span>
+<span class="w">  </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span>
+<span class="nt">angular</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span>
+<span class="w">  </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span>
+<span class="w">  </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.0</span>
+</code></pre></div>
+<p>现在返回 rqt_graph 并取消选中<strong>“调试”</strong>框。可以看到多了两个</p>
+<p><img alt="" src="assets/image-09.png" /></p>
+<p>话题不一定非得是一对一的沟通；也可以是一对多、多对一或多对多的沟通。</p>
+<p>换个角度来看，那就是运行：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>topic<span class="w"> </span>info<span class="w"> </span>/turtle1/cmd_vel
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>Type:<span class="w"> </span>geometry_msgs/msg/Twist
+Publisher<span class="w"> </span>count:<span class="w"> </span><span class="m">1</span>
+Subscription<span class="w"> </span>count:<span class="w"> </span><span class="m">2</span>
+</code></pre></div>
+<h4 id="ros2-topic-">ros2 topic 信息-详细<a class="headerlink" href="#ros2-topic-" title="Permanent link">&para;</a></h4>
+<p>要了解某个主题的更多详细信息，您可以使用<code>--verbose</code>（或<code>-v</code>）标志：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>topic<span class="w"> </span>info<span class="w"> </span>/turtle1/cmd_vel<span class="w"> </span>--verbose
+</code></pre></div>
+<p>这将返回更多详细信息，包括：</p>
+<ul>
+<li>发布者和订阅者的节点名称和命名空间</li>
+<li>主题类型</li>
+<li>QoS配置文件</li>
+</ul>
+<h4 id="ros2_1">ros2 接口显示<a class="headerlink" href="#ros2_1" title="Permanent link">&para;</a></h4>
+<p>节点通过主题以消息的形式发送数据。发布者和订阅者必须发送和接收相同类型的消息才能进行通信。</p>
+<p>之前运行后看到的那些主题类型，让我们知道每个主题使用的消息类型。回想一下，主题的类型如下：ros2 topic list -t</p>
+<div class="highlight"><pre><span></span><code>root@97dadf09cb70:/#<span class="w"> </span>ros2<span class="w"> </span>topic<span class="w"> </span>list<span class="w"> </span>-t
+/parameter_events<span class="w"> </span><span class="o">[</span>rcl_interfaces/msg/ParameterEvent<span class="o">]</span>
+/rosout<span class="w"> </span><span class="o">[</span>rcl_interfaces/msg/Log<span class="o">]</span>
+/turtle1/cmd_vel<span class="w"> </span><span class="o">[</span>geometry_msgs/msg/Twist<span class="o">]</span>
+</code></pre></div>
+<p>这个就是消息类型</p>
+<div class="highlight"><pre><span></span><code>geometry_msgs/msg/Twist
+</code></pre></div>
+<p>这意味着在包中<code>geometry_msgs</code>有一个<code>msg</code>被调用的<code>Twist</code>。</p>
+<p>现在我们可以对这种类型进行分析，以了解其详细信息。具体来说，就是了解消息期望的数据结构。ros2 interface show <msg_type></p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>interface<span class="w"> </span>show<span class="w"> </span>geometry_msgs/msg/Twist
+</code></pre></div>
+<p>返回结果：</p>
+<div class="highlight"><pre><span></span><code><span class="nx">root</span><span class="err">@</span><span class="mi">97</span><span class="nx">dadf09cb70</span><span class="p">:</span><span class="o">/</span><span class="err">#</span><span class="w"> </span><span class="nx">ros2</span><span class="w"> </span><span class="kd">interface</span><span class="w"> </span><span class="nx">show</span><span class="w"> </span><span class="nx">geometry_msgs</span><span class="o">/</span><span class="nx">msg</span><span class="o">/</span><span class="nx">Twist</span>
+<span class="o">**</span><span class="nx">This</span><span class="w"> </span><span class="nx">expresses</span><span class="w"> </span><span class="nx">velocity</span><span class="w"> </span><span class="nx">in</span><span class="w"> </span><span class="nx">free</span><span class="w"> </span><span class="nx">space</span><span class="w"> </span><span class="nx">broken</span><span class="w"> </span><span class="nx">into</span><span class="w"> </span><span class="nx">its</span><span class="w"> </span><span class="nx">linear</span><span class="w"> </span><span class="nx">and</span><span class="w"> </span><span class="nx">angular</span><span class="w"> </span><span class="nx">parts</span><span class="p">.</span><span class="o">**</span>
+
+<span class="nx">Vector3</span><span class="w">  </span><span class="nx">linear</span>
+<span class="w">        </span><span class="kt">float64</span><span class="w"> </span><span class="nx">x</span>
+<span class="w">        </span><span class="kt">float64</span><span class="w"> </span><span class="nx">y</span>
+<span class="w">        </span><span class="kt">float64</span><span class="w"> </span><span class="nx">z</span>
+<span class="nx">Vector3</span><span class="w">  </span><span class="nx">angular</span>
+<span class="w">        </span><span class="kt">float64</span><span class="w"> </span><span class="nx">x</span>
+<span class="w">        </span><span class="kt">float64</span><span class="w"> </span><span class="nx">y</span>
+<span class="w">        </span><span class="kt">float64</span><span class="w"> </span><span class="nx">z</span>
+</code></pre></div>
+<p>这说明<code>/turtlesim</code>节点期望收到一个包含两个向量的消息，<code>linear</code>这两个向量各有三个元素。</p>
+<h4 id="ros2_2">ros2 主题发布<a class="headerlink" href="#ros2_2" title="Permanent link">&para;</a></h4>
+<p>可以使用以下命令直接从命令行向主题发布数据：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>topic<span class="w"> </span>pub<span class="w"> </span>&lt;topic_name&gt;<span class="w"> </span>&lt;msg_type&gt;<span class="w"> </span><span class="s1">'&lt;args&gt;'</span>
+</code></pre></div>
+<p>参数<code>'&lt;args&gt;'</code>是你要传递给主题的实际数据，其结构与你在上一节中发现的结构相同。</p>
+<p>使用该<code>pub</code>命令主要有四种方法，如下所示。</p>
+<ol>
+<li>发布字典字符串</li>
+</ol>
+<p>要将数据发布到主题，需要以 YAML 字符串的形式传递数据。</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>topic<span class="w"> </span>pub<span class="w"> </span>/turtle1/cmd_vel<span class="w"> </span>geometry_msgs/msg/Twist<span class="w"> </span><span class="s2">"{linear: {x: 2.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 1.8}}"</span>
+</code></pre></div>
+<ol>
+<li>发布一条空白消息：</li>
+</ol>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>topic<span class="w"> </span>pub<span class="w"> </span>/turtle1/cmd_vel<span class="w"> </span>geometry_msgs/msg/Twist
+</code></pre></div>
+<p>这将以 1 Hz 的频率发布该消息类型的默认值。在本例中，这等效于以下命令：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>topic<span class="w"> </span>pub<span class="w"> </span>/turtle1/cmd_vel<span class="w"> </span>geometry_msgs/msg/Twist<span class="w"> </span><span class="s2">"{linear: {x: 0.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}"</span><span class="w"> </span>--rate<span class="w"> </span><span class="m">1</span>
+</code></pre></div>
+<p><img alt="" src="assets/image-10.png" /></p>
+<p>可以看到虽然只执行了一次 pub，但是终端会源源不断的发布命令。</p>
+<p>有时您可能只想向主题发布一次数据（而不是持续发布）。要仅发布一次命令，请添加相应选项<code>--once</code>。</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>topic<span class="w"> </span>pub<span class="w"> </span>--once<span class="w"> </span>-w<span class="w"> </span><span class="m">2</span><span class="w"> </span>/turtle1/cmd_vel<span class="w"> </span>geometry_msgs/msg/Twist<span class="w"> </span><span class="s2">"{linear: {x: 2.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 1.8}}"</span>
+</code></pre></div>
+<ul>
+<li><code>--once</code>是一个可选参数，意思是“发布一条消息然后退出”。</li>
+<li><code>-w 2</code>这是一个可选参数，意思是“等待两个匹配的订阅”。这是必需的，因为我们同时订阅了 turtlesim 和 echo 主题。</li>
+</ul>
+<div class="highlight"><pre><span></span><code>root@97dadf09cb70:/#<span class="w"> </span>ros2<span class="w"> </span>topic<span class="w"> </span>pub<span class="w"> </span>--once<span class="w"> </span>-w<span class="w"> </span><span class="m">2</span><span class="w"> </span>/turtle1/cmd_vel<span class="w"> </span>geometry_msgs/msg/Twist<span class="w"> </span><span class="s2">"{linear: {x: 2.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 1.8}}"</span>
+Waiting<span class="w"> </span><span class="k">for</span><span class="w"> </span>at<span class="w"> </span>least<span class="w"> </span><span class="m">2</span><span class="w"> </span>matching<span class="w"> </span>subscription<span class="o">(</span>s<span class="o">)</span>...
+Waiting<span class="w"> </span><span class="k">for</span><span class="w"> </span>at<span class="w"> </span>least<span class="w"> </span><span class="m">2</span><span class="w"> </span>matching<span class="w"> </span>subscription<span class="o">(</span>s<span class="o">)</span>...
+Waiting<span class="w"> </span><span class="k">for</span><span class="w"> </span>at<span class="w"> </span>least<span class="w"> </span><span class="m">2</span><span class="w"> </span>matching<span class="w"> </span>subscription<span class="o">(</span>s<span class="o">)</span>...
+Waiting<span class="w"> </span><span class="k">for</span><span class="w"> </span>at<span class="w"> </span>least<span class="w"> </span><span class="m">2</span><span class="w"> </span>matching<span class="w"> </span>subscription<span class="o">(</span>s<span class="o">)</span>...
+</code></pre></div>
+<p>在你的系统中，<code>/turtlesim</code> 节点是这个话题的一个订阅者，因为它需要接收速度命令来控制 turtle1。因此你至少有：</p>
+<div class="highlight"><pre><span></span><code>/turtlesim → 订阅 /turtle1/cmd_vel
+</code></pre></div>
+<p>但是你还没有启动：</p>
+<div class="highlight"><pre><span></span><code>ros2 topic echo /turtle1/cmd_vel
+</code></pre></div>
+<p>所以目前可能只有一个订阅者，而你命令中写的是：</p>
+<div class="highlight"><pre><span></span><code>-w 2
+</code></pre></div>
+<p>也就是要求至少发现两个订阅者以后才开始发送。</p>
+<p>你可以先在当前终端查看实际订阅数量：</p>
+<div class="highlight"><pre><span></span><code>ros2 topic info /turtle1/cmd_vel
+</code></pre></div>
+<p>如果只运行了 <code>turtlesim_node</code>，通常会看到类似：</p>
+<div class="highlight"><pre><span></span><code>Type: geometry_msgs/msg/Twist
+
+Publisher count: 0
+
+Subscription count: 1
+</code></pre></div>
+<p>增加 ros2 topic echo</p>
+<div class="highlight"><pre><span></span><code>root@97dadf09cb70:/#<span class="w"> </span>ros2<span class="w"> </span>topic<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>/turtle1/cmd_vel
+linear:
+<span class="w">  </span>x:<span class="w"> </span><span class="m">2</span>.0
+<span class="w">  </span>y:<span class="w"> </span><span class="m">0</span>.0
+<span class="w">  </span>z:<span class="w"> </span><span class="m">0</span>.0
+angular:
+<span class="w">  </span>x:<span class="w"> </span><span class="m">0</span>.0
+<span class="w">  </span>y:<span class="w"> </span><span class="m">0</span>.0
+<span class="w">  </span>z:<span class="w"> </span><span class="m">1</span>.8
+</code></pre></div>
+<p>再回去看</p>
+<div class="highlight"><pre><span></span><code>publisher:<span class="w"> </span>beginning<span class="w"> </span>loop
+publishing<span class="w"> </span><span class="c1">#1: geometry_msgs.msg.Twist(linear=geometry_msgs.msg.Vector3(x=2.0, y=0.0, z=0.0), angular=geometry_msgs.msg.Vector3(x=0.0, y=0.0, z=1.8))</span>
+</code></pre></div>
+<h4 id="ros2-topic-hz">ros2 topic hz<a class="headerlink" href="#ros2-topic-hz" title="Permanent link">&para;</a></h4>
+<p>您还可以使用以下命令查看数据发布速率：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>topic<span class="w"> </span>hz<span class="w"> </span>/turtle1/pose
+average<span class="w"> </span>rate:<span class="w"> </span><span class="m">59</span>.354<span class="w">  </span>min:<span class="w"> </span><span class="m">0</span>.005s<span class="w"> </span>max:<span class="w"> </span><span class="m">0</span>.027s<span class="w"> </span>std<span class="w"> </span>dev:<span class="w"> </span><span class="m">0</span>.00284s<span class="w"> </span>window:<span class="w"> </span><span class="m">58</span>
+</code></pre></div>
+<p><code>/turtlesim</code>它将返回节点向主题发布数据的速率数据<code>pose</code>。</p>
+<h3 id="ros2_3">ros2 服务<a class="headerlink" href="#ros2_3" title="Permanent link">&para;</a></h3>
+<p>服务是 ROS 图中节点间另一种通信方式。服务基于呼叫-响应模型，而非主题的发布-订阅模型。主题允许节点订阅数据流并持续获取更新，而服务仅在客户端明确调用时才提供数据。</p>
+<p><img alt="" src="assets/image-11.png" /></p>
+<p><img alt="" src="assets/image-12.png" /></p>
+<p>启动两个 turtlesim 节点，<code>/turtlesim</code>并且<code>/teleop_turtle</code>。</p>
+<p>打开一个新的终端并运行：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>run<span class="w"> </span>turtlesim<span class="w"> </span>turtlesim_node
+</code></pre></div>
+<p>打开另一个终端并运行：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>run<span class="w"> </span>turtlesim<span class="w"> </span>turtle_teleop_key
+</code></pre></div>
+<h4 id="ros2_4">ros2 服务列表<a class="headerlink" href="#ros2_4" title="Permanent link">&para;</a></h4>
+<p>在新终端中运行该命令将返回系统中当前所有活动服务的列表：<code>ros2 service list</code></p>
+<div class="highlight"><pre><span></span><code>root@97dadf09cb70:/#<span class="w"> </span>ros2<span class="w"> </span>service<span class="w"> </span>list
+/clear
+/kill
+/reset
+/spawn
+/teleop_turtle/describe_parameters
+/teleop_turtle/get_parameter_types
+/teleop_turtle/get_parameters
+/teleop_turtle/get_type_description
+/teleop_turtle/list_parameters
+/teleop_turtle/set_parameters
+/teleop_turtle/set_parameters_atomically
+/turtle1/set_pen
+/turtle1/teleport_absolute
+/turtle1/teleport_relative
+/turtlesim/describe_parameters
+/turtlesim/get_parameter_types
+/turtlesim/get_parameters
+/turtlesim/get_type_description
+/turtlesim/list_parameters
+/turtlesim/set_parameters
+/turtlesim/set_parameters_atomically
+</code></pre></div>
+<p>让我们重点关注 turtlesim 特有的服务，<code>/clear</code>即<code>/kill</code>、<code>/reset</code>、<code>/spawn</code>、<code>/turtle1/set_pen</code>、<code>/turtle1/teleport_absolute</code></p>
+<h4 id="ros2_5">ros2服务类型<a class="headerlink" href="#ros2_5" title="Permanent link">&para;</a></h4>
+<p>服务具有类型，用于描述服务的请求和响应数据的结构。服务类型的定义与主题类型类似，但服务类型包含两部分：一部分是请求消息，另一部分是响应消息。</p>
+<p>要了解服务的类型，请使用以下命令：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>service<span class="w"> </span><span class="nb">type</span><span class="w"> </span>&lt;service_name&gt;
+</code></pre></div>
+<p>我们来看看turtlesim的<code>/clear</code>服务。在一个新的终端窗口中，输入以下命令：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>service<span class="w"> </span><span class="nb">type</span><span class="w"> </span>/clear
+std_srvs/srv/Empty
+</code></pre></div>
+<p>该<code>Empty</code>类型表示服务调用在发出请求时不发送任何数据，在接收响应时也不接收任何数据。</p>
+<p>同时查看所有活动服务的类型</p>
+<div class="highlight"><pre><span></span><code>root@97dadf09cb70:/#<span class="w"> </span>ros2<span class="w"> </span>service<span class="w"> </span>list<span class="w"> </span>-t
+/clear<span class="w"> </span><span class="o">[</span>std_srvs/srv/Empty<span class="o">]</span>
+/kill<span class="w"> </span><span class="o">[</span>turtlesim/srv/Kill<span class="o">]</span>
+/reset<span class="w"> </span><span class="o">[</span>std_srvs/srv/Empty<span class="o">]</span>
+/spawn<span class="w"> </span><span class="o">[</span>turtlesim/srv/Spawn<span class="o">]</span>
+/teleop_turtle/describe_parameters<span class="w"> </span><span class="o">[</span>rcl_interfaces/srv/DescribeParameters<span class="o">]</span>
+/teleop_turtle/get_parameter_types<span class="w"> </span><span class="o">[</span>rcl_interfaces/srv/GetParameterTypes<span class="o">]</span>
+/teleop_turtle/get_parameters<span class="w"> </span><span class="o">[</span>rcl_interfaces/srv/GetParameters<span class="o">]</span>
+/teleop_turtle/get_type_description<span class="w"> </span><span class="o">[</span>type_description_interfaces/srv/GetTypeDescription<span class="o">]</span>
+/teleop_turtle/list_parameters<span class="w"> </span><span class="o">[</span>rcl_interfaces/srv/ListParameters<span class="o">]</span>
+/teleop_turtle/set_parameters<span class="w"> </span><span class="o">[</span>rcl_interfaces/srv/SetParameters<span class="o">]</span>
+/teleop_turtle/set_parameters_atomically<span class="w"> </span><span class="o">[</span>rcl_interfaces/srv/SetParametersAtomically<span class="o">]</span>
+/turtle1/set_pen<span class="w"> </span><span class="o">[</span>turtlesim/srv/SetPen<span class="o">]</span>
+/turtle1/teleport_absolute<span class="w"> </span><span class="o">[</span>turtlesim/srv/TeleportAbsolute<span class="o">]</span>
+/turtle1/teleport_relative<span class="w"> </span><span class="o">[</span>turtlesim/srv/TeleportRelative<span class="o">]</span>
+/turtlesim/describe_parameters<span class="w"> </span><span class="o">[</span>rcl_interfaces/srv/DescribeParameters<span class="o">]</span>
+/turtlesim/get_parameter_types<span class="w"> </span><span class="o">[</span>rcl_interfaces/srv/GetParameterTypes<span class="o">]</span>
+/turtlesim/get_parameters<span class="w"> </span><span class="o">[</span>rcl_interfaces/srv/GetParameters<span class="o">]</span>
+/turtlesim/get_type_description<span class="w"> </span><span class="o">[</span>type_description_interfaces/srv/GetTypeDescription<span class="o">]</span>
+/turtlesim/list_parameters<span class="w"> </span><span class="o">[</span>rcl_interfaces/srv/ListParameters<span class="o">]</span>
+/turtlesim/set_parameters<span class="w"> </span><span class="o">[</span>rcl_interfaces/srv/SetParameters<span class="o">]</span>
+/turtlesim/set_parameters_atomically<span class="w"> </span><span class="o">[</span>rcl_interfaces/srv/SetParametersAtomically<span class="o">]</span>
+</code></pre></div>
+<h4 id="ros2_6">ros2 服务信息<a class="headerlink" href="#ros2_6" title="Permanent link">&para;</a></h4>
+<p>要查看特定服务的信息，请使用以下命令：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>service<span class="w"> </span>info<span class="w"> </span>&lt;service_name&gt;
+</code></pre></div>
+<p>这将返回服务类型以及服务客户端和服务器的数量。</p>
+<p>例如，您可以查找该服务的客户端和服务器数量<code>/clear</code>：</p>
+<div class="highlight"><pre><span></span><code>root@97dadf09cb70:/#<span class="w"> </span>ros2<span class="w"> </span>service<span class="w"> </span>info<span class="w"> </span>/clear
+Type:<span class="w"> </span>std_srvs/srv/Empty
+Clients<span class="w"> </span>count:<span class="w"> </span><span class="m">0</span>
+Services<span class="w"> </span>count:<span class="w"> </span><span class="m">1</span>
+</code></pre></div>
+<p>ros2 服务查找</p>
+<p>你可以从命令行调用服务，但首先你需要了解输入参数的结构。</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>interface<span class="w"> </span>show<span class="w"> </span>&lt;type_name&gt;
+</code></pre></div>
+<p>请尝试对<code>/clear</code>服务类型执行此操作<code>Empty</code>：</p>
+<div class="highlight"><pre><span></span><code><span class="l l-Scalar l-Scalar-Plain">root@97dadf09cb70:/# ros2 interface show std_srvs/srv/Empty</span>
+</code></pre></div>
+<p>对 /Spawn 服务类型进行操作</p>
+<div class="highlight"><pre><span></span><code><span class="l l-Scalar l-Scalar-Plain">root@97dadf09cb70:/# ros2 interface show turtlesim/srv/Spawn</span>
+<span class="l l-Scalar l-Scalar-Plain">float32 x</span>
+<span class="l l-Scalar l-Scalar-Plain">float32 y</span>
+<span class="l l-Scalar l-Scalar-Plain">float32 theta</span>
+<span class="l l-Scalar l-Scalar-Plain">string name</span><span class="w"> </span><span class="c1"># Optional.  A unique name will be created and returned if this is empty</span>
+
+<span class="l l-Scalar l-Scalar-Plain">string name</span>
+</code></pre></div>
+<h4 id="ros2_7">ros2 服务调用<a class="headerlink" href="#ros2_7" title="Permanent link">&para;</a></h4>
+<p>现在您已经了解了什么是服务类型、如何查找服务类型以及如何查找该类型参数的结构，您可以使用以下方式调用服务：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>service<span class="w"> </span>call<span class="w"> </span>&lt;service_name&gt;<span class="w"> </span>&lt;service_type&gt;<span class="w"> </span>&lt;arguments&gt;
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>service<span class="w"> </span>call<span class="w"> </span>/clear<span class="w"> </span>std_srvs/srv/Empty
+</code></pre></div>
+<p><img alt="" src="assets/image-13.png" /></p>
+<p>现在让我们通过调用<code>/spawn</code>并设置参数来生成一个新的海龟。<code>&lt;arguments&gt;</code>从命令行调用服务时，输入必须采用 YAML 语法。</p>
+<p><img alt="" src="assets/image-14.png" /></p>
+<h3 id="ros2_8">Ros2 参数<a class="headerlink" href="#ros2_8" title="Permanent link">&para;</a></h3>
+<p>参数是节点的配置值。您可以将参数理解为节点的设置。节点可以将参数存储为整数、浮点数、布尔值、字符串和列表。在 ROS 2 中，每个节点都维护自己的参数。</p>
+<p>要查看节点的参数，请打开一个新的终端并输入以下命令：</p>
+<div class="highlight"><pre><span></span><code>root@97dadf09cb70:/#<span class="w"> </span>ros2<span class="w"> </span>param<span class="w"> </span>list
+/teleop_turtle:
+<span class="w">  </span>qos_overrides./parameter_events.publisher.depth
+<span class="w">  </span>qos_overrides./parameter_events.publisher.durability
+<span class="w">  </span>qos_overrides./parameter_events.publisher.history
+<span class="w">  </span>qos_overrides./parameter_events.publisher.reliability
+<span class="w">  </span>scale_angular
+<span class="w">  </span>scale_linear
+<span class="w">  </span>start_type_description_service
+<span class="w">  </span>use_sim_time
+/turtlesim:
+<span class="w">  </span>background_b
+<span class="w">  </span>background_g
+<span class="w">  </span>background_r
+<span class="w">  </span>holonomic
+<span class="w">  </span>qos_overrides./parameter_events.publisher.depth
+<span class="w">  </span>qos_overrides./parameter_events.publisher.durability
+<span class="w">  </span>qos_overrides./parameter_events.publisher.history
+<span class="w">  </span>qos_overrides./parameter_events.publisher.reliability
+<span class="w">  </span>start_type_description_service
+<span class="w">  </span>use_sim_time
+</code></pre></div>
+<p>您可以看到节点命名空间，<code>/teleop_turtle</code>以及<code>/turtlesim</code>每个节点的参数。</p>
+<p>每个节点都有一个参数<code>use_sim_time</code>；它并非 turtlesim 独有。</p>
+<p>根据它们的名称来看，这些参数似乎是<code>/turtlesim</code>使用 RGB 颜色值来确定 turtlesim 窗口的背景颜色。</p>
+<p>要确定参数的类型，可以使用。<code>ros2 param get</code></p>
+<h4 id="ros2_9">ros2 参数获取<a class="headerlink" href="#ros2_9" title="Permanent link">&para;</a></h4>
+<p>要显示参数的类型和当前值，请使用以下命令：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>param<span class="w"> </span>get<span class="w"> </span>&lt;node_name&gt;<span class="w"> </span>&lt;parameter_name&gt;
+</code></pre></div>
+<p>让我们来找出<code>/turtlesim</code>该参数的当前值<code>background_g</code>：这里指的是获取 RGB 的值</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>param<span class="w"> </span>get<span class="w"> </span>/turtlesim<span class="w"> </span>background_g
+Integer<span class="w"> </span>value<span class="w"> </span>is:<span class="w"> </span><span class="m">86</span>
+</code></pre></div>
+<h4 id="ros2_10">ros2 参数集<a class="headerlink" href="#ros2_10" title="Permanent link">&para;</a></h4>
+<p>要在运行时更改参数值，请使用以下命令：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>param<span class="w"> </span><span class="nb">set</span><span class="w"> </span>&lt;node_name&gt;<span class="w"> </span>&lt;parameter_name&gt;<span class="w"> </span>&lt;value&gt;
+</code></pre></div>
+<p>让我们更改<code>/turtlesim</code>背景颜色：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>param<span class="w"> </span><span class="nb">set</span><span class="w"> </span>/turtlesim<span class="w"> </span>background_r<span class="w"> </span><span class="m">150</span>
+</code></pre></div>
+<p><img alt="" src="assets/image-15.png" /></p>
+<p>使用该命令设置参数<code>set</code>只会更改当前会话中的参数，不会永久生效。但是，您可以保存设置，并在下次启动节点时重新加载这些设置。</p>
+<h4 id="ros2_11">ros2 参数转储<a class="headerlink" href="#ros2_11" title="Permanent link">&para;</a></h4>
+<p>您可以使用以下命令查看节点的所有当前参数值：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>param<span class="w"> </span>dump<span class="w"> </span>&lt;node_name&gt;
+</code></pre></div>
+<p>该命令默认将输出打印到标准输出 (stdout)，但您也可以将参数值重定向到文件以保存以供后续使用。要将当前配置的<code>/turtlesim</code>参数保存到文件中<code>turtlesim.yaml</code>，请输入以下命令</p>
+<div class="highlight"><pre><span></span><code><span class="l l-Scalar l-Scalar-Plain">root@97dadf09cb70:/# ros2 param dump /turtlesim &gt; turtlesim.yaml</span>
+<span class="l l-Scalar l-Scalar-Plain">root@97dadf09cb70:/# cat turtlesim.yaml</span><span class="w"> </span>
+<span class="l l-Scalar l-Scalar-Plain">/turtlesim</span><span class="p p-Indicator">:</span>
+<span class="w">  </span><span class="nt">ros__parameters</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">background_b</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">255</span>
+<span class="w">    </span><span class="nt">background_g</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">86</span>
+<span class="w">    </span><span class="nt">background_r</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">150</span>
+<span class="w">    </span><span class="nt">holonomic</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<span class="w">    </span><span class="nt">qos_overrides</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">/parameter_events</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">publisher</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">depth</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1000</span>
+<span class="w">          </span><span class="nt">durability</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">volatile</span>
+<span class="w">          </span><span class="nt">history</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">keep_last</span>
+<span class="w">          </span><span class="nt">reliability</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">reliable</span>
+<span class="w">    </span><span class="nt">start_type_description_service</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">use_sim_time</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+</code></pre></div>
+<p>如果将来想要使用相同的参数重新加载节点，导出参数会很有帮助。</p>
+<h4 id="ros2_12">Ros2 参数加载<a class="headerlink" href="#ros2_12" title="Permanent link">&para;</a></h4>
+<p>可以使用以下命令将参数从文件加载到当前正在运行的节点：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>param<span class="w"> </span>load<span class="w"> </span>&lt;node_name&gt;<span class="w"> </span>&lt;parameter_file&gt;
+</code></pre></div>
+<p>要将<code>turtlesim.yaml</code>生成的文件加载到节点的参数中，请输入以下命令：<code>ros2 param dump/turtlesim</code></p>
+<div class="highlight"><pre><span></span><code><span class="n">root</span><span class="o">@</span><span class="mi">97</span><span class="n">dadf09cb70</span><span class="p">:</span><span class="o">/#</span><span class="w"> </span><span class="n">ros2</span><span class="w"> </span><span class="n">param</span><span class="w"> </span><span class="k">load</span><span class="w"> </span><span class="o">/</span><span class="n">turtlesim</span><span class="w"> </span><span class="n">turtlesim</span><span class="p">.</span><span class="n">yaml</span><span class="w"> </span>
+<span class="k">Set</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="n">background_b</span><span class="w"> </span><span class="n">successful</span>
+<span class="k">Set</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="n">background_g</span><span class="w"> </span><span class="n">successful</span>
+<span class="k">Set</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="n">background_r</span><span class="w"> </span><span class="n">successful</span>
+<span class="k">Set</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="n">holonomic</span><span class="w"> </span><span class="n">successful</span>
+<span class="k">Set</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="n">qos_overrides</span><span class="p">.</span><span class="o">/</span><span class="n">parameter_events</span><span class="p">.</span><span class="n">publisher</span><span class="p">.</span><span class="n">depth</span><span class="w"> </span><span class="n">failed</span><span class="p">:</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="s1">'qos_overrides./parameter_events.publisher.depth'</span><span class="w"> </span><span class="n">cannot</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="n">because</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="k">read</span><span class="o">-</span><span class="k">only</span>
+<span class="k">Set</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="n">qos_overrides</span><span class="p">.</span><span class="o">/</span><span class="n">parameter_events</span><span class="p">.</span><span class="n">publisher</span><span class="p">.</span><span class="n">durability</span><span class="w"> </span><span class="n">failed</span><span class="p">:</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="s1">'qos_overrides./parameter_events.publisher.durability'</span><span class="w"> </span><span class="n">cannot</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="n">because</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="k">read</span><span class="o">-</span><span class="k">only</span>
+<span class="k">Set</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="n">qos_overrides</span><span class="p">.</span><span class="o">/</span><span class="n">parameter_events</span><span class="p">.</span><span class="n">publisher</span><span class="p">.</span><span class="n">history</span><span class="w"> </span><span class="n">failed</span><span class="p">:</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="s1">'qos_overrides./parameter_events.publisher.history'</span><span class="w"> </span><span class="n">cannot</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="n">because</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="k">read</span><span class="o">-</span><span class="k">only</span>
+<span class="k">Set</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="n">qos_overrides</span><span class="p">.</span><span class="o">/</span><span class="n">parameter_events</span><span class="p">.</span><span class="n">publisher</span><span class="p">.</span><span class="n">reliability</span><span class="w"> </span><span class="n">failed</span><span class="p">:</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="s1">'qos_overrides./parameter_events.publisher.reliability'</span><span class="w"> </span><span class="n">cannot</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="n">because</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="k">read</span><span class="o">-</span><span class="k">only</span>
+<span class="k">Set</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="n">start_type_description_service</span><span class="w"> </span><span class="n">failed</span><span class="p">:</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="s1">'start_type_description_service'</span><span class="w"> </span><span class="n">cannot</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="n">because</span><span class="w"> </span><span class="n">it</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="k">read</span><span class="o">-</span><span class="k">only</span>
+<span class="k">Set</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="n">use_sim_time</span><span class="w"> </span><span class="n">successful</span>
+<span class="n">root</span><span class="o">@</span><span class="mi">97</span><span class="n">dadf09cb70</span><span class="p">:</span><span class="o">/#</span><span class="w"> </span>
+</code></pre></div>
+<h4 id="_9">节点启动时加载参数文件<a class="headerlink" href="#_9" title="Permanent link">&para;</a></h4>
+<p>要使用已保存的参数值启动同一节点，请使用：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>run<span class="w"> </span>&lt;package_name&gt;<span class="w"> </span>&lt;executable_name&gt;<span class="w"> </span>--ros-args<span class="w"> </span>--params-file<span class="w"> </span>&lt;file_name&gt;
+</code></pre></div>
+<p>这是你一直用来启动 turtlesim 的相同命令，添加了标志<code>--ros-args</code>和<code>--params-file</code>，后面跟着你要加载的文件。</p>
+<p>停止正在运行的 turtlesim 节点，然后尝试使用保存的参数重新加载它，方法如下：（这个时候 turtlesim.yaml 就是保存了我们修改后的紫色配置了）</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>run<span class="w"> </span>turtlesim<span class="w"> </span>turtlesim_node<span class="w"> </span>--ros-args<span class="w"> </span>--params-file<span class="w"> </span>turtlesim.yaml
+</code></pre></div>
+<p>turtlesim窗口应该像往常一样出现，但背景会变成你之前设置的紫色。</p>
+<h3 id="ros2-action">Ros2 Action<a class="headerlink" href="#ros2-action" title="Permanent link">&para;</a></h3>
+<p>在 ROS 2 中，动作是通信类型之一，专为长时间运行的任务而设计。它们由三部分组成：目标、反馈和结果。</p>
+<p>操作基于主题和服务构建。它们的功能与服务类似，但操作可以取消。此外，它们提供持续的反馈，而服务只返回一次响应。</p>
+<p>Actions 使用客户端-服务器模型，类似于发布者-订阅者模型（详见<a href="https://docs.ros.org/en/jazzy/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics.html">主题教程</a>）。“Action 客户端”节点向“Action 服务器”节点发送目标，后者确认目标并返回反馈流和结果。</p>
+<p><img alt="" src="assets/image-16.png" /></p>
+<p>启动两个 turtlesim 节点，<code>/turtlesim</code>并且<code>/teleop_turtle</code>。</p>
+<p>打开一个新的终端并运行：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>run<span class="w"> </span>turtlesim<span class="w"> </span>turtlesim_node
+</code></pre></div>
+<p>打开另一个终端并运行：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>run<span class="w"> </span>turtlesim<span class="w"> </span>turtle_teleop_key
+</code></pre></div>
+<p>启动<code>/teleop_turtle</code>节点后，您将在终端中看到以下消息：</p>
+<div class="highlight"><pre><span></span><code>Use<span class="w"> </span>arrow<span class="w"> </span>keys<span class="w"> </span>to<span class="w"> </span>move<span class="w"> </span>the<span class="w"> </span>turtle.Use<span class="w"> </span>G<span class="p">|</span>B<span class="p">|</span>V<span class="p">|</span>C<span class="p">|</span>D<span class="p">|</span>E<span class="p">|</span>R<span class="p">|</span>T<span class="w"> </span>keys<span class="w"> </span>to<span class="w"> </span>rotate<span class="w"> </span>to<span class="w"> </span>absolute<span class="w"> </span>orientations.<span class="w"> </span><span class="s1">'F'</span><span class="w"> </span>to<span class="w"> </span>cancel<span class="w"> </span>a<span class="w"> </span>rotation.
+</code></pre></div>
+<p>我们重点关注第二行，它对应于一个操作 Action。</p>
+<p>请注意<code>/turtlesim</code>运行节点的终端。每次按下这些键，您都会向<code>/turtlesim</code>节点中的一个动作服务器发送一个目标。该目标是使海龟旋转到特定方向。海龟完成旋转后，应显示一条消息，传达目标的结果：</p>
+<div class="highlight"><pre><span></span><code><span class="o">[</span>INFO<span class="o">]</span><span class="w"> </span><span class="o">[</span>turtlesim<span class="o">]</span>:<span class="w"> </span>Rotation<span class="w"> </span>goal<span class="w"> </span>completed<span class="w"> </span>successfully
+</code></pre></div>
+<p>关键<code>F</code>在于取消正在执行中的目标。</p>
+<p>尝试按下该<code>C</code>键，然后<code>F</code>在海龟完成旋转之前再次按下该键。在<code>/turtlesim</code>节点运行的终端中，您将看到以下消息：</p>
+<div class="highlight"><pre><span></span><code><span class="o">[</span>INFO<span class="o">]</span><span class="w"> </span><span class="o">[</span>turtlesim<span class="o">]</span>:<span class="w"> </span>Rotation<span class="w"> </span>goal<span class="w"> </span>canceled
+</code></pre></div>
+<p>不仅客户端（您在远程操作中的输入）可以停止目标，服务器端（节点<code>/turtlesim</code>）也可以。当服务器端选择停止处理目标时，称为“中止”该目标。</p>
+<p>尝试在第一次旋转完成之前按下第一个<code>D</code>键，然后再按下第二个键。在节点运行的终端中，您将看到以下消息：<code>G/turtlesim</code></p>
+<div class="highlight"><pre><span></span><code><span class="o">[</span>WARN<span class="o">]</span><span class="w"> </span><span class="o">[</span>turtlesim<span class="o">]</span>:<span class="w"> </span>Rotation<span class="w"> </span>goal<span class="w"> </span>received<span class="w"> </span>before<span class="w"> </span>a<span class="w"> </span>previous<span class="w"> </span>goal<span class="w"> </span>finished.<span class="w"> </span>Aborting<span class="w"> </span>previous<span class="w"> </span>goal
+</code></pre></div>
+<p>注意后面的</p>
+<div class="highlight"><pre><span></span><code>ction<span class="w"> </span>Servers:
+<span class="w">    </span>/turtle1/rotate_absolute:<span class="w"> </span>turtlesim/action/RotateAbsolute
+<span class="w">  </span>Action<span class="w"> </span>Clients:
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>root@97dadf09cb70:/#<span class="w"> </span>ros2<span class="w"> </span>node<span class="w"> </span>info<span class="w"> </span>/turtlesim
+/turtlesim
+<span class="w">  </span>Subscribers:
+<span class="w">    </span>/parameter_events:<span class="w"> </span>rcl_interfaces/msg/ParameterEvent
+<span class="w">    </span>/turtle1/cmd_vel:<span class="w"> </span>geometry_msgs/msg/Twist
+<span class="w">  </span>Publishers:
+<span class="w">    </span>/parameter_events:<span class="w"> </span>rcl_interfaces/msg/ParameterEvent
+<span class="w">    </span>/rosout:<span class="w"> </span>rcl_interfaces/msg/Log
+<span class="w">    </span>/turtle1/color_sensor:<span class="w"> </span>turtlesim/msg/Color
+<span class="w">    </span>/turtle1/pose:<span class="w"> </span>turtlesim/msg/Pose
+<span class="w">  </span>Service<span class="w"> </span>Servers:
+<span class="w">    </span>/clear:<span class="w"> </span>std_srvs/srv/Empty
+<span class="w">    </span>/kill:<span class="w"> </span>turtlesim/srv/Kill
+<span class="w">    </span>/reset:<span class="w"> </span>std_srvs/srv/Empty
+<span class="w">    </span>/spawn:<span class="w"> </span>turtlesim/srv/Spawn
+<span class="w">    </span>/turtle1/set_pen:<span class="w"> </span>turtlesim/srv/SetPen
+<span class="w">    </span>/turtle1/teleport_absolute:<span class="w"> </span>turtlesim/srv/TeleportAbsolute
+<span class="w">    </span>/turtle1/teleport_relative:<span class="w"> </span>turtlesim/srv/TeleportRelative
+<span class="w">    </span>/turtlesim/describe_parameters:<span class="w"> </span>rcl_interfaces/srv/DescribeParameters
+<span class="w">    </span>/turtlesim/get_parameter_types:<span class="w"> </span>rcl_interfaces/srv/GetParameterTypes
+<span class="w">    </span>/turtlesim/get_parameters:<span class="w"> </span>rcl_interfaces/srv/GetParameters
+<span class="w">    </span>/turtlesim/get_type_description:<span class="w"> </span>type_description_interfaces/srv/GetTypeDescription
+<span class="w">    </span>/turtlesim/list_parameters:<span class="w"> </span>rcl_interfaces/srv/ListParameters
+<span class="w">    </span>/turtlesim/set_parameters:<span class="w"> </span>rcl_interfaces/srv/SetParameters
+<span class="w">    </span>/turtlesim/set_parameters_atomically:<span class="w"> </span>rcl_interfaces/srv/SetParametersAtomically
+<span class="w">  </span>Service<span class="w"> </span>Clients:
+
+<span class="w">  </span>Action<span class="w"> </span>Servers:
+<span class="w">    </span>/turtle1/rotate_absolute:<span class="w"> </span>turtlesim/action/RotateAbsolute
+<span class="w">  </span>Action<span class="w"> </span>Clients:
+</code></pre></div>
+<h4 id="ros2_13">ros2 操作类表<a class="headerlink" href="#ros2_13" title="Permanent link">&para;</a></h4>
+<p>操作也有类型，类似于主题和服务。要查找<code>/turtle1/rotate_absolute</code>操作的类型，请运行以下命令：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>action<span class="w"> </span>list<span class="w"> </span>-t
+/turtle1/rotate_absolute<span class="w"> </span><span class="o">[</span>turtlesim/action/RotateAbsolute<span class="o">]</span>
+</code></pre></div>
+<p>每个操作名称（在本例中仅限此操作）右侧的括号内<code>/turtle1/rotate_absolute</code>是操作类型<code>turtlesim/action/RotateAbsolute</code>。当您想从命令行或代码执行操作时，需要用到此信息。</p>
+<h4 id="ros2-action-type">ros2 action type<a class="headerlink" href="#ros2-action-type" title="Permanent link">&para;</a></h4>
+<p>如果要检查操作的类型，请运行以下命令：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>action<span class="w"> </span><span class="nb">type</span><span class="w"> </span>/turtle1/rotate_absolute
+turtlesim/action/RotateAbsolute
+</code></pre></div>
+<h4 id="ros2-action-info">ros2 action info<a class="headerlink" href="#ros2-action-info" title="Permanent link">&para;</a></h4>
+<p>您可以<code>/turtle1/rotate_absolute</code>使用以下命令进一步分析该操作：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>action<span class="w"> </span>info<span class="w"> </span>/turtle1/rotate_absolute
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>root@97dadf09cb70:/#<span class="w"> </span>ros2<span class="w"> </span>action<span class="w"> </span>info<span class="w"> </span>/turtle1/rotate_absolute<span class="w"> </span>
+Action:<span class="w"> </span>/turtle1/rotate_absolute
+Action<span class="w"> </span>clients:<span class="w"> </span><span class="m">1</span>
+<span class="w">    </span>/teleop_turtle
+Action<span class="w"> </span>servers:<span class="w"> </span><span class="m">1</span>
+<span class="w">    </span>/turtlesim
+</code></pre></div>
+<h4 id="ros2-action-interface">ros2 action interface<a class="headerlink" href="#ros2-action-interface" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>interface<span class="w"> </span>show<span class="w"> </span>turtlesim/action/RotateAbsolute
+</code></pre></div>
+<p>本消息中第一部分以上<code>---</code>是目标请求的结构（数据类型和名称）。下一部分是结果的结构。最后一部分是反馈的结构。</p>
+<div class="highlight"><pre><span></span><code><span class="l l-Scalar l-Scalar-Plain">root@97dadf09cb70:/# ros2 interface show turtlesim/action/RotateAbsolute</span>
+<span class="l l-Scalar l-Scalar-Plain">**The desired heading in radians**</span>
+<span class="l l-Scalar l-Scalar-Plain">float32 theta</span>
+
+<span class="l l-Scalar l-Scalar-Plain">**The angular displacement in radians to the starting position**</span>
+<span class="l l-Scalar l-Scalar-Plain">float32 delta</span>
+
+<span class="l l-Scalar l-Scalar-Plain">**The remaining rotation in radians**</span>
+<span class="l l-Scalar l-Scalar-Plain">float32 remaining</span>
+</code></pre></div>
+<h4 id="ros2-action-send_goal">ros2 action send_goal<a class="headerlink" href="#ros2-action-send_goal" title="Permanent link">&para;</a></h4>
+<p>现在让我们使用以下语法从命令行发送一个操作目标：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>action<span class="w"> </span>send_goal<span class="w"> </span>&lt;action_name&gt;<span class="w"> </span>&lt;action_type&gt;<span class="w"> </span>&lt;values&gt;
+</code></pre></div>
+<p><code>&lt;values&gt;</code>需要采用 YAML 格式。</p>
+<p>请留意 turtlesim 窗口，并在终端中输入以下命令：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>action<span class="w"> </span>send_goal<span class="w"> </span>/turtle1/rotate_absolute<span class="w"> </span>turtlesim/action/RotateAbsolute<span class="w"> </span><span class="s2">"{theta: 2.57}"</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>root@97dadf09cb70:/#<span class="w"> </span>ros2<span class="w"> </span>action<span class="w"> </span>send_goal<span class="w"> </span>/turtle1/rotate_absolute<span class="w"> </span>turtlesim/action/RotateAbsolute<span class="w"> </span><span class="s2">"{theta: 2.57}"</span>
+Waiting<span class="w"> </span><span class="k">for</span><span class="w"> </span>an<span class="w"> </span>action<span class="w"> </span>server<span class="w"> </span>to<span class="w"> </span>become<span class="w"> </span>available...
+Sending<span class="w"> </span>goal:
+<span class="w">     </span>theta:<span class="w"> </span><span class="m">2</span>.57
+
+Goal<span class="w"> </span>accepted<span class="w"> </span>with<span class="w"> </span>ID:<span class="w"> </span>7d78b88d3db141d39ea42cec36309699
+
+Result:
+<span class="w">    </span>delta:<span class="w"> </span>-1.0080000162124634
+
+Goal<span class="w"> </span>finished<span class="w"> </span>with<span class="w"> </span>status:<span class="w"> </span>SUCCEEDED
+</code></pre></div>
+<p>你应该能看到乌龟在旋转。</p>
+<p>所有 goal 都有一个唯一的 ID，显示在返回消息中。您还可以看到结果，即名为“偏移量”的字段<code>delta</code>，它表示进球点到起始位置的偏移量。</p>
+<p>要查看此目标的反馈，请<code>--feedback</code>在命令中添加：<code>ros2 action send_goal</code>，您将继续收到反馈，剩余的弧度，直到目标完成。</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>action<span class="w"> </span>send_goal<span class="w"> </span>/turtle1/rotate_absolute<span class="w"> </span>turtlesim/action/RotateAbsolute<span class="w"> </span><span class="s2">"{theta: -1.57}"</span><span class="w"> </span>--feedback
+Waiting<span class="w"> </span><span class="k">for</span><span class="w"> </span>an<span class="w"> </span>action<span class="w"> </span>server<span class="w"> </span>to<span class="w"> </span>become<span class="w"> </span>available...
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="l l-Scalar l-Scalar-Plain">Waiting for an action server to become available...</span>
+<span class="l l-Scalar l-Scalar-Plain">Sending goal</span><span class="p p-Indicator">:</span>
+<span class="w">     </span><span class="nt">theta</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1.57</span>
+
+<span class="nt">Goal accepted with ID</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ee8ea4230b3242a691313d8ea46ff316</span>
+
+<span class="nt">Feedback</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">remaining</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.1531853675842285</span>
+<span class="l l-Scalar l-Scalar-Plain">。。。</span>
+
+<span class="nt">Feedback</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">remaining</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.009185194969177246</span>
+
+<span class="nt">Result</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">delta</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-2.1439998149871826</span>
+
+<span class="nt">Goal finished with status</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">SUCCEEDED</span>
+</code></pre></div>
+<h3 id="rqt_console">rqt_console 查看日志<a class="headerlink" href="#rqt_console" title="Permanent link">&para;</a></h3>
+<p><code>rqt_console</code>是一个用于在 ROS 2 中查看日志消息的图形用户界面工具。通常，日志消息会显示在终端中。使用<code>rqt_console</code>，您可以收集一段时间内的日志消息，以更清晰、更有条理的方式查看它们，进行筛选，保存它们，甚至可以重新加载已保存的文件以便在其他时间查看。</p>
+<p>节点使用日志以多种方式输出有关事件和状态的消息。日志内容通常是为用户提供信息。</p>
+<p>在新终端中运行<code>rqt_console</code>以下命令：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>run<span class="w"> </span>rqt_console<span class="w"> </span>rqt_console
+</code></pre></div>
+<p>为了生成<code>rqt_console</code>要显示的日志信息，我们让海龟撞墙。在一个新的终端窗口中，输入以下命令（详见<a href="https://docs.ros.org/en/jazzy/Tutorials/Beginner-CLI-Tools/Understanding-ROS2-Topics/Understanding-ROS2-Topics.html">主题教程</a>）：<code>ros2 topic pub</code></p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>topic<span class="w"> </span>pub<span class="w"> </span>-r<span class="w"> </span><span class="m">1</span><span class="w"> </span>/turtle1/cmd_vel<span class="w"> </span>geometry_msgs/msg/Twist<span class="w"> </span><span class="s2">"{linear: {x: 2.0, y: 0.0, z: 0.0}, angular: {x: 0.0,y: 0.0,z: 0.0}}"</span>
+</code></pre></div>
+<p>由于上述命令以稳定的频率发布主题，海龟会不断撞墙。<code>rqt_console</code>你会看到相同的消息及其<code>Warn</code>严重级别反复显示，如下所示：</p>
+<p><img alt="" src="assets/image-17.png" /></p>
+<p><img alt="" src="assets/image-18.png" /></p>
+<h4 id="ros2_14">ros2 日志级别<a class="headerlink" href="#ros2_14" title="Permanent link">&para;</a></h4>
+<p>ROS 2 的日志级别按严重程度排序：</p>
+<blockquote>
+<ol>
+<li>致命的</li>
+<li>错误</li>
+<li>警告</li>
+<li>信息</li>
+<li>调试</li>
+</ol>
+</blockquote>
+<p>每个级别的具体含义并没有确切的标准，但可以肯定的是：</p>
+<ul>
+<li><code>Fatal</code>消息表明系统即将终止运行，以保护自身免受损害。</li>
+<li><code>Error</code>这些信息表明存在一些重大问题，这些问题不一定会损坏系统，但会阻止系统正常运行。</li>
+<li><code>Warn</code>消息表明出现了意外活动或不理想的结果，这可能代表着更深层次的问题，但不会直接损害功能。</li>
+<li><code>Info</code>消息指示事件和状态更新，可直观地验证系统是否按预期运行。</li>
+<li><code>Debug</code>消息详细记录了系统执行的整个步骤过程。</li>
+</ul>
+<p>默认级别为<code>Info</code>。您只会看到默认严重级别及更高级别的消息。</p>
+<p>通常情况下，只有<code>Debug</code>消息会被隐藏，因为它们是唯一比严重级别低的消息级别<code>Info</code>。例如，如果您将默认级别设置为<code>Warn</code>，则只会看到严重级别为<code>Warn</code>、<code>Error</code>和的消息<code>Fatal</code>。</p>
+<h4 id="_10">设置日志默认级别<a class="headerlink" href="#_10" title="Permanent link">&para;</a></h4>
+<p>首次运行节点时，您可以使用重映射功能设置默认日志级别<code>/turtlesim</code>。在终端中输入以下命令：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>run<span class="w"> </span>turtlesim<span class="w"> </span>turtlesim_node<span class="w"> </span>--ros-args<span class="w"> </span>--log-level<span class="w"> </span>WARN
+</code></pre></div>
+<p>现在您将不会再看到<code>Info</code>上次启动时在控制台中出现的初始级别消息<code>turtlesim</code>。这是因为<code>Info</code>这些消息的优先级低于新的默认严重级别<code>Warn</code>。</p>
+<h3 id="ros2-launch">Ros2 Launch<a class="headerlink" href="#ros2-launch" title="Permanent link">&para;</a></h3>
+<p>在大多数入门教程中，您每次运行新节点都需要打开新的终端。随着您创建的系统越来越复杂，同时运行的节点也越来越多，打开终端并重新输入配置信息会变得非常繁琐。</p>
+<p>启动文件允许您同时启动和配置多个包含 ROS 2 节点的可执行文件。</p>
+<p>运行带有该命令的单个启动文件将一次性启动您的整个系统——所有节点及其配置。<code>ros2 launch</code></p>
+<h4 id="_11">运行启动文件<a class="headerlink" href="#_11" title="Permanent link">&para;</a></h4>
+<p>打开一个新的终端并运行：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>launch<span class="w"> </span>turtlesim<span class="w"> </span>multisim.launch.py
+</code></pre></div>
+<p>这将运行两个 TurtleSim 节点：</p>
+<p><img alt="" src="assets/image-19.png" /></p>
+<p>现在这些节点已经运行，您可以像控制其他 ROS 2 节点一样控制它们。例如，您可以通过打开两个额外的终端并运行以下命令，使海龟朝相反方向移动：</p>
+<p>在第二个终端中：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>topic<span class="w"> </span>pub<span class="w">  </span>/turtlesim1/turtle1/cmd_vel<span class="w"> </span>geometry_msgs/msg/Twist<span class="w"> </span><span class="s2">"{linear: {x: 2.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 1.8}}"</span>
+</code></pre></div>
+<p>在第三个终端中：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>topic<span class="w"> </span>pub<span class="w">  </span>/turtlesim2/turtle1/cmd_vel<span class="w"> </span>geometry_msgs/msg/Twist<span class="w"> </span><span class="s2">"{linear: {x: 2.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: -1.8}}"</span>
+</code></pre></div>
+<p><img alt="" src="assets/image-20.png" /></p>
+<h3 id="_12">数据记录和回放<a class="headerlink" href="#_12" title="Permanent link">&para;</a></h3>
+<p><code>ros2 bag</code>是一个命令行工具，用于记录 ROS 2 系统中主题和服务上发布的数据。它会收集任意数量主题和服务上传递的数据，并将其保存到数据库中。之后，您可以重放这些数据，从而复现测试和实验的结果。记录主题和服务也是分享您的工作成果并允许其他人复现它的绝佳方式。</p>
+<h4 id="topic_2">管理 Topic 数据<a class="headerlink" href="#topic_2" title="Permanent link">&para;</a></h4>
+<p>您将在<code>turtlesim</code>系统中记录键盘输入，以便保存和稍后回放，因此请先启动<code>/turtlesim</code>and<code>/teleop_turtle</code>节点。</p>
+<p>打开一个新的终端并运行：</p>
+<p>打开一个新的终端并运行：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>run<span class="w"> </span>turtlesim<span class="w"> </span>turtlesim_node
+</code></pre></div>
+<p>打开另一个终端并运行：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>run<span class="w"> </span>turtlesim<span class="w"> </span>turtle_teleop_key
+</code></pre></div>
+<p>我们也创建一个新目录来存储保存的录音：</p>
+<div class="highlight"><pre><span></span><code>mkdir<span class="w"> </span>bag_files
+<span class="nb">cd</span><span class="w"> </span>bag_files
+</code></pre></div>
+<p><code>ros2 bag</code>可以记录发布到主题的消息数据。要查看系统主题列表，请打开一个新的终端并运行以下命令：</p>
+<div class="highlight"><pre><span></span><code>root@97dadf09cb70:/bag_files#<span class="w"> </span>ros2<span class="w"> </span>topic<span class="w"> </span>list
+/parameter_events
+/rosout
+/turtlesim1/turtle1/cmd_vel
+/turtlesim1/turtle1/color_sensor
+/turtlesim1/turtle1/pose
+root@97dadf09cb70:/bag_files#<span class="w"> </span>
+</code></pre></div>
+<p>在主题教程中，您了解到<code>/turtle_teleop</code>节点会向主题发布命令<code>/turtle1/cmd_vel</code>，以使 turtlesim 中的海龟移动。</p>
+<p>要查看正在发布的数据<code>/turtle1/cmd_vel</code>，请运行以下命令：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>topic<span class="w"> </span><span class="nb">echo</span><span class="w"> </span>/turtle1/cmd_vel
+</code></pre></div>
+<p>一开始不会显示任何内容，因为远程操作尚未发布任何数据。返回运行远程操作的终端，选中它使其处于活动状态。使用方向键移动海龟，您将在运行的终端上看到数据发布。<code>ros2 topic echo</code></p>
+<h4 id="_13">记录主题<a class="headerlink" href="#_13" title="Permanent link">&para;</a></h4>
+<p>要记录发布到某个主题的数据，请使用以下命令语法：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>bag<span class="w"> </span>record<span class="w"> </span>&lt;topic_name&gt;
+</code></pre></div>
+<p>在对所选主题运行此命令之前，请打开一个新的终端并进入<code>bag_files</code>您之前创建的目录，因为 rosbag 文件将保存在您运行它的目录中。</p>
+<div class="highlight"><pre><span></span><code>root@97dadf09cb70:/# ros2 bag record /turtle1/cmd_vel
+[WARN] [ros2bag]: Positional "topics" argument deprecated. Please use optional "--topics" argument instead.
+[INFO] [1787677033.023889768] [rosbag2_recorder]: Press SPACE for pausing/resuming
+[INFO] [1787677033.023900977] [rosbag2_recorder]: Event publisher thread: Started
+[INFO] [1787677033.026560734] [rosbag2_recorder]: Starting recording to 'rosbag2_2026_08_25-16_57_13'
+[INFO] [1787677033.029053697] [rosbag2_recorder]: Listening for topics...
+[INFO] [1787677033.029062989] [rosbag2_recorder]: Recording...
+[INFO] [1787677033.029068739] [rosbag2_recorder]: Topics discovery started.
+[INFO] [1787677033.132594482] [rosbag2_recorder]: Subscribed to topic '/turtle1/cmd_vel'
+[INFO] [1787677033.132614274] [rosbag2_recorder]: All requested topics are subscribed. Stopping discovery...
+[INFO] [1787677033.132619608] [rosbag2_recorder]: Topics discovery stopped.
+</code></pre></div>
+<p>现在正在记录已发布的相关数据。返回遥控终端，再次移动海龟。移动方式并不重要，但请尝试找出可识别的模式，以便稍后回放数据时查看。<code>ros2 bag/turtle1/cmd_vel</code></p>
+<p>按下此键<code>Ctrl+C</code>停止录制。</p>
+<p>数据将累积到一个名为 <code>&lt;bag_name&gt;</code> 的新目录中<code>rosbag2_year_month_day-hour_minute_second</code>。该目录将包含一个 ` <code>metadata.yaml</code><bag_name>` 以及记录格式的 `<bag_file>` 文件。</p>
+<div class="highlight"><pre><span></span><code>Setting<span class="w"> </span>up<span class="w"> </span>tree<span class="w"> </span><span class="o">(</span><span class="m">2</span>.1.1-2ubuntu3.24.04.2<span class="o">)</span><span class="w"> </span>...
+root@97dadf09cb70:/bag_files#<span class="w"> </span>tree<span class="w"> </span>.
+.
+└──<span class="w"> </span>rosbag2_2026_08_25-16_57_13
+<span class="w">    </span>├──<span class="w"> </span>metadata.yaml
+<span class="w">    </span>└──<span class="w"> </span>rosbag2_2026_08_25-16_57_13_0.mcap
+
+<span class="m">2</span><span class="w"> </span>directories,<span class="w"> </span><span class="m">2</span><span class="w"> </span>files
+</code></pre></div>
+<h4 id="topic_3">记录多个 Topic<a class="headerlink" href="#topic_3" title="Permanent link">&para;</a></h4>
+<p>您还可以录制多个主题，以及更改保存文件的名称。<code>ros2 bag</code></p>
+<p>运行以下命令：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>bag<span class="w"> </span>record<span class="w"> </span>-o<span class="w"> </span>subset<span class="w"> </span>/turtle1/cmd_vel<span class="w"> </span>/turtle1/pose
+</code></pre></div>
+<p>此<code>-o</code>选项允许您为文件包选择一个唯一的名称。在本例中<code>subset</code>，以下字符串即为文件名。</p>
+<p>要同时记录多个主题，只需列出每个主题，并用空格分隔即可。在本例中，上面的命令输出证实了两个主题都已被记录。</p>
+<div class="highlight"><pre><span></span><code>root@97dadf09cb70:/bag_files#<span class="w"> </span>tree<span class="w"> </span>subset/
+subset/
+├──<span class="w"> </span>metadata.yaml
+└──<span class="w"> </span>subset_0.mcap
+</code></pre></div>
+<h4 id="topic_4">检查 Topic 数据<a class="headerlink" href="#topic_4" title="Permanent link">&para;</a></h4>
+<p>您可以通过运行以下命令查看录制详情：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>bag<span class="w"> </span>info<span class="w"> </span>&lt;bag_file_name&gt;
+</code></pre></div>
+<p>对<code>subset</code>bag 文件运行此命令将返回有关该文件的信息列表：</p>
+<div class="highlight"><pre><span></span><code><span class="l l-Scalar l-Scalar-Plain">root@97dadf09cb70:/bag_files# ros2 bag info subset</span>
+
+<span class="l l-Scalar l-Scalar-Plain">Files</span><span class="p p-Indicator">:</span><span class="w">             </span><span class="l l-Scalar l-Scalar-Plain">subset_0.mcap</span>
+<span class="nt">Bag size</span><span class="p">:</span><span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">47.9 KiB</span>
+<span class="nt">Storage id</span><span class="p">:</span><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">mcap</span>
+<span class="nt">ROS Distro</span><span class="p">:</span><span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">jazzy</span>
+<span class="nt">Duration</span><span class="p">:</span><span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">9.089883521s</span>
+<span class="nt">Start</span><span class="p">:</span><span class="w">             </span><span class="l l-Scalar l-Scalar-Plain">Aug 25 2026 17:00:18.210152355 (1787677218.210152355)</span>
+<span class="nt">End</span><span class="p">:</span><span class="w">               </span><span class="l l-Scalar l-Scalar-Plain">Aug 25 2026 17:00:27.300035876 (1787677227.300035876)</span>
+<span class="nt">Messages</span><span class="p">:</span><span class="w">          </span><span class="l l-Scalar l-Scalar-Plain">573</span>
+<span class="nt">Topic information: Topic: /turtle1/cmd_vel | Type: geometry_msgs/msg/Twist | Count: 4 | Serialization Format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cdr</span>
+<span class="w">                   </span><span class="l l-Scalar l-Scalar-Plain">Topic</span><span class="nt">: /turtle1/pose | Type: turtlesim/msg/Pose | Count: 569 | Serialization Format</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cdr</span>
+<span class="nt">Service</span><span class="p">:</span><span class="w">           </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="nt">Service information</span><span class="p">:</span><span class="w"> </span>
+</code></pre></div>
+<h4 id="topic_5">播放 Topic 数据<a class="headerlink" href="#topic_5" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>bag<span class="w"> </span>play<span class="w"> </span>subset
+<span class="o">[</span>INFO<span class="o">]</span><span class="w"> </span><span class="o">[</span>rosbag2_storage<span class="o">]</span>:<span class="w"> </span>Opened<span class="w"> </span>database<span class="w"> </span><span class="s1">'subset'</span>.
+</code></pre></div>
+<p>乌龟会沿着我之前的操作再走一遍</p>
+<div class="highlight"><pre><span></span><code>root@97dadf09cb70:/bag_files# ros2 bag play subset
+[INFO] [1787677309.554189897] [rosbag2_player]: Set rate to 1
+[INFO] [1787677309.558838745] [rosbag2_player]: Adding keyboard callbacks.
+[INFO] [1787677309.558852455] [rosbag2_player]: Press SPACE for Pause/Resume
+[INFO] [1787677309.558856413] [rosbag2_player]: Press CURSOR_RIGHT for Play Next Message
+[INFO] [1787677309.558858913] [rosbag2_player]: Press CURSOR_UP for Increase Rate 10%
+[INFO] [1787677309.558861164] [rosbag2_player]: Press CURSOR_DOWN for Decrease Rate 10%
+[INFO] [1787677309.560107996] [rosbag2_player]: Playback until timestamp: -1
+</code></pre></div>
+<p>因为该<code>subset</code>文件记录了<code>/turtle1/pose</code>主题，所以只要 turtlesim 还在运行，即使你没有移动，该命令也不会停止。<code>ros2 bag play</code></p>
+<p>这是因为只要节点处于活动状态，它就会定期<code>/turtlesim</code>发布关于该主题的数据 。您可能已经注意到，在上面的示例结果中，该 主题的信息量只有 9；这正是我们在录制过程中按下方向键的次数。<code>/turtle1/poseros2 bag info/turtle1/cmd_velCount</code></p>
+<h4 id="_14">管理服务数据<a class="headerlink" href="#_14" title="Permanent link">&para;</a></h4>
+<p>为了记录服务数据，支持以下选项。服务数据可以同时与主题一起记录。</p>
+<p>记录特定服务：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>bag<span class="w"> </span>record<span class="w"> </span>--service<span class="w"> </span>&lt;service_names&gt;
+</code></pre></div>
+<p>记录所有服务：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>bag<span class="w"> </span>record<span class="w"> </span>--all-services
+</code></pre></div>
+<p>运行命令：</p>
+<div class="highlight"><pre><span></span><code>ros2<span class="w"> </span>bag<span class="w"> </span>record<span class="w"> </span>--service<span class="w"> </span>/add_two_ints
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>root@97dadf09cb70:/bag_files#<span class="w"> </span>ros2<span class="w"> </span>bag<span class="w"> </span>record<span class="w"> </span>--service<span class="w"> </span>/add_two_ints
+<span class="o">[</span>INFO<span class="o">]</span><span class="w"> </span><span class="o">[</span><span class="m">1787677392</span>.480550188<span class="o">]</span><span class="w"> </span><span class="o">[</span>rosbag2_recorder<span class="o">]</span>:<span class="w"> </span>Press<span class="w"> </span>SPACE<span class="w"> </span><span class="k">for</span><span class="w"> </span>pausing/resuming
+<span class="o">[</span>INFO<span class="o">]</span><span class="w"> </span><span class="o">[</span><span class="m">1787677392</span>.480560106<span class="o">]</span><span class="w"> </span><span class="o">[</span>rosbag2_recorder<span class="o">]</span>:<span class="w"> </span>Event<span class="w"> </span>publisher<span class="w"> </span>thread:<span class="w"> </span>Started
+<span class="o">[</span>INFO<span class="o">]</span><span class="w"> </span><span class="o">[</span><span class="m">1787677392</span>.483370894<span class="o">]</span><span class="w"> </span><span class="o">[</span>rosbag2_recorder<span class="o">]</span>:<span class="w"> </span>Starting<span class="w"> </span>recording<span class="w"> </span>to<span class="w"> </span><span class="s1">'rosbag2_2026_08_25-17_03_12'</span>
+<span class="o">[</span>INFO<span class="o">]</span><span class="w"> </span><span class="o">[</span><span class="m">1787677392</span>.484261654<span class="o">]</span><span class="w"> </span><span class="o">[</span>rosbag2_recorder<span class="o">]</span>:<span class="w"> </span>Listening<span class="w"> </span><span class="k">for</span><span class="w"> </span>topics...
+<span class="o">[</span>INFO<span class="o">]</span><span class="w"> </span><span class="o">[</span><span class="m">1787677392</span>.484271363<span class="o">]</span><span class="w"> </span><span class="o">[</span>rosbag2_recorder<span class="o">]</span>:<span class="w"> </span>Recording...
+<span class="o">[</span>INFO<span class="o">]</span><span class="w"> </span><span class="o">[</span><span class="m">1787677392</span>.484279446<span class="o">]</span><span class="w"> </span><span class="o">[</span>rosbag2_recorder<span class="o">]</span>:<span class="w"> </span>Topics<span class="w"> </span>discovery<span class="w"> </span>started.
+</code></pre></div>
+<p>正在记录服务上发布的服务数据。要停止记录，请在终端中输入。<code>ros2 bag/add_two_intsCtrl+C</code></p>
+<p>数据将累积到一个名为 <code>&lt;bag_name&gt;</code> 的新目录中<code>rosbag2_year_month_day-hour_minute_second</code>。该目录将包含一个 ` <code>metadata.yaml</code><bag_name>` 以及记录格式的 `<bag_file>` 文件。</p>
+<h2 id="_15">内容小结<a class="headerlink" href="#_15" title="Permanent link">&para;</a></h2>
+<p>本文说明了官方文档-ROS命令行入门所对应的核心对象、执行关系和适用范围，并保留了文章中的关键事实与操作依据。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.indexes", "navigation.top", "content.code.copy", "toc.follow"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+    
+  </body>
+</html>

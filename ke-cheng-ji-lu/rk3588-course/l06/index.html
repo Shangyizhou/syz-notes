@@ -1,0 +1,6286 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="记录课程内容、技术实践与个人学习总结">
+      
+      
+      
+        <link rel="canonical" href="https://shangyizhou.github.io/syz-notes/ke-cheng-ji-lu/rk3588-course/l06/">
+      
+      
+        <link rel="prev" href="../l05/">
+      
+      
+        <link rel="next" href="../l07/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>RK3588 Android开发答疑 - SYZ 的笔记</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../mkdocs/stylesheets/center-images.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#rk3588-android" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../.." title="SYZ 的笔记" class="md-header__button md-logo" aria-label="SYZ 的笔记" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SYZ 的笔记
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              RK3588 Android开发答疑
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="SYZ 的笔记" class="md-nav__button md-logo" aria-label="SYZ 的笔记" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    SYZ 的笔记
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SYZ 的笔记
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+          
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../ros2-intro/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    嵌入式与机器人
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    嵌入式与机器人
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    铁头山羊 STM32 入门教程
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    铁头山羊 STM32 入门教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/chapter-01/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    准备与开发环境
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_2" id="__nav_2_1_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    准备与开发环境
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-01/p002/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P002 · 安装开发环境
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-01/p003/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P003 · 1.1 （准备） STM32的基本信息
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/chapter-02/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GPIO
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_3" id="__nav_2_1_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    GPIO
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-02/p005/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P005 · 2.1 （GPIO）4种输出模式
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-02/p006/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P006 · 2.2 （GPIO）IO的最大输出速度
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-02/p007/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P007 · 2.3 （GPIO）LED闪灯实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-02/p008/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P008 · 2.4 （GPIO）4种输入模式
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-02/p009/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P009 · 2.5 （GPIO）按钮实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/chapter-03/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    串口
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_4" id="__nav_2_1_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    串口
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-03/p010/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P010 · 3.1 （串口）通信协议
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-03/p011/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P011 · 3.2 （串口）UART模块的使用方法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-03/p012/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P012 · 3.3 （串口）为串口初始化IO引脚
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-03/p013/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P013 · 3.4 （串口）发送数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-03/p014/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P014 · 3.5 （串口）格式化打印字符串
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-03/p015/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P015 · 3.6 （串口）接收数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-03/p016/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P016 · 3.7 （串口）封装常用功能
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/chapter-04/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    I²C
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_5" id="__nav_2_1_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    I²C
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-04/p017/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P017 · 4.1 （I2C）基本电路结构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-04/p018/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P018 · 4.2 （I2C）通信协议
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-04/p019/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P019 · 4.3 （I2C）I2C模块的使用方法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-04/p020/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P020 · 4.4 （I2C）写数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-04/p021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P021 · 4.5 （I2C）读数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-04/p022/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P022 · 4.6 （I2C）软I2C
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-04/p023/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P023 · 4.7 （I2C）封装常用功能
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-04/p024/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P024 · 4.8 （I2C）OLED显示器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/chapter-05/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SPI 与按钮驱动
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_6" id="__nav_2_1_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    SPI 与按钮驱动
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-05/p025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P025 · 5.1 （SPI）电路结构和通信协议
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-05/p026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P026 · 5.2 （番外） 按钮驱动程序编写
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-05/p027/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P027 · 5.3 （番外） 按钮代码的封装
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-05/p028/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P028 · 5.4 （SPI） IO引脚初始化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-05/p029/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P029 · 5.5 （SPI）SPI模块的初始化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-05/p030/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P030 · 5.6 （SPI）数据收发
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-05/p031/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P031 · 5.7 （SPI）W25Q64实验(上)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-05/p032/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P032 · 5.8 （SPI）W25Q64实验(下)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/chapter-06/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    中断
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_7" id="__nav_2_1_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    中断
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-06/p033/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P033 · 6.1 （中断）中断的概念
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-06/p034/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P034 · 6.2 （中断）中断优先级
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-06/p035/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P035 · 6.3 （中断）串口中断编程实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_8" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/chapter-07/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EXTI
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_8" id="__nav_2_1_8_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    EXTI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-07/p036/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P036 · 7.1 （EXTI）工作原理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-07/p037/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P037 · 7.2 （EXTI）按钮实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_9" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/chapter-08/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    时钟
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_9" id="__nav_2_1_9_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    时钟
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-08/p038/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P038 · 8.1 （时钟）时钟树
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-08/p039/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P039 · 8.2 （时钟）时钟树编程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_10" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/chapter-09/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    定时器
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_10" id="__nav_2_1_10_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    定时器
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-09/p040/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P040 · 9.1 （定时器）时基单元
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-09/p041/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P041 · 9.2 （定时器）自制延迟函数
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-09/p042/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P042 · 9.3 （定时器）输出比较
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-09/p043/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P043 · 9.4 （定时器）呼吸灯实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-09/p044/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P044 · 9.5 （定时器）输入捕获
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-09/p045/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P045 · 9.6 （定时器）超声波测距实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-09/p046/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P046 · 9.7 （定时器）从模式控制器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-09/p047/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P047 · 9.8 （定时器）PWM参数测量原理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-09/p048/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P048 · 9.9 （定时器）PWM参数测量实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_11" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../stm32/chapter-10/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADC
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_11" id="__nav_2_1_11_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ADC
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-10/p049/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P049 · 10.1 （ADC） 逐次逼近型ADC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-10/p050/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P050 · 10.2 （ADC） ADC模块的结构框图
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-10/p051/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P051 · 10.3 （ADC）采样时间和转换时间
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-10/p052/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P052 · 10.4 （ADC）常规单通道转换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-10/p053/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P053 · 10.5 （ADC）定时器触发
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../stm32/chapter-10/p054/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P054 · 10.6 （ADC）扫描模式
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../freertos-source/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeRTOS 源码详解
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    FreeRTOS 源码详解
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../freertos-source/p01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeRTOS 源码详解 P01：列表–概述
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../freertos-source/p02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P02 列表–初始化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../freertos-source/p03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P03 任务切换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../freertos-source/p04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P04 阻塞延时
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../freertos-source/p05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeRTOS P05｜队列-概述
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../freertos-source/p06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P06 队列-创建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../freertos-source/p07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P07 队列—发送
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../freertos-source/p08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeRTOS 源码详解 P08：队列接收
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../freertos-source/p09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    互斥量｜FreeRTOS 源码详解 P09
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../freertos-source/p10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeRTOS P10｜队列集
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../embedded-ai-rk3588/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    嵌入式 AI 教程 · RK3588
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    嵌入式 AI 教程 · RK3588
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P01｜00_导学：嵌入式 AI 教程（基于 RK3588）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P02｜01_快速了解 RK3588
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P03｜02_NPU原理及对比
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P04｜03_RKNPU 推理软件架构与模型部署流程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P05｜04_瑞芯微 GitHub 仓库介绍
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P06｜05_搭建 rknn_toolkit2 开发环境
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P07｜06_设备端 NPU 环境搭建与 NPU 驱动更新
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P08｜07_查看和调整 CPU、NPU 和 DDR 频率
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P09｜08_快速体验 rknn_demo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P10｜09_rknn模型转换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10_均值和标准差
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P12｜11_模型转换工具 rknn_convert
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P13｜12_Netron 的基本使用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P14｜13_rknn-toolkit2模型推理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    14. 模型量化精度分析
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P16｜15_模型性能评估
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P17｜16_模型内存评估
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P18｜17_模型剪枝
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    18_模型加密
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P20｜19_多 Batch 处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P21｜20_多输入模型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P22｜21_动态 shape 输入
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P23｜22_ONNX模型编辑
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P24｜23_自动生成部署 C 代码
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P25｜24_RKNN-ToolkitLite2 基本使用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P26｜25_RKNPU2—通用 C API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P27｜26_RKNPU2—零拷贝 C API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p28/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P28｜27_mobilenet模型部署
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P29｜28_mobilenet模型代码封装
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p30/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    29｜YOLOv5模型部署实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p31/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P31 · YOLOv26 模型部署：Windows 环境搭建与模型预测分析
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    30_yolov26模型部署(从0到1版)_数据集构建与模型训练
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p33/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P33｜30_yolov26模型部署(从0到1版)_导出onnx与rknn模型并板端推理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p34/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P34｜31_yolov8模型部署（优化加速版）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../embedded-ai-rk3588/p35/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P35 · 32_Deepseek_Qwen大模型部署
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RK3588 精品公开课
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    RK3588 精品公开课
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../l01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RK3588 NVR及后端产品
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../l02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RKNN模型精度优化指南
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../l03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RKNN Runtime部署指南
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../l04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RK3588 多目摄像头拼接产品及技术答疑
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../l05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RK3588 Linux SDK 开发及产品应用介绍
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RK3588 Android开发答疑
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RK3588 Android开发答疑
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0000" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        00:00 今天的直播安排与多路解码算力
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#0201" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        02:01 多路解码与编码的实测条件
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#0402" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        04:02 编码数据与七路异显
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#0603-usbtype-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        06:03 七屏接口分配与 USB/Type-C 注意事项
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#0804-type-c-usb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        08:04 Type-C 功能组合与 USB 接口拆分
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1008-usbpciesata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10:08 USB、PCIe、SATA 传输速率与测试限制
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1210-camera" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12:10 Camera 数量、像素与七路典型接法
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1422-android-sdk-lunch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14:22 八大使用场景与 Android SDK 的 lunch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1625-device" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16:25 device 分层和各类产品目录
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1826-kernel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18:26 通用配置、芯片配置与 kernel 版本
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2029-lunch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20:29 文件拷贝、产品级配置与新建 lunch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2231-dts-evb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22:31 DTS 的芯片层、EVB 层与系统层
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2431-cameraandroid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24:31 Camera、Android 和电源配置的包含关系
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2631-dtsi-evb1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26:31 为什么继承参考 DTSI，以及 EVB1 硬件配置
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2834-pmic-iot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        28:34 单 PMIC 的 IoT 参考设计
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3037-dts-evbnvr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30:37 其他参考 DTS：早期 EVB、NVR 和平板
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3239-dts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        32:39 在自己的 DTS 中改硬件差异
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3440-pmic-u-boot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        34:40 单双 PMIC 不兼容与 U-Boot 保护
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3642-i2c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        36:42 I²C 地址、外部供电和频点检查
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3843-log-ddr-spl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        38:43 从启动 log 看 DDR 与 SPL
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4043-u-boottrust" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        40:43 启动介质优先级与加载 U-Boot、Trust
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4244-bl31bl32u-boot-pmic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        42:44 BL31、BL32、U-Boot 版本与 PMIC 检查
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4445-pmic-kernel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        44:45 PMIC 电压检查、显示与加载 kernel
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4646-kernel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        46:46 kernel 的电源初始化顺序
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4846-cpucamera" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        48:46 现场答疑：CPU、显示、Camera 与动态调压
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5046-pmicddr-u-boot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        50:46 单 PMIC、博客、DDR 兼容与 U-Boot 裁剪
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5247-android-rknn-3a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        52:47 Android 开机、RKNN 与音频 3A
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5447-isp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        54:47 ISP 出图、异常掉电与数据保护
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5650-flashmaskrom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        56:50 擦除 flash、Maskrom、速率与货源
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5850-maskrom-ddr-gpio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        58:50 Maskrom 烧写、DDR 频率、发热与待机 GPIO
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6050" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        60:50 最大内存与结束
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../l07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    99%利用率的RKNN模型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../finetuning-practice/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    大模型与 AI 应用
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    大模型与 AI 应用
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../rag-intro/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2025 大模型 RAG 入门
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    2025 大模型 RAG 入门
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag-intro/l01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01：为什么需要 RAG
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag-intro/l02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02：RAG的基本流程：为什么说上手RAG只要一星期
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag-intro/l03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03：RAG的10个优化技巧：为什么RAG不是算法问题，是工程问题
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag-intro/l04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    04：RAG的评估方法：没有评估，就没法优化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rag-intro/l05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    05：项目经理视角的RAG：需求评估要细，技术迭代要快
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../lora-paper/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LoRA 论文解读与微调部署
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../ai-animation-production/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI 动画制作全流程
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    AI 动画制作全流程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../ai-animation-production/full-workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    全网150万播放的AI动画，怎么做的？分享我的制作全流程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../linux-perf/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    工程与运维实践
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    工程与运维实践
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../mlflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MLflow 最佳实践
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cc-switch-deepseek/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CC-Switch：Claude Code 接入 DeepSeek V4.1-Flash-1017
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cc-switch-codex-opencode-go/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CC-Switch：Codex 接入 OpenCode Go
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../github-pages-mkdocs-notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    用 MkDocs Material 和 GitHub Pages 发布 Markdown 笔记
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0000" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        00:00 今天的直播安排与多路解码算力
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#0201" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        02:01 多路解码与编码的实测条件
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#0402" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        04:02 编码数据与七路异显
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#0603-usbtype-c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        06:03 七屏接口分配与 USB/Type-C 注意事项
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#0804-type-c-usb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        08:04 Type-C 功能组合与 USB 接口拆分
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1008-usbpciesata" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10:08 USB、PCIe、SATA 传输速率与测试限制
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1210-camera" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12:10 Camera 数量、像素与七路典型接法
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1422-android-sdk-lunch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14:22 八大使用场景与 Android SDK 的 lunch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1625-device" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16:25 device 分层和各类产品目录
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1826-kernel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        18:26 通用配置、芯片配置与 kernel 版本
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2029-lunch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        20:29 文件拷贝、产品级配置与新建 lunch
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2231-dts-evb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        22:31 DTS 的芯片层、EVB 层与系统层
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2431-cameraandroid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        24:31 Camera、Android 和电源配置的包含关系
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2631-dtsi-evb1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        26:31 为什么继承参考 DTSI，以及 EVB1 硬件配置
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2834-pmic-iot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        28:34 单 PMIC 的 IoT 参考设计
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3037-dts-evbnvr" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        30:37 其他参考 DTS：早期 EVB、NVR 和平板
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3239-dts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        32:39 在自己的 DTS 中改硬件差异
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3440-pmic-u-boot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        34:40 单双 PMIC 不兼容与 U-Boot 保护
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3642-i2c" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        36:42 I²C 地址、外部供电和频点检查
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3843-log-ddr-spl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        38:43 从启动 log 看 DDR 与 SPL
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4043-u-boottrust" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        40:43 启动介质优先级与加载 U-Boot、Trust
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4244-bl31bl32u-boot-pmic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        42:44 BL31、BL32、U-Boot 版本与 PMIC 检查
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4445-pmic-kernel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        44:45 PMIC 电压检查、显示与加载 kernel
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4646-kernel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        46:46 kernel 的电源初始化顺序
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4846-cpucamera" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        48:46 现场答疑：CPU、显示、Camera 与动态调压
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5046-pmicddr-u-boot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        50:46 单 PMIC、博客、DDR 兼容与 U-Boot 裁剪
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5247-android-rknn-3a" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        52:47 Android 开机、RKNN 与音频 3A
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5447-isp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        54:47 ISP 出图、异常掉电与数据保护
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5650-flashmaskrom" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        56:50 擦除 flash、Maskrom、速率与货源
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5850-maskrom-ddr-gpio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        58:50 Maskrom 烧写、DDR 频率、发热与待机 GPIO
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6050" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        60:50 最大内存与结束
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="rk3588-android">RK3588 Android开发答疑<a class="headerlink" href="#rk3588-android" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>忠实整理讲稿 · 原视频 P1 · 00:00–61:14.666 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?p=1">视频来源</a>
+保留讲者的顺序、理由、例子与限定。原片 720×360，投屏较口述滞后，配图链接使用画面实际源时间；未辨词与口述/画面差异在邻近整理注中说明。</p>
+</blockquote>
+<h2 id="0000">00:00 今天的直播安排与多路解码算力<a class="headerlink" href="#0000" title="Permanent link">&para;</a></h2>
+<p>我今天直播的主要内容，就是给大家介绍一下我们 RK3588 的一些参数。相信大家在参数上都已经很熟了，有一些是我们通过实测得到的数据，我这里再给大家介绍一下。还有 RK3588 的主要使用场景。</p>
+<p>另外介绍一下 RK3588 的开发，最基础的就是在 Android 上面创建一个自己的产品 lunch，还有部分 DTS 的介绍。这两部分可能是大家在开发时用得比较多的。另外，我会介绍 RK3588 的启动流程，通过一个 RK3588 的启动 log，跟大家一起分析。最后，我们会留一部分时间进行现场答疑。大家在直播过程中有问题，都可以在留言区回复，我们的工作人员会记录，后面统一解答。</p>
+<p>好，现在开始第一部分：介绍一下 RK3588 的主要实测参数。首先，大家主要关注的是多路编解码。RK3588 支持的 H.264 硬件算力，可以达到每秒 7680 × 4320 × 30 帧，这是每秒的算力。换算成 1080P、30 帧的话，就是——</p>
+<h2 id="0201">02:01 多路解码与编码的实测条件<a class="headerlink" href="#0201" title="Permanent link">&para;</a></h2>
+<p>差不多 16 路，也就是可以同时支持 16 路 1080P、30 帧的解码。这 16 路，是按照 14 兆码率的片源实际测试的；片源码率是 14 兆。如果码率不一样，支持的最大路数也会不一样，还可能更多。</p>
+<p>下面这个，比如 H.264、1.3 兆码率，最大可以支持到 24 路同时解码；H.264、9.8 兆码率，最大可以支持到 17 路；H.265、4 兆码率，可以支持到 46 路；H.265、11 兆码率，可以支持到 31 路解码。</p>
+<blockquote>
+<p>整理注：本段转写中的“24 路”与投屏表格“21 路”不一致。投屏条件写为 Android 12.0、DDR 2113M；1.3M 片源对应 21 路。保留这处差异，不能把口述和表格静默合成一个数字。</p>
+</blockquote>
+<p><img alt="多路解码实测页：Android 12.0、DDR 2113M 下，不同码率片源对应的最大路数。表格 1.3M 行显示 21 路。" src="images/f001.jpg" /></p>
+<p><em>多路解码实测页：Android 12.0、DDR 2113M 下，不同码率片源对应的最大路数。表格 1.3M 行显示 21 路。 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=180">原片 03:00</a></em></p>
+<p>这些测试是在 DDR 最高频率下测的。CPU 消耗不大，主要是 DDR；我们测试时 DDR 跑在 2113 兆。</p>
+<p>多路编码的话，H.264、1080P、30 帧、4 兆码率，最大可以支持 11 路；H.264、1080P、30 帧、10 兆，最多支持 7 路同时编码。编码测试因为输入无法保证为 DMA buffer，大部分情况下，还是要拷贝一次再送 VPU。这里再说一下：编码测试的输入无法保证为 DMA buffer，大部分情况下需要拷贝一次送 VPU，因此多路编解码的实际路数，会小于上述按硬件像素算力换算的路数。</p>
+<h2 id="0402">04:02 编码数据与七路异显<a class="headerlink" href="#0402" title="Permanent link">&para;</a></h2>
+<p>刚刚说的是我们实测的数据。在 RK3588、Android 12、YUV420 的情况下，H.264、1080P、4 兆码率最大支持 11 路，10 兆码率支持 7 路。</p>
+<p><img alt="多路编码表：H.264 1080P@30fps，4.0M 为 11 路、10M 为 7 路；测试环境 Android 12.0 YUV420。" src="images/f002.jpg" /></p>
+<p><em>多路编码表：H.264 1080P@30fps，4.0M 为 11 路、10M 为 7 路；测试环境 Android 12.0 YUV420。 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=282">原片 04:42</a></em></p>
+<p>然后是多屏异显。大家知道 RK3588 在显示部分非常强大，最多可以支持 7 路异显。我们的 VOP 支持 Split 模式，可以把左右半屏的数据，同时输出到同一类型的两个显示接口上。可以看这个图：这是一个 VOP 输出，比如这里的长和宽，是两倍的宽；通过 VOP 的 Split 模式分屏，可以把它分成两个，对半分，把这两部分分别送到我们的显示接口，比如 DP0、DP1，或者 MIPI0、MIPI1，送到同一个类型。但是，这个屏的类型要是同一种类型的两个显示接口。</p>
+<p>利用 RK3588 的 VOP Split 模式，最多可以支持七屏异显。这边就是我们七屏异显的一个连接方案。</p>
+<blockquote>
+<p>整理注：317–347 秒原转写出现机械重复，正文按该区段局部恢复转写补回；DP0/DP1 及后文 HDMI/eDP 等接口同时参照画面确认。</p>
+</blockquote>
+<p><img alt="VP 的 Split 模式示意：左右半屏分别输出到同类型两个显示接口，画面示例为 DP0、DP1。" src="images/f003.jpg" /></p>
+<p><em>VP 的 Split 模式示意：左右半屏分别输出到同类型两个显示接口，画面示例为 DP0、DP1。 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=342">原片 05:42</a></em></p>
+<p>我们 VP0、VP1 这两路，VP0 接两路 1080P，通过 Split 模式，分别输出给两个 HDMI 或者两个 eDP。那 VP1 呢——</p>
+<h2 id="0603-usbtype-c">06:03 七屏接口分配与 USB/Type-C 注意事项<a class="headerlink" href="#0603-usbtype-c" title="Permanent link">&para;</a></h2>
+<p>也是通过 Split 模式，可以同时输出两路 1080P 数据，分别接到两个 DP。VP2 也是两路 1080P，分别送给两路 MIPI。VP3 接一路 1080P，它可以输出到的接口是 BT1120 和 BT656，这样就组成一个七屏异显。</p>
+<p><img alt="七路 1080P 异显分配：VP0 对应 HDMI/eDP，VP1 对应 DP，VP2 对应 MIPI-DSI，VP3 对应 BT1120/BT656。" src="images/f004.jpg" /></p>
+<p><em>七路 1080P 异显分配：VP0 对应 HDMI/eDP，VP1 对应 DP，VP2 对应 MIPI-DSI，VP3 对应 BT1120/BT656。 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=402">原片 06:42</a></em></p>
+<p>另外是 USB 部分。RK3588 的 USB 有一些注意事项，在这里给大家介绍一下。RK3588 有两路 Type-C 接口，我们一般称为 Type-C0 和 Type-C1。RK3588S 只有一路 Type-C，也就是只有 Type-C0，没有 Type-C1。Type-C0 和 Type-C1 都是 OTG 口，都能够支持 device 和 host 的功能。但是只有 Type-C0 支持固件烧写，所以大家做硬件设计时，固件烧写接口一定要用 Type-C0 来做。优先选用 Type-C0：如果你只想要一个 Type-C，就优先用 Type-C0 作为 OTG 口。</p>
+<p>第二个是 Type-C 支持 USB 3.0、DP、PD 充电等多个功能。如果只需要 USB 3.0 或 DP 单独某一个功能，接口就可以根据用户需求，设计成任意形式。如果需要组合功能，一般会设计成 Type-C 标准接口的形式。而且 Type-C 要接一个外挂的 CC 芯片，目前我们支持的 CC 芯片有 FUSB302 和 HUSB311。</p>
+<h2 id="0804-type-c-usb">08:04 Type-C 功能组合与 USB 接口拆分<a class="headerlink" href="#0804-type-c-usb" title="Permanent link">&para;</a></h2>
+<p>这是我们目前调过的 CC 芯片。如果要 PD 快充，还是要外挂一个充电 IC。</p>
+<p>Type-C 口可以支持以下几种功能组合：USB 2.0 OTG、USB 3.0 OTG、DP、USB 2.0 OTG 加上 4 lane 的 DP，或者 USB 3.0 OTG 再加上 2 lane 的 DP，这是它的组合。</p>
+<p>RK3588 有一个和 PCIe、SATA 复用的 USB 3.0 接口。这个接口只有 USB 3.0 的功能，所以一般不单独使用，一般跟另外一个 USB 2.0 口组成一个完整的 3.0 接口。大家一定要注意：这个跟 PCIe 和 SATA 复用的 USB 3 接口，只有 USB 3.0 的功能。</p>
+<p>一个 USB 3.0 接口作为 host 时，可以拆分成 2.0 和 3.0 部分，分别接一个 U2 和 U3 设备，也就是 USB 2.0 和 USB 3.0 设备。但是不能把一个 USB 3.0 拆分出来的 2.0 部分和 3.0 部分，一个用作 device，一个用作 host。要么两个都是 device，要么都是 host，不能分别一个 host、一个 device。</p>
+<p><img alt="USB/Type-C 使用注意事项，包含 OTG、功能组合、PCIe/SATA 复用 USB 3.0 及 host 拆分约束。" src="images/f005.jpg" /></p>
+<p><em>USB/Type-C 使用注意事项，包含 OTG、功能组合、PCIe/SATA 复用 USB 3.0 及 host 拆分约束。 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=524">原片 08:44</a></em></p>
+<p>再看 USB 3.0 的最大传输速率。这是我们测出的数据。USB 3.1 接口，时钟是 5G，理论值可以达到 500 兆，我们实测是 385 兆。</p>
+<h2 id="1008-usbpciesata">10:08 USB、PCIe、SATA 传输速率与测试限制<a class="headerlink" href="#1008-usbpciesata" title="Permanent link">&para;</a></h2>
+<p>USB 2.0 的 clock 是 480 兆，理论速度可以达到 60 兆，但是实测是 37 兆。</p>
+<p><img alt="USB 实测速率页：USB 3.1 Gen1 为 385MB/s，USB 2.0 为 37MB/s，并提醒测试依赖设备及传输场景。" src="images/f006.jpg" /></p>
+<p><em>USB 实测速率页：USB 3.1 Gen1 为 385MB/s，USB 2.0 为 37MB/s，并提醒测试依赖设备及传输场景。 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=684">原片 11:24</a></em></p>
+<blockquote>
+<p>整理注：上文速率数字对应投屏的 USB 3.1 Gen1 理论 500MB/s、实测 385MB/s；USB 2.0 理论 60MB/s、实测 37MB/s。冻结转写将口述单位识别成“兆 bit”，此处展示原投屏单位供核对。</p>
+</blockquote>
+<p>以上数据是我们在特定场景下实测的 USB 实际传输速率，并不意味着任意 USB 设备都能达到以上速率。USB 传输速度受到很多因素影响，比如 USB 传输类型、设备协议开销、传输协议本身的损耗等等。所以一般评估传输速率，需要根据具体设备分析。我们这边是在我们的 EVB 板上测试的。</p>
+<p>另外是 PCIe 和 SATA。PCIe 的最大传输速率，理论值可以达到 3.8G，我们实测是 3G。PCIe 2.0 的时钟是 5G，理论速率可以达到 500 兆，实测达到 380 兆。SATA 3.0 的时钟是 6G，理论速度可以达到 600 兆，实际测试速率达到 550 兆每秒。</p>
+<p><img alt="PCIe/SATA 传输速率表，显示接口代次、lane 数、时钟及理论和实测速度。" src="images/f007.jpg" /></p>
+<p><em>PCIe/SATA 传输速率表，显示接口代次、lane 数、时钟及理论和实测速度。 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=724">原片 12:04</a></em></p>
+<blockquote>
+<p>整理注：投屏逐项标为 PCIe 3.0 ×4、8GHz、理论 3.84GB/s、实测 3GB/s；PCIe 2.0 ×1、5GHz、理论 500MB/s、实测 380MB/s；SATA 3.0、6GHz、理论 600MB/s、实测 550MB/s。保留讲者的概数，并列投屏准确写法，不把冻结转写中的 bit 当作图表单位。</p>
+</blockquote>
+<p>RK3588 的 camera 部分，接口有两个 ISP，还有 MIPI CSI，还有 DVP。然后我们 RK3588 最大——</p>
+<h2 id="1210-camera">12:10 Camera 数量、像素与七路典型接法<a class="headerlink" href="#1210-camera" title="Permanent link">&para;</a></h2>
+<p>RK3588 最多可以支持 7 个 camera。RK3588S 会少一点，最多可以支持 5 个 camera。</p>
+<p>这里列到了 RK3588S 和 RK3588：最大可以支持一个 48 兆，也就是 4800 万像素的 camera，这里是 15 帧。如果是 3200 万像素，帧率可以到 30 帧。还可以同时支持两个 1600 万像素、30 帧的 camera，以及 4 个 800 万像素、30 帧。RK3588S 最大可以支持 5 个 4 兆，也就是 400 万像素、30 帧的 camera 数据处理；RK3588 最多可以支持 7 个 400 万像素、30 帧的 camera。</p>
+<p><img alt="Camera 支持表：RK3588S 的 4 路 MIPI-CSI 加 1 路 DVP，RK3588 的 6 路 MIPI-CSI 加 1 路 DVP，以及对应像素和帧率组合。" src="images/f008.jpg" /></p>
+<p><em>Camera 支持表：RK3588S 的 4 路 MIPI-CSI 加 1 路 DVP，RK3588 的 6 路 MIPI-CSI 加 1 路 DVP，以及对应像素和帧率组合。 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=789">原片 13:09</a></em></p>
+<p>这是 RK3588 的 7 个 camera 的一个典型接法。我们有 camera0、camera1、camera2、camera3、camera4、camera5，这 6 个是 MIPI camera，再加一个 DVP camera，就是从 rkcif 这条通路过来，组成 7 路 camera。这是每一路 camera 的通路。</p>
+<p><img alt="七路 Camera 典型连接：上方六路 MIPI 摄像头与下方一路 DVP 摄像头，各自经过对应的软件通路。" src="images/f009.jpg" /></p>
+<p><em>七路 Camera 典型连接：上方六路 MIPI 摄像头与下方一路 DVP 摄像头，各自经过对应的软件通路。 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=885">原片 14:45</a></em></p>
+<p>软件 DTS 配置就以这些名字来配，这里是 CSI D-PHY、CSI，还有 rkcif，就按照这个通路来配。我们 DTS 里提供了对应的参考配置。</p>
+<blockquote>
+<p>整理注：此处节点缩写原转写不清，依据画面确认 CSI/D-PHY、rkcif；图中文字较小，具体 DTS 节点全名应参看源图及对应 SDK，不把模糊缩写补造成一份可执行配置。</p>
+</blockquote>
+<p>上面讲的，是我们常用的 RK3588 一些性能的实测数据。</p>
+<h2 id="1422-android-sdk-lunch">14:22 八大使用场景与 Android SDK 的 lunch<a class="headerlink" href="#1422-android-sdk-lunch" title="Permanent link">&para;</a></h2>
+<p>RK3588 主要有这八大使用场景。一个是平板，RK3588、RK3588S 作为消费类平板；另外是 ARM PC、智慧大屏，像一体机、最近比较火的教学一体机；还有多目摄像头、高性能的边缘计算、智能 NVR，还有 VR 和 AR 产品，以及智能座舱。智能座舱，也就是车载部分，是我们重点在推的一个产品线。</p>
+<p><img alt="八大适用场景页：高性能平板、ARM PC、智慧大屏、多目摄像头、边缘计算、智能 NVR、VR/AR、智能座舱。" src="images/f010.jpg" /></p>
+<p><em>八大适用场景页：高性能平板、ARM PC、智慧大屏、多目摄像头、边缘计算、智能 NVR、VR/AR、智能座舱。 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=933">原片 15:33</a></em></p>
+<p>以上简单介绍了 RK3588。下面给大家介绍一下我们 RK3588 Android SDK 开发的一些东西。</p>
+<p>首先介绍一下 Android 上 device 下面的 lunch，以及如何新建自己的产品。这里看一下 Android 上 device 的结构、device 的一些说明，以及如何新建自己的产品目录，也就是添加一个新的 lunch。</p>
+<p>RK3588 Android SDK 在编译时，需要先 lunch，选择产品。lunch 会根据不同产品配置对应参数。所以大家做自己的产品开发，最好新建一个自己的产品目录，也就是自己的 lunch。这样就可以用一套代码开发不同产品，然后——</p>
+<h2 id="1625-device">16:25 device 分层和各类产品目录<a class="headerlink" href="#1625-device" title="Permanent link">&para;</a></h2>
+<p>产品上面的差异，都在自己的产品 device 下面做一些差异化配置。</p>
+<p>这里介绍一下 RK3588 的 device 结构。通用部分，<code>device/rockchip/common</code> 是 Rockchip 平台的一些通用配置。<code>device/rockchip/rk3588</code> 里面，是 RK3588 芯片平台的配置，可以配置芯片信息，以及芯片特有的一些模块。</p>
+<p>下面是具体产品。这里区分了 RK3588 和 RK3588S。一个主要是我们的 EVB 板，大家可以用这个产品去做行业应用类的产品。另外一个主要给 RK3588S 的平板类产品，或者一些带电池的设备。<code>rk3588-box</code> 主要是电视类产品；<code>rk3588-XR</code> 主要是 RK3588S 的 AR、VR 产品。</p>
+<p><img alt="讲者打开 Android 12 的 device 结构文章，展示通用平台、RK3588 芯片平台及多个产品目录的继承关系。" src="images/f011.jpg" /></p>
+<p><em>讲者打开 Android 12 的 device 结构文章，展示通用平台、RK3588 芯片平台及多个产品目录的继承关系。 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=1056">原片 17:36</a></em></p>
+<blockquote>
+<p>整理注：原转写将几个产品目录的 s、下划线、连字符混识，源画面又只有 720×360，图中最小的后缀不足以逐字可靠辨认。这里保留讲者对 EVB/行业、平板/电池、box、XR 的用途说明；实际新建目录时，以当时 SDK 目录为准，不把模糊后缀当作可复制命令。</p>
+</blockquote>
+<p>再介绍一下 Rockchip Android 平台通用配置，主要在 common 下面。这里面有一个编译脚本，在 build 下面，是我们编译、打包用的脚本。大家编译时，可以用 <code>build.sh</code> 来编译，里面集成了一些编译命令，可以实现一键编译。这是我们推荐的编译方式：用这个脚本来编。</p>
+<h2 id="1826-kernel">18:26 通用配置、芯片配置与 kernel 版本<a class="headerlink" href="#1826-kernel" title="Permanent link">&para;</a></h2>
+<p>这里面还包含一些 fstab，就是分区表的一些信息、工具。我们的分区表都是自动生成的，<code>parameter_tools</code>，parameter 就是分区表；配置或者它自动生成的编译，都在这里面。</p>
+<p>然后是一些 init 服务，我们 RK 平台的服务都在这里面，这是 init.rc。还有 sepolicy，是权限部分的一些配置。</p>
+<p><code>device.mk</code> 主要是平台相关配置，比如编译选项，在这里可以控制编译哪个模块、编译哪些 app 等。<code>BoardConfig.mk</code> 是平台默认的一些产品属性配置，以及平台功能的一些宏定义，都在这里面配置。</p>
+<p><img alt="Rockchip Android 平台通用配置页面，包含编译工具、init、sepolicy、device.mk 和 BoardConfig.mk 的说明。" src="images/f012.jpg" /></p>
+<p><em>Rockchip Android 平台通用配置页面，包含编译工具、init、sepolicy、device.mk 和 BoardConfig.mk 的说明。 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=1164">原片 19:24</a></em></p>
+<p>RK3588 芯片平台，也就是 RK3588 特有的配置，在 <code>device/rockchip/rk3588</code> 里面。这里会配置芯片的信息：这是 ARM64、ARMv8 架构，支持 64 位和 32 位，然后配置 Mali，以及 kernel 版本。</p>
+<p><img alt="RK3588 芯片平台配置代码示例；源视频分辨率限制了细小代码与版本值的辨读。" src="images/f013.jpg" /></p>
+<p><em>RK3588 芯片平台配置代码示例；源视频分辨率限制了细小代码与版本值的辨读。 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=1224">原片 20:24</a></em></p>
+<p>为什么这里配置一个 kernel 版本？因为 Android 12 支持一些老芯片和新芯片。比如老芯片 356X、3326、3399，这些都有升级到 Android 12；我们的 RK3588 也是 Android 12，但是它们的 kernel 版本不一样。目前，除了 RK3588 用的版本以外，其他都使用 4.19，所以这里做一些区分。</p>
+<p><img alt="芯片 BoardConfig 代码的 kernel 配置行，现场页面显示 PRODUCT_KERNEL_VERSION := 5.10。" src="images/f014.jpg" /></p>
+<p><em>芯片 BoardConfig 代码的 kernel 配置行，现场页面显示 PRODUCT_KERNEL_VERSION := 5.10。 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=1264">原片 21:04</a></em></p>
+<blockquote>
+<p>整理注：1215–1217 秒冻结转写和局部恢复转写均识别为“5.0”，口述识别存在歧义；滞后显示的代码行 PRODUCT_KERNEL_VERSION := 5.10 给出配置示例的版本。保留 Android 12、老芯片例子及其他平台使用 4.19 的讲述口径，区分口述识别与屏幕配置证据。</p>
+</blockquote>
+<p>还有，这里是一些——</p>
+<h2 id="2029-lunch">20:29 文件拷贝、产品级配置与新建 lunch<a class="headerlink" href="#2029-lunch" title="Permanent link">&para;</a></h2>
+<p>RK3588 的 <code>device.mk</code> 里面会做一些文件拷贝。大家编译时要拷贝一些配置文件，可以在这里做拷贝，还有系统属性这些。</p>
+<p>这些产品目录下面，还会区分每个子产品的目录，比如 RK3588、RK3588S、box、VR。下面就是每个产品具体的配置信息，是产品级配置。这里的 <code>BoardConfig</code> 也是产品信息，比如你要不要 A/B，还有 sensor，以及配置是否支持 USB Camera，这些都在这里配置。</p>
+<p><img alt="产品级 BoardConfig 配置示例，涉及产品功能开关；源分辨率下最小字段不宜直接抄录为可执行配置。" src="images/f015.jpg" /></p>
+<p><em>产品级 BoardConfig 配置示例，涉及产品功能开关；源分辨率下最小字段不宜直接抄录为可执行配置。 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=1336">原片 22:16</a></em></p>
+<p>下面介绍一下如何新建自己的 lunch。新建 lunch 其实很简单，先看你的产品类型。如果你是平板类型、消费电子类型、带电池的设备，就直接把对应 RK3588S 平板产品的目录复制一份，再重命名为你自己产品的名字。并且，把这个目录下面所有原产品的字段，全部替换成你自己的产品字段，就可以了。这就是新建 lunch 的介绍。</p>
+<p><img alt="新建产品 lunch 的页面：复制参考产品目录、重命名，并替换原产品字段。" src="images/f016.jpg" /></p>
+<p><em>新建产品 lunch 的页面：复制参考产品目录、重命名，并替换原产品字段。 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=1372">原片 22:52</a></em></p>
+<blockquote>
+<p>整理注：源转写的目录后缀不稳定，截图保留现场目录与替换示例；这里只按可确定的产品类型与操作步骤整理。sensor 由相邻 BoardConfig 的多项传感器功能开关校读。</p>
+</blockquote>
+<p>下面再介绍一下 RK3588 开发的 DTS。首先介绍 DTS 架构。大家开发过程中用得比较多的，就是 DTS 配置。我们的 RK3588 DTS 架构是这样子的——</p>
+<h2 id="2231-dts-evb">22:31 DTS 的芯片层、EVB 层与系统层<a class="headerlink" href="#2231-dts-evb" title="Permanent link">&para;</a></h2>
+<p>这是一个架构图。这里是 RK3588、RK3588S，我们的核心是 RK3588S。大家知道 RK3588 和 RK3588S 的功能差不多，只是 RK3588 比 RK3588S 的功能多一些。所以，<code>rk3588s.dtsi</code> 配置 RK3588 和 RK3588S 公共的芯片信息；<code>rk3588.dtsi</code> 配置 RK3588 相较于 RK3588S 差异的信息。这两个都是芯片级配置。</p>
+<p>我们这里的 EVB 板，<code>rk3588-evb.dtsi</code> 放的是 EVB 的配置。因为内部做了好几款 EVB，功能大致一样，但会有一点差异。我们要验证不同模块，所以做了不同板子；每个板子重点验证的模块不一样。所以，会把 EVB 板子的公共部分，都放到 <code>rk3588-evb.dtsi</code> 里面。</p>
+<p>下面是 EVB1 这块具体板子。RK3588 EVB1 就是我们公开售卖的 RK3588 EVB 板。大家如果拿到这个板子，可以看到用到的 DTSI 就是这里这个；具体用到的 DTS 在下面。</p>
+<p><img alt="DTS 架构图，展示 RK3588S 公共芯片层、RK3588 差异层、EVB 公共层、具体板级及 Android/Linux 分支。" src="images/f017.jpg" /></p>
+<p><em>DTS 架构图，展示 RK3588S 公共芯片层、RK3588 差异层、EVB 公共层、具体板级及 Android/Linux 分支。 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=1456">原片 24:16</a></em></p>
+<p>因为要兼容 Android 和 Linux，它们有一些配置不一样。核心部分都在 DTSI 这里。默认没有后缀的是 Android；如果是 Linux，这里会带一个 linux。</p>
+<blockquote>
+<p>整理注：架构图中的板级文件名还带板号、版本等后缀，源图细字有限。上文保留芯片公共层、差异层、EVB 公共层、具体板级与系统级的解释，不凭模糊图像补写完整板级文件名。</p>
+</blockquote>
+<h2 id="2431-cameraandroid">24:31 Camera、Android 和电源配置的包含关系<a class="headerlink" href="#2431-cameraandroid" title="Permanent link">&para;</a></h2>
+<p>这个 DTS 里面，会包含 EVB1 的 camera 配置 DTSI。Android 相关配置是 <code>rk3588-android.dtsi</code>，这是跟 Linux 的差别。</p>
+<p>这里还有一个比较重要的 <code>rk3588-rk806-dual.dtsi</code>，是电源部分的相关配置。如果你的硬件设计都是参考我们的硬件设计，这部分基本不用改，这部分基本不用改。我后面也会给大家讲电源部分要怎么配。</p>
+<p>我们的电源方案有两种：一种用两个 RK806，称为双 PMIC 方案；另外一种用一个 RK806，再加三个 RK860 的 DC/DC，称为单 PMIC 方案。这两个配置有一点不一样，所以大家硬件设计时，要看清楚用的是单 PMIC 还是双 PMIC。</p>
+<blockquote>
+<p>整理注：本段 DC/DC 的 RK860 型号在转写中缺少可核定的后缀，先保留识别出的型号范围，后续按讲者展开的电源配置核对；不把它扩写成未经辨清的具体器件料号。</p>
+</blockquote>
+<p>这边是 RK3588S 的 DTS 架构，它其实跟 RK3588 一样。大家实际开发时，可以参考我们的 RK3588 EVB1。建议直接 include 这个 DTSI：如果你们的参考设计跟我们的 EVB 板差不多，就直接包含 EVB1 的参考 DTSI，然后把这里改成你们自己的 DTS，把差异部分放到自己的 DTS 里面修改。</p>
+<blockquote>
+<p>整理注：本段口述的 EVB1 Camera 配置与板级 DTSI 完整文件名，冻结转写存在字符错识，现场架构图见前图，保留包含关系与修改步骤，不把不清的板号/版本后缀当作确切路径。</p>
+</blockquote>
+<h2 id="2631-dtsi-evb1">26:31 为什么继承参考 DTSI，以及 EVB1 硬件配置<a class="headerlink" href="#2631-dtsi-evb1" title="Permanent link">&para;</a></h2>
+<p>这样，在我们进行代码更新时，你们比较容易更新到我们 DTS 部分的修改，不会把我们的 DTS 修改漏掉。</p>
+<p>这是 RK3588 EVB1 的硬件配置：用的是 LPDDR4、8G 的 DDR，最高频率是 2112 兆；用双 PMIC，两个 RK806；32G eMMC。显示接口有两个 MIPI、两个 HDMI，一个 VGA，还有一个 Type-C 的 DP。</p>
+<p>USB 部分，有一个 USB 3.0 host，加一个 Type-C 3.0，另外加两个 USB 2.0 host。还有一个 SATA 接口、一个 HDMI RX。camera 有两个 4 lane 的 MIPI D-PHY TX；以太网是一个 RJ45，加一个 PCIe 的 RJ45，一个 PCIe 接口的。</p>
+<p><img alt="RK3588 EVB1 主要硬件配置表，列出 DDR、双 PMIC、eMMC、显示、USB、SATA、HDMI RX、Camera 和以太网。" src="images/f018.jpg" /></p>
+<p><em>RK3588 EVB1 主要硬件配置表，列出 DDR、双 PMIC、eMMC、显示、USB、SATA、HDMI RX、Camera 和以太网。 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=1699">原片 28:19</a></em></p>
+<blockquote>
+<p>整理注：硬件介绍保留讲者当时的接口与方向口径；MIPI D-PHY TX 由现场硬件配置表所示，不能按摄像头方向常识静默改成 RX。RJ45 的第二路为 PCIe 扩展，以现场表格为核对依据。</p>
+</blockquote>
+<p>这就是开发板的 DTS 架构。下面再介绍怎么建自己的 DTS。建议大家根据自己的硬件设计，直接复制一份我们现有的 DTS。我们的开发板是 EVB1，前面已经介绍了：如果你的硬件配置跟 EVB1 类似，用的是双 PMIC，我建议就参考这个 RK3588 EVB1 的 DTS。那我们现在主要的参考设计——</p>
+<h2 id="2834-pmic-iot">28:34 单 PMIC 的 IoT 参考设计<a class="headerlink" href="#2834-pmic-iot" title="Permanent link">&para;</a></h2>
+<p>我们现在主推的都是单 PMIC。你们拿到的应该是这个硬件参考设计，它是单 PMIC，对应软件 DTS 配置是 <code>rk3588-evb7-lp4-v10</code> 这个参考 DTS，跟我们发布的 RK3588-IoT 参考设计相匹配。如果你的硬件按我们的参考设计来做，开发时就以这个为基础。</p>
+<p>它主要是单 PMIC：一个 RK806，加三个 RK860 DC/DC。DDR 是 LP4、200 球。然后是一个 Type-C 加一个 USB 3.0、两个 USB 2.0，以及一个 SATA 3.0 接口。两个 HDMI 2.1 TX、一个 HDMI 2.0 RX，还有 VGA，以及 SDIO 的 Wi-Fi。</p>
+<p>我们的 EVB1，Wi-Fi 用的是 PCIe 接口的 Wi-Fi 6；EVB7 用的是 SDIO 接口。另外还有一个 4 lane 的标准 PCIe 3.0 接口、两个 4 lane 的 MIPI CSI 接口，也就是两个 4 lane 的 MIPI D-PHY RX，接 camera；还有一个 4 lane 的 MIPI D-PHY TX，是接屏的。</p>
+<p><img alt="参考 DTS 选择表中的 RK3588 EVB7 / RK3588-IoT 参考设计，展示单 PMIC、LPDDR4 与接口组合。" src="images/f019.jpg" /></p>
+<p><em>参考 DTS 选择表中的 RK3588 EVB7 / RK3588-IoT 参考设计，展示单 PMIC、LPDDR4 与接口组合。 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=1870">原片 31:10</a></em></p>
+<blockquote>
+<p>整理注：此段接口缩写多处被识别成“SPMI”“私人的米P”等，按现场参考设计表及“camera/屏”的连续讲解校读 HDMI、4 lane、MIPI D-PHY。原段对 RX/TX 出现回绕，正文保留先 camera、后屏的顺序；细小 DTS 完整后缀见截图，不把不清字段变成复制命令。</p>
+</blockquote>
+<h2 id="3037-dts-evbnvr">30:37 其他参考 DTS：早期 EVB、NVR 和平板<a class="headerlink" href="#3037-dts-evbnvr" title="Permanent link">&para;</a></h2>
+<p>Codec 用的是 ES8388。我们这里还有电源灯这些，另外是按键。</p>
+<blockquote>
+<p>整理注：电源灯一词依据 1800–1860 秒局部恢复转写校读，修复原转写“楼一炮电灯”。恢复尾部出现与课程无关的字幕署名幻觉，不作为讲述内容。</p>
+</blockquote>
+<p>这是我们的参考 DTS。EVB4 这个 DTS 也是单 PMIC，是比较早发布的一个 DTS。有些同学开发时可能参考的是这个 DTS，这个也是单 PMIC，也是可以的。EVB2 这块板子，目前没有在售卖。</p>
+<p>NVR 的话，参考 DTS 是 <code>rk3588-nvr-demo-v10</code>，这个 DTS 是 NVR 的一款。</p>
+<p>RK3588S 的开发板用的是 RK3588S EVB1。这也是我们公开售卖的 RK3588S EVB，屏用的是 eDP，也是双 PMIC。屏是 eDP，其他配置跟 RK3588 的 EVB 一样，这里还有一个 CAN 接口。</p>
+<blockquote>
+<p>整理注：RK3588S、eDP、双 PMIC、比较 RK3588 EVB，以及 CAN 接口，依据 1900–1940 秒局部恢复转写校读；原转写 cam/camera 片段按补证确认为 CAN 接口。</p>
+</blockquote>
+<p>然后这个是平板的 <code>rk3588s-tablet-v10</code>。平板是双 PMIC，而且带电池。如果你有带电池的产品，可以参考这个 DTS，这个是双 PMIC；后面 V11 是单 PMIC，V11 这个是单 PMIC。</p>
+<h2 id="3239-dts">32:39 在自己的 DTS 中改硬件差异<a class="headerlink" href="#3239-dts" title="Permanent link">&para;</a></h2>
+<p>其他部分跟 V10 一样，只有 PMIC、电源部分不一样。所以大家选择时，可以根据自己的硬件设计，选择对应的参考 DTS。</p>
+<p>新建 DTS，可以直接 include 我们的 DTSI。比如你要参考我们 EVB1、LP4 的 DTSI，就直接 include。在这里 include 你要参考的 DTS，还有 camera 部分、Android 的配置，这些是要 include 的。</p>
+<p>然后根据自己板子的硬件差异，在自己的 DTS 里面修改。比如可以改一下背光 GPIO，因为可能用得不一样。还有触摸屏，如果你的触摸屏不一样，可以把我们 EVB 的触摸屏 disable 掉，再在自己的 DTS 添加自己的触摸屏配置。这就是新建一个 DTS。</p>
+<p><img alt="新板 DTS 的差异修改示例：背光 GPIO 配置以及 disable 原触摸屏节点。" src="images/f020.jpg" /></p>
+<p><em>新板 DTS 的差异修改示例：背光 GPIO 配置以及 disable 原触摸屏节点。 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=2101">原片 35:01</a></em></p>
+<blockquote>
+<p>整理注：示例板级 DTSI 的完整版本后缀在冻结转写中不稳定，截图显示其 include 结构。保留“参考板级 / camera / Android 配置 + 自己修改差异”的操作次序，不凭缩写拼造文件路径。</p>
+</blockquote>
+<p>这里再给大家介绍电源部分。主要就是单 PMIC 和双 PMIC，我们现在主推的都是单 PMIC。单 PMIC 方案，一个 RK806 加三个 RK860 DC/DC；双 PMIC 是两个 RK806。</p>
+<h2 id="3440-pmic-u-boot">34:40 单双 PMIC 不兼容与 U-Boot 保护<a class="headerlink" href="#3440-pmic-u-boot" title="Permanent link">&para;</a></h2>
+<p>单 PMIC 和双 PMIC 在软件上不兼容，大家开发时要注意：软件配置要跟你的硬件设计一致，否则会起不来。</p>
+<p>因为这两个相互不兼容，固件如果烧错，有可能损坏芯片。所以为了保护，我们在 U-Boot 阶段做了一个拦截：会检测你当前是双 PMIC 还是单 PMIC。如果配置错，就会打印这个 log，不让你启动，开机失败。大家如果看到这个 log，就去检查是不是 PMIC，也就是电源部分的单双 PMIC 配置错了。</p>
+<p><img alt="单双 PMIC 不兼容说明及 U-Boot 阶段保护日志；下方列出单 PMIC 的参考 DTS 与 single 电源 DTSI。" src="images/f021.jpg" /></p>
+<p><em>单双 PMIC 不兼容说明及 U-Boot 阶段保护日志；下方列出单 PMIC 的参考 DTS 与 single 电源 DTSI。 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=2185">原片 36:25</a></em></p>
+<p>屏幕日志示例为 <code>spi2: RK806: 2</code>，以及 <code>HW single pmic, the firmware dual pmic(0x8)!</code>。</p>
+<p>单 PMIC 的话，我们在 DTS 里面 include 的是 <code>rk3588-rk806-single.dtsi</code>，电源部分配置都在这里。另外，还要配置一下 DC/DC 的配置。</p>
+<p>这里上面的接口配置，原局部音频转写对 SPI 与 I²C 缩写识别不稳定；现场代码显示，PMIC RK806 在 SPI2 上，外接 DC/DC 在 I²C 节点下，相关配置写在 DTS 里面。这三个 DC/DC 分别给 CPU big0、CPU big1，还有 NPU 供电。CPU big1 就是 CPU 6 和 7，另一路给 NPU 供电；这里用到了 RK860-2、RK860-3。</p>
+<blockquote>
+<p>整理注：2163 秒起原转写出现 DCDC 机械回环。已比较 2140–2215、2153–2185 的恢复转写及独立 small 转写，恢复了接口配置、DTS 和 CPU big0 供电的意思；具体 SPI/I²C 缩写依据实际代码核对，不把不清的一句伪装成准确引语。CPU big0 后面的具体核号口述未可靠恢复；截图注释指向 CPU4–5，属于图像证据。CPU big1 的 6、7 及 NPU 供电由较长恢复片段明确提供。原 RK806-2/3 的错识按图中 DC/DC 型号 RK860-2/3 校读。</p>
+</blockquote>
+<p><img alt="单 PMIC 方案的电源 DTSI 与 SPI2 配置代码开始部分。" src="images/f022.jpg" /></p>
+<p><em>单 PMIC 方案的电源 DTSI 与 SPI2 配置代码开始部分。 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=2203">原片 36:43</a></em></p>
+<p><img alt="三个 DC/DC 的配置示例：I²C 节点下的 RK860-2、RK860-3；当前代码显示 CPU big0，图注标出 CPU4–5 和 CPU6–7 的供电分配。" src="images/f029.jpg" /></p>
+<p><em>三个 DC/DC 的配置示例：I²C 节点下的 RK860-2、RK860-3；当前代码显示 CPU big0，图注标出 CPU4–5 和 CPU6–7 的供电分配。 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=2298">原片 38:18</a></em></p>
+<h2 id="3642-i2c">36:42 I²C 地址、外部供电和频点检查<a class="headerlink" href="#3642-i2c" title="Permanent link">&para;</a></h2>
+<p>我们把另外一路用 RK860-3，主要差别是 I²C 地址不一样，其他都是一样的。因为同一条 I²C 下面，不能挂两个 I²C 地址一样的器件，所以用了两个不同 I²C 地址的版本。</p>
+<blockquote>
+<p>整理注：冻结转写在上一窗末尾和本窗开头将 DC/DC 型号识别为 RK806-2 / RK806-3；现场 DC/DC 代码显示 RK860-2、RK860-3。这里区分 SPI 上的 RK806 PMIC 与 I²C 上的 RK860 DC/DC，上一窗已经结合局部恢复与图中注释保留电源分配；CPU big0 核号的来源限制见上一窗整理注。</p>
+</blockquote>
+<p>另外是外部电源配置。外部电源，是指 PMIC 依赖的电源。在 DTS 配置时，这些电源的配置要在 PMIC 配置前面，这样开机时才能正常初始化。也就是说，我们 PMIC 的电源依赖于外部电源，比如 VCC 12V、VCC 5V，这些都要在比较前面初始化。</p>
+<p><img alt="外部电源配置说明，包含先于 PMIC 初始化的依赖关系、opp_summary 检查提示和 VCC12V/VCC5V 的示例。" src="images/f023.jpg" /></p>
+<p><em>外部电源配置说明，包含先于 PMIC 初始化的依赖关系、opp_summary 检查提示和 VCC12V/VCC5V 的示例。 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=2418">原片 40:18</a></em></p>
+<p>如果这些电源初始化有异常，CPU、GPU、NPU 这些可能都会有异常。我们可以通过 <code>cat /d/opp/opp_summary</code>，来看相关 CPU、GPU、DDR、NPU 的频点有没有出来。如果没出来，可能就是电源配置或者初始化有问题。</p>
+<p>双 PMIC 的话，它的电源配置在 <code>rk3588-rk806-dual.dtsi</code> 配置文件里，这是电源部分比较容易出错的地方。</p>
+<p><img alt="双 PMIC 配置页，明确显示 rk3588-rk806-dual.dtsi 及 SPI 上 RK806 的配置。" src="images/f027.jpg" /></p>
+<p><em>双 PMIC 配置页，明确显示 rk3588-rk806-dual.dtsi 及 SPI 上 RK806 的配置。 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=2446">原片 40:46</a></em></p>
+<blockquote>
+<p>整理注：2306–2309 秒原转写出现机械碎词，局部恢复仍未可靠识别后缀；完整文件名由随后可读的双 PMIC 配置页确认为 dual，并非依据“干6”等 ASR 字符猜写。</p>
+</blockquote>
+<h2 id="3843-log-ddr-spl">38:43 从启动 log 看 DDR 与 SPL<a class="headerlink" href="#3843-log-ddr-spl" title="Permanent link">&para;</a></h2>
+<p>这是我们 DTS 的介绍。下面再介绍 RK3588 的启动流程，看一下开机 log，根据 log 来分析启动流程。</p>
+<p>这是一份 RK3588 的开机 log。首先，开机的第一条是 DDR，也就是我们最先启动的是 DDR。这里能看到 DDR 的软件版本，这个是 1.07。大家看版本时，可以看到 DDR 的版本。</p>
+<p><img alt="DDR 初始化 log：V1.07、LPDDR4X、4通道每通道2GB，以及528/1068/1560/2112MHz四个频点。" src="images/f024.jpg" /></p>
+<p><em>DDR 初始化 log：V1.07、LPDDR4X、4通道每通道2GB，以及528/1068/1560/2112MHz四个频点。 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=2526">原片 42:06</a></em></p>
+<p>DDR 对应的文件，在我们代码的 <code>rkbin</code> 下面，bin 目录的 RK3588 DDR 文件；跑的就是这一段。屏幕给出的文件为 <code>rkbin/bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.07.bin</code>。下面是 DDR 初始化，能看到 DDR 类型和最高频率。DDR 是 4 个通道，每个通道 2G，这是 8G 容量。它支持 4 个频点，它支持 4 个频点：528、1068、1560，最高 2112。到这里，DDR 初始化结束。</p>
+<p>DDR 初始化结束、DDR 跑完，就跑 SPL。SPL 在我们的 loader 里面，这里是它对应的代码、bin 文件以及源文件位置，屏幕对应 <code>rkbin/bin/rk35/rk3588_spl_v1.11.bin</code>。这里能看到 SPL 版本。SPL 只跑小核，大核没有跑。所以在开机 log 的时候，我们看到这两个 log——</p>
+<blockquote>
+<p>整理注：本视频中投屏落后于口述，配图采用实际 log 出现的源时间。画面显示 LPDDR4X、2112MHz、DDR 版本 V1.07，以及 528/1068/1560/2112MHz 四频点。文件版本后缀还包含频率及多平台信息，不凭模糊转写拼造可复制路径。</p>
+</blockquote>
+<h2 id="4043-u-boottrust">40:43 启动介质优先级与加载 U-Boot、Trust<a class="headerlink" href="#4043-u-boottrust" title="Permanent link">&para;</a></h2>
+<p>这两条 <code>Failed to set cpu01</code>、<code>Failed to set cpu23</code> 的 log，大家可以忽略。芯片启动时，先从 SPI 存储里面查找固件。如果那里没有固件，就跳到下一级，也就是 SD 卡，再从 SD 卡查找固件。引导的最高优先级是 SPI，然后是 SD 卡，SD 卡之后才从 eMMC 里面加载。也就是说，如果你插了 SD 卡，而且 SD 卡有固件，就优先从 SD 卡启动。</p>
+<p>这些在 log 里都能看出来。这里没有接 SD 卡，所以 SD 卡初始化报错；前面都没有找到，就开始从 eMMC 加载固件。这里的 MMC 就是 eMMC。</p>
+<p><img alt="SPL 正常的小核阶段提示，以及 SPI、SD 卡查询与 SD 卡未插入的初始化错误。" src="images/f025.jpg" /></p>
+<p><em>SPL 正常的小核阶段提示，以及 SPI、SD 卡查询与 SD 卡未插入的初始化错误。 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=2586">原片 43:06</a></em></p>
+<blockquote>
+<p>整理注：开头一句冻结及恢复转写均为“可以不用忽略这个 log”，口语有歧义；结合前句只运行小核与画面明确标注“正常的log”，正文按可忽略这些正常提示整理。口述 SPI 类型在原转写中不清，局部恢复的发音近 SPI NOR；现场页面注释写“查询 SPI nand”，并有 <code>unknown raw ID</code>、<code>unrecognized JEDEC id bytes</code> 等日志。不能把不清的口述直接扩成唯一确定的 NOR 或 NAND 类型，优先级按可确定的 SPI → SD → eMMC 保留。</p>
+</blockquote>
+<p>最开始加载的是 U-Boot 下面的 ATF，也就是我们的 Trust，然后是 U-Boot、FDT，以及 ATF 的各段代码，还有 OP-TEE。屏幕顺序列出 atf-1、uboot、fdt、atf-2、atf-3、atf-4、optee。这是最前面加载的。加载完，跳到 U-Boot。这里是 U-Boot 前面这段的启动耗时。</p>
+<p><img alt="eMMC 加载和校验各阶段代码，随后跳转 ARM Trusted Firmware；页面显示前段总耗时115.998ms。" src="images/f026.jpg" /></p>
+<p><em>eMMC 加载和校验各阶段代码，随后跳转 ARM Trusted Firmware；页面显示前段总耗时115.998ms。 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=2670">原片 44:30</a></em></p>
+<p>跳转后，最先启动的是 BL31。BL31 就是我们的 Trust。如果以前做过我们 RK 平台，其他旧平台会有一个 <code>trust.img</code>；RK3588 没有 <code>trust.img</code>——</p>
+<h2 id="4244-bl31bl32u-boot-pmic">42:44 BL31、BL32、U-Boot 版本与 PMIC 检查<a class="headerlink" href="#4244-bl31bl32u-boot-pmic" title="Permanent link">&para;</a></h2>
+<p>这些都包含在 U-Boot 里面。这里能看到 BL31 的版本，大家核对时可以看这个版本。版本里面带有 commit 信息，主要根据这个 commit 信息来确认版本。</p>
+<p><img alt="BL31（Trust）初始化与版本信息，包含commit标识；下方开始展示DDR变频信息。" src="images/f028.jpg" /></p>
+<p><em>BL31（Trust）初始化与版本信息，包含commit标识；下方开始展示DDR变频信息。 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=2682">原片 44:42</a></em></p>
+<p>这里是 BL31 里面 DDR 变频，主要是 DDR 变频部分。下面是 BL32 初始化。BL32 主要就是 OP-TEE，这里可以看到 BL32 的信息。BL32 初始化完成，就到 U-Boot 阶段，这里可以看到 U-Boot 版本以及编译信息。</p>
+<p><img alt="U-Boot 版本、model、内存容量与 eMMC HS200 启动介质日志" src="images/f039.jpg" /></p>
+<p><em>U-Boot 版本、model、内存容量与 eMMC HS200 启动介质日志 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=2768">原片 46:08</a></em></p>
+<p>这里是 DTS 配置的 model，可以确认你的 DTS 是不是对的。这里还能看到内存容量，是 8G。启动是从 eMMC 启动，eMMC 在 U-Boot 这段跑的是 HS200。</p>
+<p>boot mode 是启动模式，normal 或者 recovery。如果第一次开机，这里也会显示 recovery。</p>
+<p>U-Boot 里面会初始化 PMIC，就是我们前面说的 PMIC。如果这里 PMIC 配置错了，就会打印这一段 log；看到这段，就去检查是不是单双 PMIC 配置错了。最终它会卡在这里，不继续往下走。</p>
+<h2 id="4445-pmic-kernel">44:45 PMIC 电压检查、显示与加载 kernel<a class="headerlink" href="#4445-pmic-kernel" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>原视频：<a href="https://www.bilibili.com/video/BV19U4y1673R/?p=1&amp;t=2684.92">本段 44:44</a></p>
+</blockquote>
+<p>如果配置正确，就继续往下走。这里是双 PMIC，可以看到输出电压都是 0.75V，电压都是 0.75V；如果不是 0.75V，可能就有异常。</p>
+<p>然后是单 PMIC。单 PMIC 会先初始化三个 DC/DC，这三个 DC/DC 这里都是 0.85V。如果没有看到这个 0.85V，说明有问题，要检查 DC/DC 的硬件有没有贴错、料有没有用错，或者通信异常。然后是单 PMIC 的 RK806 初始化。到这里，PMIC 初始化结束。</p>
+<p><img alt="单 PMIC 的外部 DC/DC 与 RK806 电压日志" src="images/f030.jpg" /></p>
+<p><em>单 PMIC 的外部 DC/DC 与 RK806 电压日志 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=2876">原片 47:56</a></em></p>
+<blockquote>
+<p>整理注：本段口述转写为三个 DC/DC“0.85V”，后续实际日志图写的是 <code>vdd_cpu_big0_s0 800000 uV</code>、<code>vdd_cpu_big1_s0 800000 uV</code>、<code>vdd_npu_s0 800000 uV</code>，即图像示例为 0.8V；保留这处口述识别与屏幕差异，不合并成唯一数字。投屏比口述滞后，配图保留实际出现时间。</p>
+</blockquote>
+<p>这里会显示 DTS 的名称，根据这个可以判断加载的 DTS 是不是对的。这还是在 U-Boot 阶段。下面是 U-Boot 的显示部分，最后 logo 出来，然后是 clock 的一些初始化。</p>
+<p><img alt="U-Boot 显示部分与 DTS model 日志" src="images/f031.jpg" /></p>
+<p><em>U-Boot 显示部分与 DTS model 日志 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=2900">原片 48:20</a></em></p>
+<p>这是 Android 固件的加载、AVB 校验，校验固件的合法性。如果开了 AVB，就会进行 AVB 部分的校验，校验下一级。</p>
+<p><img alt="Android 固件 AVB 校验日志" src="images/f038.jpg" /></p>
+<p><em>Android 固件 AVB 校验日志 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=2924">原片 48:44</a></em></p>
+<p>然后到这里，开始加载 kernel，进行 kernel 固件加载、kernel 启动。</p>
+<p>这里显示 U-Boot 阶段的耗时。如果耗时太大，大于几秒，说明 U-Boot 阶段耗时比较长。正常我们 EVB 的耗时在一秒以内。</p>
+<p><img alt="U-Boot 总耗时 861.280ms 与 kernel 启动编译信息" src="images/f032.jpg" /></p>
+<p><em>U-Boot 总耗时 861.280ms 与 kernel 启动编译信息 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=2948">原片 49:08</a></em></p>
+<p>下面就是 kernel 启动阶段。U-Boot 启动完，就到 kernel，这里是 kernel 的一些编译信息。</p>
+<h2 id="4646-kernel">46:46 kernel 的电源初始化顺序<a class="headerlink" href="#4646-kernel" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>原视频：<a href="https://www.bilibili.com/video/BV19U4y1673R/?p=1&amp;t=2805.92">本段 46:45</a></p>
+</blockquote>
+<p>可以通过版本、时间，确认编译时间、编译信息、版本对不对。这里是 DTS 名字，下面是内存初始化，<code>reserved memory</code>，这里是预留的内存。再下面是 CPU 的加载、初始化，以及其他初始化。</p>
+<p><img alt="kernel 编译信息与 reserved memory 初始化" src="images/f033.jpg" /></p>
+<p><em>kernel 编译信息与 reserved memory 初始化 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=2984">原片 49:44</a></em></p>
+<p>各路电源的初始化在这里进行，是 kernel 阶段 PMIC 各路电源的初始化。如果在这里没看到初始化，电源初始化是在 CPU 变频之后才开始，就会有问题。PMIC 初始化太晚，会导致 CPU 那些初始化异常。所以要检查前面讲的 DTS 配置，把电源部分提前。</p>
+<p><img alt="kernel 阶段 PMIC 各路供电初始化" src="images/f034.jpg" /></p>
+<p><em>kernel 阶段 PMIC 各路供电初始化 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=3020">原片 50:20</a></em></p>
+<p>这是 CPU 变频的部分，这一步要在电源初始化之后。这个是 DDR 变频的一些初始化。</p>
+<p><img alt="DDR 变频相关初始化与频率日志" src="images/f035.jpg" /></p>
+<p><em>DDR 变频相关初始化与频率日志 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=3068">原片 51:08</a></em></p>
+<p>到这里，就开始 Android 分区的加载。这大概就是 kernel 进入 Android 的过程，开机流程就是这样。</p>
+<p><img alt="进入 Android 的分区挂载日志" src="images/f036.jpg" /></p>
+<p><em>进入 Android 的分区挂载日志 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=3080">原片 51:20</a></em></p>
+<p>上面给大家介绍了一些 Android 开发的东西。接下来是现场答疑，大家有问题可以提，我会针对刚刚留言区的一些问题进行回答。</p>
+<h2 id="4846-cpucamera">48:46 现场答疑：CPU、显示、Camera 与动态调压<a class="headerlink" href="#4846-cpucamera" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>原视频：<a href="https://www.bilibili.com/video/BV19U4y1673R/?p=1&amp;t=2925.92">本段 48:45</a></p>
+</blockquote>
+<p>我们来看一下大家的问题。低一档的 CPU 方案，比 RK3588 低的就是 RK3399；RK3399 再下面是〔型号未辨清〕，然后有 RK3568、RK3566，再下面就是〔型号音近“RK336”，未辨清〕，〔随后一处音近“比较30”，未辨清〕，就这样子。</p>
+<blockquote>
+<p>整理注：2937–2958 秒的芯片型号阶梯，冻结转写含“RK32588”“RK3256”“比较30”等不可靠片段。局部恢复仍识别为“RK388”“RK336”“比较30”，未可靠恢复。本段保留可辨型号、未辨槽位与讲述次序，未辨清的具体型号仍须核听，不据常见产品线补造一条准确排序。</p>
+</blockquote>
+<p>RK3588 支持 4K。它的 HDMI 最高可以支持 8K、60 帧显示；DP 最高支持 8K、30 帧；eDP 可以支持到 6K——4K、60 帧；MIPI 最大也是 4K、60 帧。</p>
+<blockquote>
+<p>整理注：eDP 处先有“6K”的口述识别，紧接着是“4K60帧”，正文保留后一句的数值并注明该回绕。3001–3006 秒 Camera 支持问题原转写为“Caml支持RA2”，局部恢复仍为“ro2”，音近 RAW/RAW2，缩写未可靠辨清，回答为可以支持，不能将 RA2 擅自解释成具体格式或接口。</p>
+</blockquote>
+<p>Camera 支持吗？可以支持，Camera 可以支持〔问题中的具体缩写未辨清〕。</p>
+<p>“PMIC RK806 也是带内核动态调压吗？低功耗模式下，双 PMIC 是不是更有优势？”RK806 在 kernel 下面可以支持动态调压，通过 SPI 接口通信。现在为什么推出单 PMIC？我们认为单 PMIC 的功耗会更好一点，而且成本也会更低一点。</p>
+<h2 id="5046-pmicddr-u-boot">50:46 单 PMIC、博客、DDR 兼容与 U-Boot 裁剪<a class="headerlink" href="#5046-pmicddr-u-boot" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>原视频：<a href="https://www.bilibili.com/video/BV19U4y1673R/?p=1&amp;t=3046.12">本段 50:46</a></p>
+</blockquote>
+<p>所以后面我们主推的都是单 PMIC，不是双 PMIC。我们再看下面的问题。</p>
+<p>我的博客链接，大家可以在网上搜一下，就是我刚刚放的那个。我给大家看一下这个链接，把这个博客……可以直接在网上搜 RK3588，就可以看到我的，点进来就能看到。</p>
+<p><img alt="讲者演示搜索后进入 RK3588 Kernel DTS 解析博客栏目" src="images/f037.jpg" /></p>
+<p><em>讲者演示搜索后进入 RK3588 Kernel DTS 解析博客栏目 · <a href="https://www.bilibili.com/video/BV19U4y1673R/?t=3356">原片 55:56</a></em></p>
+<p>DDR 会兼容一些不同容量的。我们在网上会更新 DDR 的注意事项和支持列表，大家可以通过支持列表去获取。</p>
+<blockquote>
+<p>整理注：3130 秒附近“低调”根据连续的“容量、注意事项、支持列表”校读为 DDR；本段口述未给出可可靠抄录的支持列表网址，截图保留博客查找演示，不增补外部地址。</p>
+</blockquote>
+<p>U-Boot 阶段，我们现在的启动时间差不多一秒以内。如果想更快，可以做一些裁剪，也可以再快一点点。但是，一秒以内的时间再继续缩，优化程度也不会很高，你再优化一点时间——</p>
+<blockquote>
+<p>整理注：末句的具体毫秒数原转写为“几多秒”，不能确定，正文不确定具体数量，只保留继续缩短时间的意思，接下一段“意义也不大”。</p>
+</blockquote>
+<h2 id="5247-android-rknn-3a">52:47 Android 开机、RKNN 与音频 3A<a class="headerlink" href="#5247-android-rknn-3a" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>原视频：<a href="https://www.bilibili.com/video/BV19U4y1673R/?p=1&amp;t=3166.6000000000004">本段 52:46</a></p>
+</blockquote>
+<p>意义也不大。但是，如果做裁剪，也可以再进行裁剪、再进行优化。RK3588 的 Android 12 开机速度，我们目前差不多在 12 秒左右。大家看一下，还有什么问题，可以现场再给大家解答。</p>
+<p>“Android 有提供 AI 算法的 demo 吗？”我们有 NPU 的 RKNN 开发包，SDK 里面也有带。大家如果有兴趣，可以拿去看我们的 NPU RKNN 开发包。</p>
+<p>“RK3588 的 3A 算法有支持吗？”3A 算法我们也有支持。如果有兴趣，可以通过我们的 Redmine 提问，我们会指派给对应工程师解答。因为 3A 这一块跟硬件的耦合性比较高，要针对你们的硬件做对应适配。所以，各位需要跟我们的业务，或者通过 Redmine 跟我们沟通，我们再以 case by case 的方式来支持。这指的是音频的 3A 算法。</p>
+<blockquote>
+<p>整理注：工单渠道在原转写中为“日卖/的卖”，按连续提问、指派工程师的语境校读为 Redmine，未得到画面文字确认；不扩写成具体网址。</p>
+</blockquote>
+<h2 id="5447-isp">54:47 ISP 出图、异常掉电与数据保护<a class="headerlink" href="#5447-isp" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>原视频：<a href="https://www.bilibili.com/video/BV19U4y1673R/?p=1&amp;t=3286.6000000000004">本段 54:46</a></p>
+</blockquote>
+<p>“RK3588 ISP 到出图需要多长时间？”这个时间差不多 150 毫秒左右。RK3588 ISP 到出图的时间，差不多是 150 毫秒左右。</p>
+<p>我们前面通过问卷调查收集了一些问题，看看里面主要的问题。比如，有客户提到异常掉电的场景：设备不带电池，关机时直接掉电，容易产生数据丢失，导致无法开机。</p>
+<p>针对这个，只能说尽量避免、尽量减少发生概率。一些措施是：能尽量不用磁盘加密，就把磁盘加密关掉；文件系统用〔名称音近“EXT”，未辨清〕；另外，主要是应用开发上要做好数据保护。一些关键数据，要做好及时的回写。就是应用开发上要做一下保护。这是前面收集的问题。</p>
+<blockquote>
+<p>整理注：此处磁盘加密、回写按连续语境校读；文件系统名在冻结及3320–3380秒恢复转写中均音近“一叉击式”，仍未辨清，不能直接确定为 ext4。尚无画面展示这些设置，应按原音复核未辨术语，不能把本段讲者的降低概率建议写成消除掉电风险的保证。</p>
+</blockquote>
+<p>大家看，如果没有什么问题，今天直播就到这里。我们左上角还有一个……那我们看现场，这里还有一个问题：“擦除 flash，有什么方式进 loader 模式？”</p>
+<h2 id="5650-flashmaskrom">56:50 擦除 flash、Maskrom、速率与货源<a class="headerlink" href="#5650-flashmaskrom" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>原视频：<a href="https://www.bilibili.com/video/BV19U4y1673R/?p=1&amp;t=3409.78">本段 56:49</a></p>
+</blockquote>
+<p>擦除 flash 完，flash 里面就没有固件了，这时没办法进 loader。因为 loader 在 U-Boot 里面，你把代码都擦掉了，就没办法进，只能进 Maskrom。擦掉之后直接插进去，就是 Maskrom 模式。Maskrom 下面也可以进行固件烧写，但是要完整烧写。</p>
+<p>大家还有问题可以继续，我看还有很多问题。</p>
+<p>这里有客户问“3.0”的测试速率最高能达到多少。你指的是 PCIe 3.0 的测试速率吗？如果是 PCIe，我上面已经讲过理论数据和实测数据，大家可以回放看前面的介绍。</p>
+<p>“RK3588 现在货源稳定吗？”货源部分，我们现在已经量产，这个可以咨询对应业务。货源肯定是有保障的，RK3588 现在是我们主推的高端芯片。</p>
+<p>“RK3588S 平板的关机电流大概是多少？”关机漏电流大约在 50mA 左右。</p>
+<blockquote>
+<p>整理注：50mA 为冻结转写和 3510–3585 秒独立局部恢复转写共同识别的讲者口径；现场没有电流测量画面或单位文字，本稿保留来源，不依据常识静默改成 µA，也不把该数值当作独立验证的硬件指标。</p>
+</blockquote>
+<h2 id="5850-maskrom-ddr-gpio">58:50 Maskrom 烧写、DDR 频率、发热与待机 GPIO<a class="headerlink" href="#5850-maskrom-ddr-gpio" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>原视频：<a href="https://www.bilibili.com/video/BV19U4y1673R/?p=1&amp;t=3529.78">本段 58:49</a></p>
+</blockquote>
+<p>“Maskrom 烧写失败。”Maskrom 烧写失败，要先检查板子的硬件是不是有问题。一般在 Maskrom 下面，如果硬件没问题，烧写是不会失败的，除非硬件有问题。</p>
+<blockquote>
+<p>整理注：3530–3557 秒冻结转写被大量“RK353/关机电流”机械重复污染，以上根据 3510–3585 秒局部恢复补回问题和回答，未把重复识别当成讲者反复强调。这里是讲者对烧写失败的回答口径，未替他补加未讲的排查条件。</p>
+</blockquote>
+<p>“RK3588 LPDDR4 支持的最高频率是多少？”最高频率可以达到 2112 兆，前面讲过，最高支持 2112 兆。LPDDR5 最高可以支持到——2.7G。</p>
+<blockquote>
+<p>整理注：LPDDR5 处原转写经历“2”“262.7”“2.7兆2.7G”的回绕，保留最后的 2.7G 口述概数；前面 DDR bin 文件名出现 <code>lp5_2736MHz</code> 是另一处屏幕证据，不用它覆盖本句说法。</p>
+</blockquote>
+<p>“RK3528 的发热情况怎么样？”我们目前看来还好。跑安兔兔的时候，测到芯片端的最高温度，差不多都维持在 50 度以下。就是跑安兔兔烤机这种高负载情况下，温度在 50 度以内。</p>
+<blockquote>
+<p>整理注：3593–3598 秒问题与复述中的芯片型号，冻结和3580–3630秒局部恢复均为“3528”，因此保留 RK3528，而非按场次主题改成 RK3588；画面只有答疑页，未提供型号文字；本段温度也没有另行补加散热配置、环境温度等原讲述未提供的条件。</p>
+</blockquote>
+<p>“待机模式下，GPIO 配置在什么状态功耗最低？”GPIO 在待机状态下，一般没用的 GPIO 都会断电；比如那些需要中断的，才不断电。</p>
+<h2 id="6050">60:50 最大内存与结束<a class="headerlink" href="#6050" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>原视频：<a href="https://www.bilibili.com/video/BV19U4y1673R/?p=1&amp;t=3649.78">本段 60:49</a></p>
+</blockquote>
+<p>RK3588 最大支持的内存，可以达到 32G。</p>
+<p>大家还有什么问题？没问题，我们今天的时间差不多就到这里了。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.indexes", "navigation.top", "content.code.copy", "toc.follow"], "search": "../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+    
+  </body>
+</html>

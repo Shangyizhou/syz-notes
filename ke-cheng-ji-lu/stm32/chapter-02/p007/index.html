@@ -1,0 +1,5557 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="记录课程内容、技术实践与个人学习总结">
+      
+      
+      
+        <link rel="canonical" href="https://shangyizhou.github.io/syz-notes/ke-cheng-ji-lu/stm32/chapter-02/p007/">
+      
+      
+        <link rel="prev" href="../p006/">
+      
+      
+        <link rel="next" href="../p008/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>P007 · 2.3 （GPIO）LED闪灯实验 - SYZ 的笔记</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../../mkdocs/stylesheets/center-images.css">
+    
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#p007-23-gpioled" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../../../.." title="SYZ 的笔记" class="md-header__button md-logo" aria-label="SYZ 的笔记" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            SYZ 的笔记
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              P007 · 2.3 （GPIO）LED闪灯实验
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../../.." title="SYZ 的笔记" class="md-nav__button md-logo" aria-label="SYZ 的笔记" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    SYZ 的笔记
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SYZ 的笔记
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+          
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../ros2-intro/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    嵌入式与机器人
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    嵌入式与机器人
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    铁头山羊 STM32 入门教程
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    铁头山羊 STM32 入门教程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../chapter-01/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    准备与开发环境
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_2" id="__nav_2_1_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    准备与开发环境
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-01/p002/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P002 · 安装开发环境
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-01/p003/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P003 · 1.1 （准备） STM32的基本信息
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_3" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GPIO
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_3" id="__nav_2_1_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    GPIO
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p005/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P005 · 2.1 （GPIO）4种输出模式
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p006/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P006 · 2.2 （GPIO）IO的最大输出速度
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P007 · 2.3 （GPIO）LED闪灯实验
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P007 · 2.3 （GPIO）LED闪灯实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#led" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        实验内容与 LED
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        从模板建立工程
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gpioc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        给 GPIOC 开启时钟
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gpio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GPIO 的编程接口
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gpio_init" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GPIO_Init 的两个参数
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gpio_writebit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GPIO_WriteBit 与单步测试
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#led_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        让 LED 循环闪烁
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p008/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P008 · 2.4 （GPIO）4种输入模式
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p009/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P009 · 2.5 （GPIO）按钮实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../chapter-03/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    串口
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_4" id="__nav_2_1_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    串口
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-03/p010/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P010 · 3.1 （串口）通信协议
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-03/p011/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P011 · 3.2 （串口）UART模块的使用方法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-03/p012/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P012 · 3.3 （串口）为串口初始化IO引脚
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-03/p013/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P013 · 3.4 （串口）发送数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-03/p014/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P014 · 3.5 （串口）格式化打印字符串
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-03/p015/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P015 · 3.6 （串口）接收数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-03/p016/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P016 · 3.7 （串口）封装常用功能
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../chapter-04/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    I²C
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_5" id="__nav_2_1_5_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    I²C
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-04/p017/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P017 · 4.1 （I2C）基本电路结构
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-04/p018/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P018 · 4.2 （I2C）通信协议
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-04/p019/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P019 · 4.3 （I2C）I2C模块的使用方法
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-04/p020/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P020 · 4.4 （I2C）写数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-04/p021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P021 · 4.5 （I2C）读数据
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-04/p022/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P022 · 4.6 （I2C）软I2C
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-04/p023/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P023 · 4.7 （I2C）封装常用功能
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-04/p024/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P024 · 4.8 （I2C）OLED显示器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_6" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../chapter-05/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SPI 与按钮驱动
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_6" id="__nav_2_1_6_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    SPI 与按钮驱动
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-05/p025/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P025 · 5.1 （SPI）电路结构和通信协议
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-05/p026/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P026 · 5.2 （番外） 按钮驱动程序编写
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-05/p027/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P027 · 5.3 （番外） 按钮代码的封装
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-05/p028/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P028 · 5.4 （SPI） IO引脚初始化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-05/p029/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P029 · 5.5 （SPI）SPI模块的初始化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-05/p030/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P030 · 5.6 （SPI）数据收发
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-05/p031/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P031 · 5.7 （SPI）W25Q64实验(上)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-05/p032/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P032 · 5.8 （SPI）W25Q64实验(下)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_7" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../chapter-06/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    中断
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_7" id="__nav_2_1_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    中断
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-06/p033/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P033 · 6.1 （中断）中断的概念
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-06/p034/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P034 · 6.2 （中断）中断优先级
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-06/p035/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P035 · 6.3 （中断）串口中断编程实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_8" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../chapter-07/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    EXTI
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_8" id="__nav_2_1_8_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    EXTI
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-07/p036/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P036 · 7.1 （EXTI）工作原理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-07/p037/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P037 · 7.2 （EXTI）按钮实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_9" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../chapter-08/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    时钟
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_9" id="__nav_2_1_9_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    时钟
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-08/p038/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P038 · 8.1 （时钟）时钟树
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-08/p039/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P039 · 8.2 （时钟）时钟树编程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_10" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../chapter-09/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    定时器
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_10" id="__nav_2_1_10_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    定时器
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-09/p040/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P040 · 9.1 （定时器）时基单元
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-09/p041/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P041 · 9.2 （定时器）自制延迟函数
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-09/p042/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P042 · 9.3 （定时器）输出比较
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-09/p043/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P043 · 9.4 （定时器）呼吸灯实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-09/p044/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P044 · 9.5 （定时器）输入捕获
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-09/p045/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P045 · 9.6 （定时器）超声波测距实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-09/p046/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P046 · 9.7 （定时器）从模式控制器
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-09/p047/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P047 · 9.8 （定时器）PWM参数测量原理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-09/p048/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P048 · 9.9 （定时器）PWM参数测量实验
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1_11" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../chapter-10/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ADC
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_1_11" id="__nav_2_1_11_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_1_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_1_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    ADC
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-10/p049/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P049 · 10.1 （ADC） 逐次逼近型ADC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-10/p050/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P050 · 10.2 （ADC） ADC模块的结构框图
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-10/p051/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P051 · 10.3 （ADC）采样时间和转换时间
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-10/p052/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P052 · 10.4 （ADC）常规单通道转换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-10/p053/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P053 · 10.5 （ADC）定时器触发
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../chapter-10/p054/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P054 · 10.6 （ADC）扫描模式
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../freertos-source/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeRTOS 源码详解
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    FreeRTOS 源码详解
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../freertos-source/p01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeRTOS 源码详解 P01：列表–概述
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../freertos-source/p02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P02 列表–初始化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../freertos-source/p03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P03 任务切换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../freertos-source/p04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P04 阻塞延时
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../freertos-source/p05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeRTOS P05｜队列-概述
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../freertos-source/p06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P06 队列-创建
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../freertos-source/p07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P07 队列—发送
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../freertos-source/p08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeRTOS 源码详解 P08：队列接收
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../freertos-source/p09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    互斥量｜FreeRTOS 源码详解 P09
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../freertos-source/p10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FreeRTOS P10｜队列集
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../embedded-ai-rk3588/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    嵌入式 AI 教程 · RK3588
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    嵌入式 AI 教程 · RK3588
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P01｜00_导学：嵌入式 AI 教程（基于 RK3588）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P02｜01_快速了解 RK3588
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P03｜02_NPU原理及对比
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P04｜03_RKNPU 推理软件架构与模型部署流程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P05｜04_瑞芯微 GitHub 仓库介绍
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P06｜05_搭建 rknn_toolkit2 开发环境
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P07｜06_设备端 NPU 环境搭建与 NPU 驱动更新
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p08/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P08｜07_查看和调整 CPU、NPU 和 DDR 频率
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p09/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P09｜08_快速体验 rknn_demo
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p10/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P10｜09_rknn模型转换
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p11/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10_均值和标准差
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p12/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P12｜11_模型转换工具 rknn_convert
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p13/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P13｜12_Netron 的基本使用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p14/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P14｜13_rknn-toolkit2模型推理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p15/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    14. 模型量化精度分析
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p16/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P16｜15_模型性能评估
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p17/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P17｜16_模型内存评估
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p18/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P18｜17_模型剪枝
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p19/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    18_模型加密
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p20/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P20｜19_多 Batch 处理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p21/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P21｜20_多输入模型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p22/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P22｜21_动态 shape 输入
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p23/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P23｜22_ONNX模型编辑
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p24/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P24｜23_自动生成部署 C 代码
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p25/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P25｜24_RKNN-ToolkitLite2 基本使用
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p26/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P26｜25_RKNPU2—通用 C API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p27/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P27｜26_RKNPU2—零拷贝 C API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p28/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P28｜27_mobilenet模型部署
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p29/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P29｜28_mobilenet模型代码封装
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p30/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    29｜YOLOv5模型部署实战
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p31/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P31 · YOLOv26 模型部署：Windows 环境搭建与模型预测分析
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p32/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    30_yolov26模型部署(从0到1版)_数据集构建与模型训练
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p33/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P33｜30_yolov26模型部署(从0到1版)_导出onnx与rknn模型并板端推理
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p34/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P34｜31_yolov8模型部署（优化加速版）
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../embedded-ai-rk3588/p35/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P35 · 32_Deepseek_Qwen大模型部署
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../rk3588-course/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RK3588 精品公开课
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    RK3588 精品公开课
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rk3588-course/l01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RK3588 NVR及后端产品
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rk3588-course/l02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RKNN模型精度优化指南
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rk3588-course/l03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RKNN Runtime部署指南
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rk3588-course/l04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RK3588 多目摄像头拼接产品及技术答疑
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rk3588-course/l05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RK3588 Linux SDK 开发及产品应用介绍
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rk3588-course/l06/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RK3588 Android开发答疑
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rk3588-course/l07/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    99%利用率的RKNN模型
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../finetuning-practice/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    大模型与 AI 应用
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    大模型与 AI 应用
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../rag-intro/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2025 大模型 RAG 入门
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    2025 大模型 RAG 入门
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rag-intro/l01/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01：为什么需要 RAG
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rag-intro/l02/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02：RAG的基本流程：为什么说上手RAG只要一星期
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rag-intro/l03/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03：RAG的10个优化技巧：为什么RAG不是算法问题，是工程问题
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rag-intro/l04/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    04：RAG的评估方法：没有评估，就没法优化
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rag-intro/l05/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    05：项目经理视角的RAG：需求评估要细，技术迭代要快
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../lora-paper/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    LoRA 论文解读与微调部署
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../ai-animation-production/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    AI 动画制作全流程
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    AI 动画制作全流程
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../ai-animation-production/full-workflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    全网150万播放的AI动画，怎么做的？分享我的制作全流程
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../linux-perf/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    工程与运维实践
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    工程与运维实践
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mlflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MLflow 最佳实践
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../cc-switch-deepseek/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CC-Switch：Claude Code 接入 DeepSeek V4.1-Flash-1017
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../cc-switch-codex-opencode-go/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CC-Switch：Codex 接入 OpenCode Go
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../github-pages-mkdocs-notes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    用 MkDocs Material 和 GitHub Pages 发布 Markdown 笔记
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#led" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        实验内容与 LED
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        从模板建立工程
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gpioc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        给 GPIOC 开启时钟
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gpio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GPIO 的编程接口
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gpio_init" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GPIO_Init 的两个参数
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gpio_writebit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GPIO_WriteBit 与单步测试
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#led_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        让 LED 循环闪烁
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="p007-23-gpioled">P007 · 2.3 （GPIO）LED闪灯实验<a class="headerlink" href="#p007-23-gpioled" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>整理方式：忠实清理讲稿。保留讲者原有顺序、第一人称讲解、例子与操作细节；清理停顿、修正有画面依据的明显识别错误。 来源：<a href="https://www.bilibili.com/video/BV11X4y1j7si/?p=7">哔哩哔哩原视频，第 7 分P（P7）</a>；范围 00:00–42:33，使用原始时间轴。</p>
+</blockquote>
+<h2 id="led">实验内容与 LED<a class="headerlink" href="#led" title="Permanent link">&para;</a></h2>
+<p>各位同学大家好，我是铁头山羊。今天我们来学习第二章的第三节。首先我们先来回顾一下：在之前的课程里边，我们已经学习过 GPIO 模块八种工作模式中的四种。这四种模式是跟我们 IO 引脚的输出有关的。然后在上一期视频的过程中，我们还学习了 IO 引脚的最大输出速度。学完了这两部分内容之后，我们就可以利用这两个知识来做一个实验。本节课我们要做的这个实验的名字，叫做 LED 闪灯实验。首先我们先来看一下这个实验的内容。</p>
+<p>本套视频所需要的所有材料，都包含在这个开发套件包里。大家可以扫描屏幕上的二维码，进入到我们的淘宝店铺来购买它。购买套件之后，你将获得课程所有的课件和源码，还能加入答疑群，和 UP 直接交流。</p>
+<p>本期视频我们要做的实验是这样的：首先在我们的开发套件包里边，有这么一个电路板。这个电路板就是我们单片机的最小系统板。然后在这个最小系统板的这个位置，大家看，这里有一盏灯。这盏灯是一个 LED 灯，它上面有一个丝印，这里标注 PC13，大家可以看到吧？这里有一个 PC13，说明这盏灯是连接在我们单片机的 PC13 引脚上的。</p>
+<p><img alt="最小系统板上的 PC13 标注与板载 LED。" src="images/f001.jpg" /></p>
+<p><em>最小系统板上的 PC13 标注与板载 LED。 ·</em> <a href="https://www.bilibili.com/video/BV11X4y1j7si/?p=7\&amp;t=60"><em>原片 01:00</em></a></p>
+<p>然后我们就可以使用 PC13 这个引脚，去控制这盏灯的点亮和熄灭。我们一会儿点亮这颗灯，一会儿熄灭这颗灯，循环地去做这个动作，就可以看到这个 LED 闪烁起来了。本节课我们就是要通过编程来实现这个 LED 闪烁的效果。</p>
+<p>因为我们要控制这个 LED，所以我们首先来分析一下，我们这个 IO 引脚是如何让 LED 点亮和熄灭的。我们先来看看怎么去点亮一盏 LED。我们来看这么一个电路图，在这个电路图里面，这个符号就表示刚才所说的 LED。LED 的中文又叫做发光二极管。从它的名字我们就可以看得出来，这个 LED 就是一种能够发光的二极管。</p>
+<p>所以我们在电路里边用这个符号来表示它。在这个符号当中，这一部分就表示一个普通的二极管，然后上面的两个箭头就表示这个二极管发出的光线。这个就是发光二极管的符号。</p>
+<p>对于这个发光二极管来说，它也是有阳极和阴极的。我们在给这个二极管供电的时候，需要在阳极供一个正电压，阴极供一个负电压，这样就会有电流从这个二极管里面流过。当流过这个二极管的电流足够大的时候，这个发光二极管就会点亮。我们这个电流一般需要控制在 2～10mA 之间，也就是说，只要我们给这个二极管通一个 2～10mA 的电流，它就会发光。如果这里没有电流的话，这个二极管就会熄灭。</p>
+<p>了解了这个原理之后，我们就知道了，要想点亮这颗 LED，我们只需要给它通一个 2～10mA 的电流就可以了。那我们怎么去通这个 2～10mA 的电流呢？可以通过这么一个电路。在这个电路里边，这里就是 LED。LED 的阳极我们给它接一个正电压，比如说我们单片机里边的 VDD，也就是 3.3V。然后 LED 的阴极，我们给它接地，也是低电压 0V。</p>
+<p>在这个 3.3V 和 0V 之间，我们串这么一个电阻。这个电阻叫做限流电阻。顾名思义，这个限流电阻的作用就是去限制流过 LED 的电流，把它限制在 2～10mA 之间。比如说，我们这个限流电阻的阻值取 510Ω，我们来算一算流过这个 LED 的电流是多少。</p>
+<p>首先，当这个 LED 导通的时候，因为它是一个二极管，对吧？所以它导通的时候，它的压降应该是 0.7V，这个就是二极管的导通压降。然后我们知道了这里的电压之后，这个限流电阻的电压，是不是就是用总的 3.3V 的电压，减去 LED 两端的 0.7V 的电压？这两个相减，得到的结果就是 2.6V，对吧？而这里的电阻的阻值是 510Ω。我们知道了电压，知道了电阻，是不是能求出这个限流电阻的电流？然后这里的电流和这个电流是不是相等的？因为它们两个是串联的，它们两个电流其实是一样的。所以我们就把这个电流求出来，是不是就可以得出流过这个发光二极管的电流了？这个电流是多少呢？就是用 2.6V 除以 510Ω，得出来的结果约等于 5mA 左右。这个 5mA 是不是就在 2～10mA 之间？所以通过这个电路，我们是不是就可以给这个 LED 通一个 2～10mA 之间的电流了？这个 LED 是不是就点亮了？</p>
+<p><img alt="510Ω 限流电阻、LED 和电压标注，画面给出约 5mA 的计算。" src="images/f002.jpg" /></p>
+<p><em>510Ω 限流电阻、LED 和电压标注，画面给出约 5mA 的计算。 ·</em> <a href="https://www.bilibili.com/video/BV11X4y1j7si/?p=7\&amp;t=270"><em>原片 04:30</em></a></p>
+<p>现在我们知道了怎么去点亮 LED，接下来我们再来看一下怎么去熄灭 LED。要想熄灭这个 LED，就更加简单了。刚才我们不是给 LED 的阳极接了一个高电压 VDD 吗？只要我们把这个 VDD 给它撤下来，这个 LED 是不是就熄灭了？所以我们把这个电路图改变一下，在这里给它加一个开关。这个开关可以拨到这么两个位置：如果拨到上面这个位置的话，这个点是不是就跟高电压 VDD 相连了？这样这个 LED 是不是就点亮了？</p>
+<p>如果我们把它拨到下面去的话，这个点是不是就跟下面的地相连了，也就是 0V 相连了？既然阳极这里是 0V，阴极这里也是 0V，所以这两个点之间是不是就没有电压差了？所以就不会有电流从这个地方流过，对吧？所以这个 LED 就熄灭了。因此我们就可以通过拨动这个开关，来控制这个 LED 的点亮和熄灭：拨到上面就是点亮，拨到下面就是熄灭。</p>
+<p>我们注意观察一下这个开关。对于这个开关来说，如果它拨到上面的位置，那么这里就通过开关接高电压 VDD；如果拨到下面的位置，这个位置就通过开关接低电压 VSS。其实这个开关就跟我们之前学习的 IO 引脚的推挽输出特别相似。比如说现在我们就把这个开关替换成单片机上的一个 IO 引脚，就是这么一个 IO 引脚，后面的这一部分电路保持不变。我们把这个 IO 引脚的模式设置成推挽模式。我们知道，对于推挽模式来说，这个 MOS 管负责“推”，下面的这个 MOS 管负责“挽”，而且这两个 MOS 管是交替导通的。</p>
+<p>比如说，我们导通上面的 MOS 管，然后关断下面的 MOS 管，这个位置是不是就通过上面的 MOS 管接高电压 VDD 了？这就相当于我们这个开关拨到上面，然后这一点通过这个位置接 VDD，对吧？反过来，如果我们把上面的断开，下面的导通，这个点是不是就通过下面的 MOS 管接低电压 VSS 了？这就相当于我们把这里的开关拨到下面去，然后这一点通过开关接低电压 VSS。是不是这个开关就跟我们这个 IO 引脚完全一样了？</p>
+<p>所以我们就可以通过这个 IO 引脚，把它设置成推挽模式，然后通过编程的方式向这个 IO 引脚写 0 和写 1，来控制这个 LED 的点亮或者熄灭。我们把这种接法称为 LED 的一种推挽接法，这个就是推挽接法的电路。</p>
+<p><img alt="推挽模式电路：P-MOS、N-MOS 与 LED 阳极侧连接。" src="images/f003.jpg" /></p>
+<p><em>推挽模式电路：P-MOS、N-MOS 与 LED 阳极侧连接。 ·</em> <a href="https://www.bilibili.com/video/BV11X4y1j7si/?p=7\&amp;t=435"><em>原片 07:15</em></a></p>
+<p>除了这种推挽接法之外，还有另外一种接法，这个接法就叫做开漏接法。我们来看这么一个电路图。这张电路图跟刚才所看的那个电路图基本上是一样的，只不过我们把刚才这里的开关，移动到了 LED 的阴极这个位置。我们通过使用这个开关，来控制 LED 的点亮或者熄灭。</p>
+<p>首先我们先来看一下 LED 点亮的情况。要想点亮这颗 LED，我们就只需要把这个开关闭合上就可以了。闭合上这个开关之后，这个电路图是不是就跟我们一开始分析的那个电路图一模一样了？这样 LED 上就会流过一个 5mA 左右的电流，这个 LED 就点亮了，对吧？那现在我们再把这个开关断开。</p>
+<p>断开开关之后，这个电路是不是就开路了？所以这个电流从这里流过来之后，到这个位置就没有回路了，对吧？所以在这个 LED 上就不会有电流，这个 LED 就会熄灭。因此我们就可以通过这个开关，去控制这个 LED 的点亮或者熄灭。而这个开关就比较类似于我们的 IO 引脚的开漏模式。</p>
+<p>现在咱们就把这个开关替换成单片机的一个 IO 引脚，比如说替换成这么一个 IO 引脚。然后我们把这个 IO 引脚设置成开漏模式。我们知道，对于开漏模式来说，它要求下面的 N-MOS 管的漏极一直保持断开，这个就是开漏。其实也就是要求这个 P-MOS 管一直断开，这里一直断开。也就是说，这部分电路我们是不是就不需要考虑了？因为它始终是断开的。</p>
+<p>所以我们可以看到，下面的 N-MOS 管的开关，是不是就类似于我们这里的这个开关？所以这两个电路是不是就是完全一样的了？因此我们只需要把这个地方设置成开漏模式，然后向这个开漏模式的 IO 引脚写 0 的时候，下面的这个开关闭合，也就相当于这里的开关闭合，对吧？所以这个 LED 就会点亮。而如果我们向这个开漏模式的 IO 引脚写 1 的时候，下面的 MOS 管也关断，对吧？就相当于这里的开关断开。那么这里没有回路了，所以这个 LED 就会熄灭。我们就可以通过这种方式，去控制 LED 的点亮和熄灭。</p>
+<p><img alt="开漏模式电路：LED 阴极接 IO，P-MOS 保持断开。" src="images/f004.jpg" /></p>
+<p><em>开漏模式电路：LED 阴极接 IO，P-MOS 保持断开。 ·</em> <a href="https://www.bilibili.com/video/BV11X4y1j7si/?p=7\&amp;t=578"><em>原片 09:38</em></a></p>
+<p>刚才讲得有点乱，现在我们再来总结一下。我们的这个 LED，想要控制它点亮或者熄灭，我们有两种接线方式，就是这两种接线方式。其中前面的接线方式，我们把开关放到 LED 的阳极，也就是放到左边；而后边的接线方式，我们把开关放到阴极，也就放到这个位置。其中放到阳极的这个方式，就类似于我们在这里放了一个 IO 引脚，然后把这个 IO 引脚设置成推挽模式，所以这个接法就叫做推挽接法。而后面的这个开关，就类似于我们这个 IO 引脚设置成了开漏模式。也就是说，这个开关就等效于下面 N-MOS 管的开关。然后我们把这种接法叫做开漏接法。</p>
+<p>通过刚才的学习，我们知道这颗 LED 有两种接线方式，一种是推挽接法，另一种是开漏接法。现在我们就产生了一个问题：我们本次实验要使用的这颗板载 LED，它到底是使用推挽接法连接的，还是使用开漏接法来连接的呢？要想回答这个问题，我们就得看一下这个最小系统板的电路图。</p>
+<p>我在课程资料里边给大家准备了这么一个文件，这个文件就是我们刚才那个最小系统板的原理图。现在我们打开这个文档，然后我们来看一下原理图。在这个原理图的这个位置，这里有一个四方形的结构，这个结构就代表最小系统板上的这颗芯片，也就是我们的 STM32 单片机。</p>
+<p>然后我们往上看，这里有两颗 LED，对吧？其中上面的这颗 LED 是 D1，这颗 LED 就是我们最小系统板上这颗红色的 LED。这个是一个电源指示灯，只要我们给这个最小系统板供上电，这个指示灯就会亮。然后剩下的，下面还有一颗 LED，就是 D2。D2 这个 LED 连接的是我们单片机上的 PC13 这个引脚，也就是连接的这个引脚，PC13 这个引脚。然后它就是我们本节课要用的这个蓝色的、闪烁的 LED。</p>
+<p><img alt="最小系统板原理图中的 D1、D2，D2 经 R5 连接 PC13。" src="images/f005.jpg" /></p>
+<p><em>最小系统板原理图中的 D1、D2，D2 经 R5 连接 PC13。 ·</em> <a href="https://www.bilibili.com/video/BV11X4y1j7si/?p=7\&amp;t=691"><em>原片 11:31</em></a></p>
+<p>下面我们就来分析一下这张电路图，它到底是属于我们刚才介绍的推挽接法，还是属于开漏接法呢？我们把刚才的电路图摘出来，放在这个位置。然后在下面，我们左边放推挽接法的电路图，右边放开漏接法的电路图。我们来对比一下，这种接法到底是属于左边的推挽接法，还是右边的开漏接法。首先告诉大家结论，这个电路图就是我们右边这种开漏接法的电路图。</p>
+<p>比如说，我们来对比一下。这里就是我们的 LED，这里是 LED，然后 LED 的阳极接的是高电压 3.3V。我们来看这个 LED 的阳极，是不是接的高电压 VDD？然后这里是限流电阻，这个限流电阻用来控制电流，这里就是对应的限流电阻。然后这个 LED 的阴极，我们看它接的是单片机的 PC13 这个引脚，对吧？对于开漏接法来说，我们来看这里的 LED，它的阴极是不是就接到一个 IO 引脚？所以这种接法就是一个标准的开漏接法。</p>
+<p><img alt="板载 LED 原理图与推挽、开漏两种接法的对照。" src="images/f006.jpg" /></p>
+<p><em>板载 LED 原理图与推挽、开漏两种接法的对照。 ·</em> <a href="https://www.bilibili.com/video/BV11X4y1j7si/?p=7\&amp;t=753"><em>原片 12:33</em></a></p>
+<p>所以下面我们去设置这个 IO 引脚工作模式的时候，我们一定要把这个 IO 引脚的工作模式设置成开漏模式。好的，到这里，本节课所有的知识点我都给大家讲完了。讲完这些知识点之后，下一步我们就开始编写代码了。</p>
+<h2 id="_1">从模板建立工程<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>要想编写代码，首先我们得先建立一个新的工程，然后我们才能把代码写到这个工程里面。那怎么去新建这个工程呢？我们来看，我在下面这个位置给大家准备了一个网址，这个网址就是我们课程资料的百度网盘。然后我们需要打开这个网址，在百度网盘里面去下载一个叫做模板工程的东西。这个模板工程，就是事先准备好的一个空的工程。我们把这个模板工程下载下来，然后对这个模板工程进行重命名，然后就可以新建一个工程了。然后我们再把代码写到这个工程里边。</p>
+<p>所以下面我们就从这个百度网盘里面，把模板工程下载下来。现在我们就复制这个百度网盘的链接，就是复制到这个位置。当然你也可以扫右边的二维码，效果是一样的。我们复制这个链接，然后粘贴到浏览器里面，这样我们就可以打开百度网盘。打开百度网盘之后，这个“标准库”就是我们课程的资料。然后我们打开这个“标准库”，在底下这里有一个 template.rar，这个就是我们所说的模板工程。我们把这个文件下载下来就可以了。</p>
+<p>下载完成之后，我们会得到这么一个文件，这个文件就是我们的模板工程。我们可以看到，这个文件其实是一个压缩包，对吧？所以我们在使用它之前，首先需要对这个压缩包进行解压。我们右键点击这个压缩包，然后把它解压到当前文件夹。注意，是解压到当前文件夹。解压之后，我们就会得到这么一个东西，就是这个 template，这个文件夹就是我们的模板工程。</p>
+<p>然后我们需要对这个模板工程进行重命名，比如说我们给它起个新的名字，叫做 BlinkyLED。这个 Blink 就是闪烁的意思，LED 就是那个发光二极管，对吧？所以我们这个实验的名字就是一个闪灯实验。然后我们把这个名字复制一下，打开这个文件夹，然后对里边的这两个文件也进行重命名。重命名完之后，现在我们就可以双击打开下面这个文件了。这个文件就是工程文件，它的后缀是 .uvprojx，这就是工程文件。我们双击打开它，这样就把这个工程打开了。</p>
+<p>打开工程之后，我们会在左边这个位置看到一个树形的结构，对吧？我们打开这个树形结构，然后打开 default 文件夹，打开 user 文件夹，下面有个 main.c。这个 main.c 就是我们主程序所在的位置。我们双击打开它。接下来我们在写代码的时候，就需要把程序写到 main.c 这个文件里面。</p>
+<p><img alt="Keil 工程树中的 user 与打开的 main.c 主程序。" src="images/f007.jpg" /></p>
+<p><em>Keil 工程树中的 user 与打开的 main.c 主程序。 ·</em> <a href="https://www.bilibili.com/video/BV11X4y1j7si/?p=7\&amp;t=932"><em>原片 15:32</em></a></p>
+<h2 id="gpioc">给 GPIOC 开启时钟<a class="headerlink" href="#gpioc" title="Permanent link">&para;</a></h2>
+<p>好的，下面我们开始编写这个程序。我们编程的第一步，就是为 GPIOC 去开启时钟。那为什么要给 GPIOC 开启时钟呢？原因是这样的，因为我们在编程的过程中，需要使用到 PC13 这个引脚去控制板载 LED，对吧？而这个 PC13 引脚又是归我们单片机里边 GPIOC 这个片上外设管的。所以我们在使用 GPIOC 之前，就得为这个 GPIOC 去开启时钟。然后我们再来解释一下什么是时钟，我们可以把这个时钟类比成人的心跳。</p>
+<p>而这里“开启时钟”的含义，就是给我们身体里面的某个器官去提供心跳，也就是给身体里面这个器官去供血。我们曾经把单片机里边的这些模块，比作成人体里面一个一个的器官。比如说，我们把 GPIOC 比作成人的这么一只手，而给 GPIOC 开启时钟，就相当于给这只手提供心跳，也就是给这只手供血。只有我们给这只手供血之后，这只手才能开始工作，也就相当于我们这个 GPIOC 才能开始工作。所以我们在使用 GPIOC 之前，必须得为 GPIOC 去开启时钟。</p>
+<p>我们在为 GPIOC 开启时钟的时候，使用的是这么一个编程接口，这个编程接口叫做 RCC_APB2PeriphClockCmd。这个编程接口本来是要放到后边才去学的，但是因为我们现在用到了，所以提前把它拿出来。所以这个编程接口，大家不需要理解它的含义，这是一个固定的写法。</p>
+<p>然后这个编程接口有两个参数。第一个参数，填写我们要开启的模块的名称。因为我们本次要使用的是 GPIOC 这个模块，对吧？所以我们这里就填 RCC_APB2Periph_GPIOC，这里的 x 给它替换成 C 就可以了。如果你想开启 GPIOA 的时钟，那你这里就填 GPIOA；如果是 B 的话，就填 GPIOB，以此类推。第二个参数填 ENABLE，ENABLE 就是开启时钟的意思。</p>
+<p><img alt="开启 GPIOx 时钟的接口及将端口替换为 GPIOC 的标注。" src="images/f008.jpg" /></p>
+<p><em>开启 GPIOx 时钟的接口及将端口替换为 GPIOC 的标注。 ·</em> <a href="https://www.bilibili.com/video/BV11X4y1j7si/?p=7\&amp;t=1044"><em>原片 17:24</em></a></p>
+<p>这是一个固定的写法，等到后边我们讲到时钟树的时候，大家就明白这个编程接口的含义了。大家先不用理解它，我们直接把这个代码写到程序里面就可以了。下面我们来编写一下这段程序。我们找到 main.c 文件，也就是刚才打开的这个文件。我们把程序写在 main 方法里面。这个 main 方法，就是我们程序的起点。我们在 main 方法的第一行去编写程序。首先我们先写一个注释，第一行我们要做的事情，就是开启 GPIOC 的时钟。我们调用的编程接口，这是一个固定的写法，叫 RCC_APB2PeriphClockCmd。第一个参数填 RCC_APB2Periph_GPIOC，然后第二个参数填 ENABLE。这样我们就把 GPIOC 的时钟给它开起来了。下面我们才能使用 GPIOC，对板载 LED 进行操作。</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// 1. 开启GPIOC的时钟</span>
+<span class="n">RCC_APB2PeriphClockCmd</span><span class="p">(</span><span class="n">RCC_APB2Periph_GPIOC</span><span class="p">,</span><span class="w"> </span><span class="n">ENABLE</span><span class="p">);</span>
+</code></pre></div>
+<h2 id="gpio">GPIO 的编程接口<a class="headerlink" href="#gpio" title="Permanent link">&para;</a></h2>
+<p>给 GPIOC 开启了时钟之后，下一步我们就需要使用 GPIO 模块，对板载 LED 进行操作了。那这个程序应该怎么写呢？大家是不是现在就没有思路？为什么没有思路呢？因为我们还没有学习跟 GPIO 模块相关的一些编程接口。所以下一步我们就来学习这些编程接口。</p>
+<p>我们从课程资料里面，拿出这么一个文件来，这个文件叫做 GPIO 的编程接口汇总。我们本章学习的就是 GPIO 模块，对吧？这里边这些编程接口，就是我们本章所需要学习的所有编程接口。下面我们打开这个文件。可以看到，本章我们一共需要学习这么四个编程接口。下面我们就逐一对这些编程接口的作用做一个介绍。</p>
+<p>首先我们先来观察一下这些编程接口。对于这些编程接口来说，它都是以 GPIO_ 开头的。这里 GPIO_ 这个前缀，表示这些编程接口都是属于 GPIO 这个模块的。我们这个 GPIO 模块最常用的编程接口，一共有这么四个。本节课我们要学习的是这三个编程接口，这个编程接口我们下节课再学。然后在这三个编程接口当中，最后一个编程接口用得比较少，所以我们重点就是学习第一个和第二个编程接口就可以了。</p>
+<p><img alt="GPIO 模块编程接口汇总及 IO 输出结构示意图。" src="images/f009.jpg" /></p>
+<p><em>GPIO 模块编程接口汇总及 IO 输出结构示意图。 ·</em> <a href="https://www.bilibili.com/video/BV11X4y1j7si/?p=7\&amp;t=1174"><em>原片 19:34</em></a></p>
+<p>首先我们先来看第一个编程接口。第一个编程接口叫做 GPIO_Init，其中这里的 Init 是一个单词的缩写，这个单词叫做 initialize。initialize 就是初始化的意思。所以这个编程接口的作用，就是对我们的 IO 引脚进行初始化。我们知道，在单片机里边有很多引脚，这一圈一共是 48 个。而 GPIO_Init 的作用，就是对其中的一根 IO 引脚进行初始化。我们每调用一次 GPIO_Init，就是去初始化这一根 IO 引脚。然后我们再来解释一下初始化的概念。那什么是初始化呢？所谓初始化，就是我们在使用这个 IO 引脚之前，去配置一下这个 IO 引脚的参数，这个就叫做初始化。</p>
+<p>具体是配置哪些参数呢？比如说，我们之前学习过，对于单片机的一个 IO 引脚来说，它总共有八种工作模式可选，对吧？四种输入、四种输出。那我们在使用这个 IO 引脚之前，是不是需要从这八种模式里面选择一种？另外，对于这个 IO 引脚来说，它还有一个最大输出速度的概念。那我们在使用 IO 引脚的时候，到底选的是 2MHz 的最大输出速度，还是 10MHz 的最大输出速度，还是 50MHz 的最大输出速度？这两个参数，都是通过 GPIO_Init 这个编程接口进行配置的。</p>
+<p>解释完了 GPIO_Init，我们再来看第二个编程接口。第二个编程接口叫做 GPIO_WriteBit，其中 write 就是写的意思，然后 bit 表示一个比特位。所以这个编程接口的作用，就是向我们的输出数据寄存器去写一个比特位，也就是向这里去写值。</p>
+<p>比如说，我给大家举个例子：我们把这个 IO 引脚设置成通用输出推挽模式，那我们就可以调用 GPIO_WriteBit，向这个比特位去写一个 0，或者写一个 1。在推挽模式下，如果我们写 0 的时候，这个位置当然输出的就是一个低电压，对吧？就是下面的 MOS 管闭合，上面的 MOS 管断开，这就是输出的低电压。如果我们在同样模式下写一个 1，那就是上面的闭合，下面的断开，那这里输出的就是一个高电压。所以我们就可以通过这里的写 0 和写 1，去控制这个 IO 引脚的输出状态了，对吧？这就是 GPIO_WriteBit 的作用。也就是我们调用 GPIO_WriteBit 的时候，其实是通过 CPU 向这个输出数据寄存器写 0，或者写 1，从而去控制这个 IO 引脚上的输出电压。</p>
+<p>然后我们再来看一下最后一个编程接口。最后一个编程接口叫做 GPIO_ReadOutputDataBit。read 当然就是读的意思，就是这里的这个读；然后 output 代表输出，data 代表数据，bit 代表一个比特位。所以这个编程接口的作用，就是从输出数据寄存器里边读一个比特位出来，其实读的就是这个比特位的值。</p>
+<p>比如说，我们调用上面的这个编程接口，向这里写入了一个 1，接着再调用下面这个编程接口，把这个值读出来，那我们读的就是 1。如果我们调用它，往里边写入一个 0，那么我们紧接着调用它，把这个 0 就能给它读出来。所以这个编程接口读的，其实是我们上一次，就是最近一次使用上面这个编程接口写入的一个值。我们最近一次写入的是什么，那调用这个编程接口读出来的就是什么。这个编程接口用得比较少。</p>
+<p>讲完了这些编程接口之后，下面我们来梳理一下本次实验的思路。本次实验，我们首先需要使用 GPIO_Init，去对我们要使用的这个 IO 引脚进行初始化。因为我们的 LED 连接的是单片机的 PC13 引脚，所以我们要初始化的 IO 引脚就是 PC13，对吧？</p>
+<p>然后在调用这个编程接口进行初始化的时候，我们需要设置两个参数。刚才我们说了，一个是 IO 引脚的模式，另一个是最大输出速度。我们先来看这个模式。对于单片机的 IO 引脚来说，我们知道它有八种工作模式，其中四种输出、四种输入，对吧？因为我们要使用这个 IO 引脚向外输出信号，去控制这个 LED，所以它应当选择输出模式。然后输出模式，又根据通用还是复用、推挽还是开漏，分成这么四种。那我们来看一下，我们到底应该选择通用还是复用？</p>
+<p>选择推挽还是开漏？首先，因为我们这个 LED 使用的是一个开漏接法，对吧？所以这个地方我们应当选择开漏。然后我们需要调用这个编程接口，向输出数据寄存器里边写 0 或者写 1，来控制 LED 的点亮和熄灭，对吧？所以我们走的是这么一条路，就是通过 CPU 写程序，去往这里边写值，然后去控制这个 LED。所以我们采用的是通用模式。我们就可以确定，这个 IO 引脚的模式就是通用输出开漏模式。</p>
+<p>然后我们再来确定一下 IO 引脚的最大输出速度。因为对于我们这个 LED 来说，它的工作速度比较慢，一般都不会超过 100Hz。而我们所使用的 IO 引脚的最大输出速度有 2MHz、10MHz，还有 50MHz。2 兆就是 200 万，10 兆就是 1000 万，50 兆就是 5000 万。所以跟这个 100Hz 比起来，这些频率都非常快，对吧？我们选一个最小的就可以了。所以我们选的是通用输出开漏模式，而且使用的是一个 2MHz 的最大输出速度。</p>
+<p>然后初始化完这个 IO 引脚之后，下一步我们就调用 GPIO_WriteBit，向这里的寄存器写 0 或者写 1，去控制这个 LED 点亮或者熄灭就可以了。所以我们总共分成两步，第一步初始化，第二步就是去控制这盏灯的亮灭。下面我们从第一步开始，首先我们调用 GPIO_Init，对这个 IO 引脚进行初始化。</p>
+<h2 id="gpio_init">GPIO_Init 的两个参数<a class="headerlink" href="#gpio_init" title="Permanent link">&para;</a></h2>
+<p>我们来看一下 GPIO_Init 这个编程接口的使用方法。这个 GPIO_Init，我们刚才介绍过，它的作用就是去初始化一个 IO 引脚。那我们来看一下，这个编程接口有这么两个参数。我们只看这个参数就可以了，前面的类型我们先不关注。然后第一个参数叫做 GPIOx，这个 GPIOx 用来填写我们要初始化的那个引脚的端口号。那什么是端口号呢？比如说，本次实验我们使用的是 PC13 这个引脚，对吧？PC13 这个引脚是归 GPIOC 管的，所以它的端口号就是 GPIOC。所以这个参数我们就填 GPIOC 就可以了，也就是把这里的 x 换成一个大写字母 C。</p>
+<p>我们来写一下这个程序。这个程序是第二步，第二步我们需要初始化 IO 引脚，也就是把 PC13 初始化成通用输出开漏模式，最大输出速度是 2MHz。为了初始化这个 IO 引脚，我们调用的是 GPIO_Init 这个编程接口。第一个参数我们说过，是填这个端口号，对吧？也就是 GPIOC。这样我们前半部分就写完了。</p>
+<p>然后我们再来看一下第二个参数。第二个参数叫做 GPIO_InitStruct。这个 GPIO_InitStruct，它是一个这种结构体的指针类型的，前面这个表示一个结构体，这个星表示是一个指针，所以说它是这么一个结构体指针类型的变量。</p>
+<p>然后这种结构体，就类似于一张菜单。比如说，我们去餐馆吃饭，点菜的时候就往菜单上去写入我们想要的菜，然后餐馆就会按照我们的要求给我们上菜，对吧？对于这个编程接口来说，这个参数的作用跟菜单是一样的。我们想把 PC13 引脚初始化成什么模式，最大输出速度选多少，我们把这些参数都填到这个结构体里边，然后这个编程接口就会按照我们的要求，对这里的 IO 引脚进行初始化。</p>
+<p>下面我们就来看一下这个结构体的定义。这个位置就是这个结构体的定义。这个结构体有这么三个成员。首先第一个成员 GPIO_Pin，用来填写我们要操作的引脚的编号，也就是我们要初始化的那个引脚的编号。比如说，本次实验我们要初始化的是 PC13 这个引脚，那么它的引脚编号是不是就是 13？然后这个位置，我们就填 GPIO_Pin_13 就可以了。它的范围是从 GPIO_Pin_0 到 GPIO_Pin_15，我们这里就填 GPIO_Pin_13 就可以了。然后第二个成员叫做 GPIO_Speed，这个用来填写我们 IO 引脚的最大输出速度。如果我们把这个引脚设置成了一个输出模式之后，那么我们就需要去指定这个引脚的最大输出速度。这个最大输出速度可以选 2MHz、10MHz 或者 50MHz。如果我们把这个成员填成 GPIO_Speed_2MHz，就是选择 2MHz；这个 GPIO_Speed_10MHz 就代表 10MHz，下面这个 GPIO_Speed_50MHz 就代表 50MHz。</p>
+<p>最后一个成员是 GPIO_Mode，这个 GPIO_Mode 用来选择我们 IO 引脚的模式。一共有八种模式，四种输出、四种输入。我们只学习了这么四种输出，对吧？这四种输出分别是 GPIO_Mode_Out_PP，其中 Out 代表输出，PP 第一个 P 代表 push，就是推，第二个 P 代表 pull，就是拉。所以这种模式就是通用输出推挽模式。</p>
+<p>然后下面这种模式叫做 Out_OD，这个 Out 代表输出，然后 O 代表 open，也就是开，D 代表 drain，也就是漏，所以这个就是通用输出开漏。再往下这个模式叫做 AF_PP，这个 AF 其实代表 alternate function，也就是复用的意思，然后 PP 代表推挽，所以这个就是复用输出推挽。再往下这里是 AF_OD，这个就是复用输出开漏。所以这四种模式就对应 IO 引脚的四种输出模式。</p>
+<p><img alt="GPIO_Init 参数、结构体成员与四种输出模式。" src="images/f010.jpg" /></p>
+<p><em>GPIO_Init 参数、结构体成员与四种输出模式。 ·</em> <a href="https://www.bilibili.com/video/BV11X4y1j7si/?p=7\&amp;t=1798"><em>原片 29:58</em></a></p>
+<p>对于我们这个电路图来说，我们使用的是开漏接法，对吧？准确地说是通用输出开漏接法。因为我们需要使用 CPU，直接向那个寄存器里边去写值，所以它是通用输出开漏。所以我们要选择的模式就是这种模式，也就是 GPIO_Mode_Out_OD。</p>
+<p>我们来写一下这个程序。因为我们这个编程接口需要使用到一个 GPIO_InitTypeDef 这种结构体类型的变量，所以我们先用这个结构体类型，声明这么一个变量，也就是这种结构体类型。我们随便给这个变量起一个名字，我们一般就把这个结构体的名字叫做 GPIO_InitStruct。然后后边这里，我们再给这个结构体赋一个零初值。这个数值一定要赋，不赋这个数值的话，有的时候可能会产生一些意想不到的错误。</p>
+<p>然后我们就按照刚才的说法给这些成员赋值。第一个成员就是 GPIO_Pin，也就是引脚的编号。我们要操作的是 PC13，对吧？所以这里就填 GPIO_Pin_13 就可以了。然后第二个成员是 GPIO_Mode，我们要使用的模式就是通用输出开漏模式，也就是 GPIO_Mode_Out_OD。然后第三个成员填的是最大输出速度，这个最大输出速度我们选 2MHz 就可以了，这个就代表 2MHz。填好了这些成员之后，我们再把这个参数取一个地址，给它放进去。这样我们这个程序就写好了。</p>
+<div class="highlight"><pre><span></span><code><span class="n">GPIO_InitTypeDef</span><span class="w"> </span><span class="n">GPIO_InitStruct</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+<span class="n">GPIO_InitStruct</span><span class="p">.</span><span class="n">GPIO_Pin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_Pin_13</span><span class="p">;</span>
+<span class="n">GPIO_InitStruct</span><span class="p">.</span><span class="n">GPIO_Mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_Mode_Out_OD</span><span class="p">;</span>
+<span class="n">GPIO_InitStruct</span><span class="p">.</span><span class="n">GPIO_Speed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">GPIO_Speed_2MHz</span><span class="p">;</span>
+<span class="n">GPIO_Init</span><span class="p">(</span><span class="n">GPIOC</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">GPIO_InitStruct</span><span class="p">);</span>
+</code></pre></div>
+<p><img alt="main.c 中完成的 PC13 开漏、2MHz 初始化代码。" src="images/f011.jpg" /></p>
+<p><em>main.c 中完成的 PC13 开漏、2MHz 初始化代码。 ·</em> <a href="https://www.bilibili.com/video/BV11X4y1j7si/?p=7\&amp;t=1875"><em>原片 31:15</em></a></p>
+<p>刚才我们调用了 GPIO_Init，对下面这个 IO 引脚做了一个初始化。那初始化完这个 IO 引脚之后，我们是不是就需要调用 GPIO_WriteBit，向 IO 引脚的输出数据寄存器写值了？我们知道，对于板载 LED 来说，它连接的是 PC13 引脚，然后使用的是开漏接法。所谓开漏接法，就是下边这种接法。对于开漏接法来说，上面的 P-MOS 管是不是始终是断开的？所以这部分电路我们就不用管了，对吧？</p>
+<p>所以如果我们向这个开漏引脚写 0，那下面的 MOS 管闭合，这样就会形成一个回路，电流就顺着这里流到地了，对不对？这个时候 LED 就点亮。相反，如果我们向这个开漏模式的引脚写一个 1，那下面的开关就断开，所以这个地方就开路了。所以电流从这里往这边流，流到这个位置它就流不过去了，因为后边就没有路了，所以 LED 就是熄灭的。所以在这个开漏模式下，写 0，LED 点亮，写 1，LED 熄灭。下面我们就分别向这个 IO 引脚写 0 和写 1，我们来看一下 LED 的状态。</p>
+<h2 id="gpio_writebit">GPIO_WriteBit 与单步测试<a class="headerlink" href="#gpio_writebit" title="Permanent link">&para;</a></h2>
+<p>现在我们来看一下 GPIO_WriteBit 这个编程接口的使用方法。我们刚才说过，GPIO_WriteBit 就是用来向我们这个 IO 引脚去写值的，写 0 或者写 1。然后这个编程接口有这么三个参数。</p>
+<p>首先第一个参数叫做 GPIOx。这个 GPIOx 用来填写我们要操作的，就是我们要写值的那个 IO 引脚的端口号。因为我们本次实验使用的是 PC13 这个引脚，对吧？所以这里的端口号我们就填 GPIOC。我们把这个 GPIOC 填到这个参数里边就可以了。</p>
+<p>然后第二个参数叫做 GPIO_Pin。这个填的是我们要操作的这个引脚的引脚编号。引脚编号是不是就是从 0～15？比如说，我们本次实验使用的是 PC13，然后我们这个参数就填 GPIO_Pin_13 就可以了。</p>
+<p>然后我们再来看第三个参数。第三个参数叫做 BitValue，这个 BitValue 就是填我们要向 IO 引脚写入的值。我们可以写 0，也可以写 1。如果你想要写 0，那这个参数就填 Bit_RESET，Bit_RESET 就表示 0。然后如果想写 1，就填 Bit_SET，Bit_SET 就是写 1。</p>
+<p>比如说，我给大家举个例子，我们分别向 PC13 这个引脚写 0 和写 1，去控制 LED 的点亮和熄灭，那么程序就是这样的：首先我们调用 GPIO_WriteBit，第一个参数填 GPIOC，这是端口号。然后第二个参数填 GPIO_Pin_13，这个是引脚编号。这两个加起来是不是就是 PC13？然后最后一个参数，我们写 0 的时候就填 Bit_RESET，这样就是向 PC13 写一个 0 了。如果写 1 的话，就是下面这行代码，我们只需要改一下最后一个参数就可以了。</p>
+<p><img alt="GPIO_WriteBit 三个参数与写 0、写 1 两行示例。" src="images/f012.jpg" /></p>
+<p><em>GPIO_WriteBit 三个参数与写 0、写 1 两行示例。 ·</em> <a href="https://www.bilibili.com/video/BV11X4y1j7si/?p=7\&amp;t=2059"><em>原片 34:19</em></a></p>
+<p>把最后一个参数，从上面的 RESET 换成下面的 SET，这个 SET 就表示 1。</p>
+<p>下面我们来测试一下代码。比如说，我们先向这个 IO 引脚写一个 1，再向它写一个 0。那么我们写 1 的时候调用的参数，就是 GPIOC、GPIO_Pin_13，然后写 1 就是 Bit_SET，对吧？这个就是写 1。写 0 的话，就是 GPIO_WriteBit(GPIOC, GPIO_Pin_13, Bit_RESET)，这个就是写 0。</p>
+<div class="highlight"><pre><span></span><code><span class="n">GPIO_WriteBit</span><span class="p">(</span><span class="n">GPIOC</span><span class="p">,</span><span class="w"> </span><span class="n">GPIO_Pin_13</span><span class="p">,</span><span class="w"> </span><span class="n">Bit_SET</span><span class="p">);</span><span class="w">   </span><span class="c1">// 写1</span>
+<span class="n">GPIO_WriteBit</span><span class="p">(</span><span class="n">GPIOC</span><span class="p">,</span><span class="w"> </span><span class="n">GPIO_Pin_13</span><span class="p">,</span><span class="w"> </span><span class="n">Bit_RESET</span><span class="p">);</span><span class="w"> </span><span class="c1">// 写0</span>
+</code></pre></div>
+<p>然后现在我们来测试一下这个代码。我们首先先来设置一下调试器，按这里这个按钮设置一下调试器。我们使用的调试器叫做 ST-Link 调试器，我们点 Debug 选项卡，这里选 ST-Link Debugger，然后点击确定。这样我们就把调试器设置好了。</p>
+<p><img alt="Debug 选项卡中选择 ST-Link Debugger。" src="images/f019.jpg" /></p>
+<p><em>Debug 选项卡中选择 ST-Link Debugger。 ·</em> <a href="https://www.bilibili.com/video/BV11X4y1j7si/?p=7\&amp;t=2116"><em>原片 35:16</em></a></p>
+<p>设置好调试器之后，下一步我们再点击左上角的第二个按钮，就是这个按钮，来编译一下代码。编译代码之后，这里会有一些日志。这个日志的倒数第二行，这里要出现“0 Error(s), 0 Warning(s)”，才表示编译成功。0 Errors 就是零错误，0 Warnings 就是零警告，说明我们这个代码没有问题。</p>
+<p><img alt="编译日志显示 0 Error(s)、0 Warning(s)。" src="images/f013.jpg" /></p>
+<p><em>编译日志显示 0 Error(s)、0 Warning(s)。 ·</em> <a href="https://www.bilibili.com/video/BV11X4y1j7si/?p=7\&amp;t=2138"><em>原片 35:38</em></a></p>
+<p>这个代码没有问题之后，下面我们使用一下代码的调试功能。我们把鼠标移到这个位置，看到这里有一个放大镜，里边有一个红色的 D，对吧？这个就是一个调试按钮。我们按一下调试按钮，然后单片机就进入了一个调试状态。然后我们就可以一行一行地去执行代码了。</p>
+<p>首先我们先执行第一行，对吧？开启 GPIOC 的时钟。然后我们再来执行第二行，就是对这个 IO 引脚进行初始化。初始化完成之后，你会发现这个 LED 点亮了。为什么它会亮呢？</p>
+<p>因为在初始状态下，这个 IO 引脚，就是 PC13，这个引脚初始值是 0，就是默认状态下是 0。0 就是表示这个 LED 点亮，对吧？</p>
+<p>然后下一步，我们向这个 IO 引脚再写一个 1，也就是执行这一行代码。写 1 之后，这个 LED 是不是就熄灭了？我们来测试一下它会不会熄灭。我们再次单步来执行这一行，看，这个 LED 是不是就熄灭了？然后我们继续执行最后一行，最后一行是再写一个 0。写 0 的话，这个 LED 就会点亮。然后我们单步，看，这个 LED 是不是就点亮了？所以我们就可以通过这样的代码，去向这个 IO 引脚写 0 或者写 1，控制这里的 LED 点亮或者熄灭。</p>
+<p><img alt="单步执行写 0 代码后，右侧板载蓝色 LED 点亮。" src="images/f014.jpg" /></p>
+<p><em>单步执行写 0 代码后，右侧板载蓝色 LED 点亮。 ·</em> <a href="https://www.bilibili.com/video/BV11X4y1j7si/?p=7\&amp;t=2218"><em>原片 36:58</em></a></p>
+<p>调试完成之后，大家再按一次上面这个放大镜按钮，就可以退出调试模式了。</p>
+<h2 id="led_1">让 LED 循环闪烁<a class="headerlink" href="#led_1" title="Permanent link">&para;</a></h2>
+<p>刚才我们已经学会了怎么去点灯、怎么去灭灯。知道了怎么点灯、怎么灭灯之后，下一步我们再引申一下，我们来看一下如何通过编程让 LED 闪烁起来。其实要让 LED 闪烁起来非常简单，我们就是先点亮这颗 LED，然后等一段时间再把它熄灭，然后再等一段时间，再点亮这个 LED。如此循环往复，这个 LED 就闪烁起来了。</p>
+<p>我们可以用上面这么一张图，表示这个闪亮的过程。我们来看一下这张图。首先我们先向 PC13 这个引脚写一个 0，我们知道在开漏模式下写 0，这个 LED 是不是就被点亮了？然后点亮这颗 LED 之后，我们延迟一段时间，就是延迟这么长时间，那这个 LED 是不是就亮这么长时间？延迟完这一段时间之后，我们再向这个引脚写一个 1。写 1 之后，这个 LED 就熄灭了。然后我们再延迟一段时间，这个灯就会灭这么长时间。</p>
+<p>延迟完这段时间之后，我们再向它写 0，这个 LED 又点亮了。我们不断地去重复这个步骤：写 0，延迟一段时间；写 1，再延迟一段时间；写 0，延迟一段时间。然后这么不断地循环往复地执行下去，我们就可以看到 LED 先点亮，后熄灭，再点亮，再熄灭，对吧？这样它是不是就闪起来了？然后下面我们把这个图转换成一个程序。</p>
+<p>首先，因为我们这个写 0、写 1 和等待的过程，是一个循环的过程，所以我们使用程序里面的一个 while 循环，来表示这个过程。并且这个 while 循环里面，条件是 1，1 表示永远为真，对吧？所以这个循环就会一直执行下去，也就意味着我们的灯会一直闪下去。</p>
+<p>然后在 while 循环里边，首先我们先调用刚才学习过的 GPIO_WriteBit，先向 PC13 这个引脚写一个 0，也就是这里的这个 0。写 0 之后，我们这个 LED 是不是就点亮了？点亮了之后，这里是不是要延迟一段时间？比如说我们延迟 100ms，那么我们就调用一个 Delay 函数。这个 Delay 函数，它并不是标准库里面的函数，这是我提供给大家的，不过大家直接拿来用就可以了。这个 Delay 就是一个延迟函数，然后它延迟的单位就是毫秒。我们这里如果要延迟 100ms，这个位置就填 100 就可以了，这个就是延迟 100ms。</p>
+<p>延迟完这 100ms 之后，下一步我们是不是要把这个 1 给它写进去了，就是熄灭这个 LED，对吧？所以我们填下 GPIO_WriteBit(GPIOC, GPIO_Pin_13, Bit_SET)，这个灯就灭了。灭了之后我们再延迟 100ms，然后如此循环往复，就实现了一个闪灯的效果了。</p>
+<p><img alt="写 0、延迟、写 1、延迟的时间图与 while(1) 闪灯代码。" src="images/f015.jpg" /></p>
+<p><em>写 0、延迟、写 1、延迟的时间图与 while(1) 闪灯代码。 ·</em> <a href="https://www.bilibili.com/video/BV11X4y1j7si/?p=7\&amp;t=2384"><em>原片 39:44</em></a></p>
+<p>下面我们来编写一下这个程序。我们回到刚才的代码，首先刚才写了这么两行测试代码，一个是写 1，一个是写 0。写 1 就是灭灯，写 0 就是亮灯。这两行代码是测试代码，对于闪灯没有帮助，所以我们把这两行代码注释掉。我们看到这里有一个绿色的双下划线，对吧？这个就是一个注释的按钮。我们按这个按钮，这两行就被注释掉了，那这两行就从代码里面给它删除掉了。</p>
+<p>然后接下来我们就开始写刚才那个程序。我们的程序要写在 while 循环里面，正好 main 方法里面，这里是不是有个 while 循环？所以我们就把刚才的程序写到这个 while 循环里面就可以了。</p>
+<p>然后第一行我们要写的代码，就是 GPIO_WriteBit(GPIOC, GPIO_Pin_13, Bit_RESET)，这个是亮灯。亮灯结束之后，我们需要延迟一段时间，使用 Delay 这个函数去延迟 100ms，这里是延迟 100ms。</p>
+<p>但是 Delay 这个方法，是包含在——我们来看左边这个 my_lib，这里有一个 delay.h 这个头文件里面的。所以我们在使用 Delay 方法之前，先要引用 delay.h 这个头文件。所以我们把代码移动到上面最顶部，这里我们在这行写一个 include delay.h，把这个头文件引用进来。这样我们看，是不是这个错误就消失了？我们就可以使用 Delay 这个函数进行延迟了。</p>
+<p>然后延迟完，我们再次调用 GPIO_WriteBit(GPIOC, GPIO_Pin_13, Bit_SET)，这个就是熄灭 LED。熄灭完这个 LED 之后，我们再次调用 Delay 这个延迟函数，再延迟 100ms，对不对？这样我们的程序是不是就写完了？</p>
+<div class="highlight"><pre><span></span><code><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;delay.h&gt;</span>
+
+<span class="c1">// main中的while循环</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">GPIO_WriteBit</span><span class="p">(</span><span class="n">GPIOC</span><span class="p">,</span><span class="w"> </span><span class="n">GPIO_Pin_13</span><span class="p">,</span><span class="w"> </span><span class="n">Bit_RESET</span><span class="p">);</span><span class="w"> </span><span class="c1">// 亮</span>
+<span class="w">    </span><span class="n">Delay</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span><span class="w">                                </span><span class="c1">// 延迟100ms</span>
+<span class="w">    </span><span class="n">GPIO_WriteBit</span><span class="p">(</span><span class="n">GPIOC</span><span class="p">,</span><span class="w"> </span><span class="n">GPIO_Pin_13</span><span class="p">,</span><span class="w"> </span><span class="n">Bit_SET</span><span class="p">);</span><span class="w">   </span><span class="c1">// 灭</span>
+<span class="w">    </span><span class="n">Delay</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span><span class="w">                                </span><span class="c1">// 延迟100ms</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><img alt="while 循环中的 GPIO_WriteBit 与两次 Delay(100)。" src="images/f016.jpg" /></p>
+<p><em>while 循环中的 GPIO_WriteBit 与两次 Delay(100)。 ·</em> <a href="https://www.bilibili.com/video/BV11X4y1j7si/?p=7\&amp;t=2496"><em>原片 41:36</em></a></p>
+<p>现在我们还是按左上角的第二个按钮，编译一下程序。然后这一次，直接把代码下载到单片机当中。我们按这里这个按钮，两个向下的箭头，上面有个 LOAD。我们按这个按钮，把它下载到单片机当中。</p>
+<p>下载完成之后，你会看到这里有三行：Programming Done，就是下载完成；Verify OK，就是代码验证完成；然后它跟你说 Finished，就是完成了。出现这三行，就说明我们的代码已经下载成功了。</p>
+<p><img alt="LOAD 下载后的 Programming Done、Verify OK 与 Finished 日志。" src="images/f017.jpg" /></p>
+<p><em>LOAD 下载后的 Programming Done、Verify OK 与 Finished 日志。 ·</em> <a href="https://www.bilibili.com/video/BV11X4y1j7si/?p=7\&amp;t=2527"><em>原片 42:07</em></a></p>
+<p>然后我们回到单片机，我们按一下单片机的复位按钮，刚才写的程序就会开始执行。我们按一下这个复位按钮，可以看到这个 LED 是不是就闪烁起来了？就证明我们这个程序已经写完了，就成功了。</p>
+<p><img alt="复位后运行闪灯程序，板载蓝色 LED 点亮的瞬间。" src="images/f018.jpg" /></p>
+<p><em>复位后运行闪灯程序，板载蓝色 LED 点亮的瞬间。 ·</em> <a href="https://www.bilibili.com/video/BV11X4y1j7si/?p=7\&amp;t=2546"><em>原片 42:26</em></a></p>
+<p>好的，以上就是本期视频的全部内容。感谢大家的收看，我是铁头山羊，让我们下期视频再见。</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.sections", "navigation.indexes", "navigation.top", "content.code.copy", "toc.follow"], "search": "../../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}, "version": null}</script>
+    
+    
+      <script src="../../../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+    
+  </body>
+</html>
